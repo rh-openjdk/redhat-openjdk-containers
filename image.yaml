@@ -1,7 +1,6 @@
 name: "redhat-openjdk-18/openjdk18-openshift"
-description: "..."
-version: "1.1"
-release: "dev"
+description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 1.8"
+version: "1.2"
 user: 185
 from: "jboss/openjdk18-rhel7:1.0"
 envs:
