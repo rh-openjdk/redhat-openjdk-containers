@@ -1,0 +1,7 @@
+# Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 1.8
+
+NOTE: Extends link:https://github.com/jboss-container-images/jboss-openjdk-image[JBoss OpenJDK image]
+
+# License
+
+See link:LICENSE[LICENSE] file.
