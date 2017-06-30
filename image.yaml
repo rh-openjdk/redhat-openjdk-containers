@@ -4,183 +4,183 @@ version: "1.2"
 user: 185
 from: "jboss/openjdk18-rhel7:1.0"
 envs:
-     - name: MAVEN_VERSION
-       value: "3.3.9-2.8.el7"
-     - name: JOLOKIA_VERSION
-       value: "1.3.5"
-     - name: PATH
-       value: $PATH:"/usr/local/s2i"
-     - name: AB_JOLOKIA_PASSWORD_RANDOM
-       value: "true"
-     - name: AB_JOLOKIA_AUTH_OPENSHIFT
-       value: "true"
-     - name: JAVA_DATA_DIR
-       value: "/deployments/data"
-     - name: MAVEN_ARGS
-       description: Arguments to use when calling Maven, replacing the default `package hawt-app:build -DskipTests -e`. Please be sure to run the `hawt-app:build` goal (when not already bound to the `package` execution phase), otherwise the startup scripts won't work.
-       example: "-e -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package"
-     - name: MAVEN_ARGS_APPEND
-       description: Additional Maven arguments.
-       example: "-X -am -pl"
-     - name: ARTIFACT_DIR
-       description: Path to `target/` where the jar files are created for Maven multi module builds. These are added to **$MAVEN_ARGS**.
-       example: "plugins/"
-     - name: ARTIFACT_COPY_ARGS
-       description: Arguments to use when copying artifacts from the output directory to the application directory. Useful to specify which artifacts will be part of the image. It defaults to `-r hawt-app/*` when a `hawt-app` directory is found on the build directory, otherwise jar files only will be included (`*.jar`).
-       example: "-r hawt-app/*"
-     - name: MAVEN_CLEAR_REPO
-       description: If set then the Maven repository is removed after the artifact is built. This is useful for keeping the created application image small, but prevents *incremental* builds. Defaults to *false*.
-       example: "true"
-     - name: JAVA_APP_DIR
-       description: The directory where the application resides. All paths in your application are relative to this directory.
-       example: "myapplication/"
-     - name: JAVA_LIB_DIR
-       description: Directory holding the Java jar files as well an optional `classpath` file which holds the classpath. Either as a single line classpath (colon separated) or with jar files listed line-by-line. If not set **JAVA_LIB_DIR** is the same as **JAVA_APP_DIR**.
-     - name: JAVA_OPTIONS
-       description: JVM options passed to the `java` command.
-       example: "-verbose:class"
-     - name: JAVA_ARGS
-       description: Arguments passed to the `java` application.
-     - name: JAVA_MAX_MEM_RATIO
-       description: Is used when no `-Xmx` option is given in **JAVA_OPTIONS**. This is used to calculate a default maximal heap memory based on a containers restriction. If used in a Docker container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to `0` in which case no `-Xmx` option is added.
-       example: "40"
-     - name: JAVA_DIAGNOSTICS
-       description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
-       example: "true"
-     - name: JAVA_MAIN_CLASS
-       description: A main class to use as argument for `java`. When this environment variable is given, all jar files in **JAVA_APP_DIR** are added to the classpath as well as **JAVA_LIB_DIR**.
-     - name: JAVA_APP_JAR
-       description: A jar file with an appropriate manifest so that it can be started with `java -jar` if no **JAVA_MAIN_CLASS** is set. In all cases this jar file is added to the classpath, too.
-     - name: JAVA_APP_NAME
-       description: Name to use for the process.
-       example: "demo-app"
-     - name: JAVA_CLASSPATH
-       description: The classpath to use. If not given, the startup script checks for a file `**JAVA_APP_DIR/classpath**` and use its content literally as classpath. If this file doesn't exists all jars in the app dir are added (`classes:**JAVA_APP_DIR/***`).
-     - name: JAVA_DEBUG
-       description: If set remote debugging will be switched on. **Disabled by default.**
-       example: "true"
-     - name: JAVA_DEBUG_PORT
-       description: Port used for remote debugging. Defaults to *5005*.
-       example: "8787"
-     - name: AB_HAWKULAR_REST_URL
-       description: The url of the Hawkular REST service to which the Hawkular agent will emit metrics.  This must be set to configure the Hawkular agent.
-       example: "http://myhawkularservice.example.com/hawkular"
-     - name: AB_HAWKULAR_REST_USER
-       description: The username used for basic authentication with the Hawkular REST service.
-       example: hawkW1nd
-     - name: AB_HAWKULAR_REST_PASSWORD
-       description:  The password used for basic authentication with the Hawkular REST service.
-       example: QSandC
-     - name: AB_HAWKULAR_REST_FEED_ID
-       description: The feed-id for this agent.  Must be globally unique to the Hawkular REST service.
-       example: autogenerate
-     - name: AB_HAWKULAR_REST_TENANT_ID
-       description: The tenant-id for this agent.
-       example: hawkular
-     - name: AB_HAWKULAR_REST_KEYSTORE
-       description: The name of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
-       example: keystore.jks
-     - name: AB_HAWKULAR_REST_KEYSTORE_DIR
-       description:  The location of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
-       example: /etc/hawkular-agent-volume
-     - name: AB_HAWKULAR_REST_KEYSTORE_PASSWORD
-       description:  The password for the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
-       example: tru5tM3
-     - name: AB_HAWKULAR_REST_KEYSTORE_TYPE
-       description: The type of the keystore file used to verify the identity of the Hawkular REST service when using https.  Defaults to the JVM default, jks.
-       example: jks
-     - name: AB_HAWKULAR_REST_KEY_MANAGER_ALGORITHM
-       description: The key manager algorithm to use when verifying the identity of the Hawkular REST service.  Defaults to the JVM default.
-       example: X509
-     - name: AB_HAWKULAR_REST_TRUST_MANAGER_ALGORITHM
-       description: The trust manager algorithm to use when verifying the identity of the Hawkular REST service.  Defaults to the JVM default.
-       example: X509
-     - name: AB_HAWKULAR_REST_SSL_PROTOCOL
-       description: The SSL protocol to use when verifying the identity of the Hawkular REST service. Defaults to TLSv1.
-       example: TLSv1
-     - name: AB_HAWKULAR_AGENT_OPTS
-       description: Additional options to add to the -javaagent parameter, e.g. delay=10.
-     - name: AB_HAWKULAR_AGENT_CONFIG
-       description: The location of the Hawkular agent configuration file, in yaml.  Defaults to /opt/hawkular/etc/hawkular-javaagent-config.yaml.
-       example: /opt/eap/standalone/configuration/hawkular-javaagent-config.yaml
-     - name: AB_JOLOKIA_OFF
-       description: If set disables activation of Joloka (i.e. echos an empty value). By default, Jolokia is enabled.
-       example: "true"
-     - name: AB_JOLOKIA_CONFIG
-       description: If set uses this file (including path) as Jolokia JVM agent properties (as described in Jolokia's link:https://www.jolokia.org/reference/html/agents.html#agents-jvm[reference manual]). If not set, the `/opt/jolokia/etc/jolokia.properties` will be created using the settings as defined in the manual. Otherwise the rest of the settings in this document are ignored.
-       example: "/opt/jolokia/custom.properties"
-     - name: AB_JOLOKIA_HOST
-       description: Host address to bind to. Defaults to **0.0.0.0**.
-       example: "127.0.0.1"
-     - name: AB_JOLOKIA_PORT
-       description: Port to listen to. Defaults to **8778**.
-       example: "5432"
-     - name: AB_JOLOKIA_USER
-       description: User for basic authentication. Defaults to **jolokia**.
-       example: "myusername"
-     - name: AB_JOLOKIA_PASSWORD
-       description: Password for basic authentication. By default authentication is switched off.
-       example: "mypassword"
-     - name: AB_JOLOKIA_PASSWORD_RANDOM
-       description: Determines if a random AB_JOLOKIA_PASSWORD be generated. Set to **true** to generate random password. Generated value will be written to `/opt/jolokia/etc/jolokia.pw`.
-       example: "true"
-     - name: AB_JOLOKIA_HTTPS
-       description: Switch on secure communication with https. By default self signed server certificates are generated if no `serverCert` configuration is given in **AB_JOLOKIA_OPTS**.
-       example: "true"
-     - name: AB_JOLOKIA_ID
-       description: Agent ID to use (`$HOSTNAME` by default, which is the container id).
-       example: "openjdk-app-1-xqlsj"
-     - name: AB_JOLOKIA_DISCOVERY_ENABLED
-       description: Enable Jolokia discovery. Defaults to **false**.
-       example: "true"
-     - name: AB_JOLOKIA_OPTS
-       description:  Additional options to be appended to the agent configuration. They should be given in the format `key=value,key=value,...`.
-       example: "backlog=20"
-     - name: AB_JOLOKIA_AUTH_OPENSHIFT
-       description: Switch on client authentication for OpenShift TLS communication. The value of this parameter can be a relative distinguished name which must be contained in a presented client's certificate. Enabling this parameter will automatically switch Jolokia into https communication mode. The default CA cert is set to `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt`.
-       example: "true"
-     - name: CONTAINER_CORE_LIMIT
-       description: A calculated core limit as described in https://www.kernel.org/doc/Documentation/scheduler/sched-bwc.txt.
-       example: "2"
-     - name: CONTAINER_MAX_MEMORY
-       description: Memory limit given to the container.
-       example: "1024"
-     - name: GC_MIN_HEAP_FREE_RATIO
-       description: Minimum percentage of heap free after GC to avoid expansion.
-       example: "20"
-     - name: GC_MAX_HEAP_FREE_RATIO
-       description: Maximum percentage of heap free after GC to avoid shrinking.
-       example: "40"
-     - name: GC_TIME_RATIO
-       description: Specifies the ratio of the time spent outside the garbage collection (for example, the time spent for application execution) to the time spent in the garbage collection.
-       example: "4"
-     - name: GC_ADAPTIVE_SIZE_POLICY_WEIGHT
-       description: The weighting given to the current GC time versus previous GC times.
-       example: "90"
-     - name: GC_MAX_METASPACE_SIZE
-       description: The maximum metaspace size.
-       example: "100"
-     - name: MAVEN_MIRROR_URL
-       description: The base URL of a mirror used for retrieving artifacts.
-       example: "http://10.0.0.1:8080/repository/internal/"
-     - name: https_proxy
-       description: The location of the https proxy. This takes precedence over **HTTPS_PROXY**, **http_proxy**, and **HTTP_PROXY**, and will be used for both Maven builds and Java runtime.
-       example: "myuser:mypass@127.0.0.1:8080"
-     - name: HTTPS_PROXY
-       description: The location of the https proxy. This takes precedence over **http_proxy** and **HTTP_PROXY**, and will be used for both Maven builds and Java runtime.
-       example: "myuser@127.0.0.1:8080"
-     - name: http_proxy
-       description: The location of the http proxy. This takes precedence over **HTTP_PROXY** and will be used for both Maven builds and Java runtime.
-       example: "http://127.0.0.1:8080"
-     - name: HTTP_PROXY
-       description: The location of the http proxy. This will be used for both Maven builds and Java runtime.
-       example: "127.0.0.1:8080"
-     - name: no_proxy
-       description: A comman separated lists of hosts, IP addresses or domains that can be accessed directly. This takes precedence over **NO_PROXY** and will be used for both Maven builds and Java runtime.
-       example: "*.example.com"
-     - name: NO_PROXY
-       description: A comman separated lists of hosts, IP addresses or domains that can be accessed directly. This will be used for both Maven builds and Java runtime.
-       example: "foo.example.com,bar.example.com"
+    - name: MAVEN_VERSION
+      value: "3.3.9-2.8.el7"
+    - name: JOLOKIA_VERSION
+      value: "1.3.5"
+    - name: PATH
+      value: $PATH:"/usr/local/s2i"
+    - name: AB_JOLOKIA_PASSWORD_RANDOM
+      value: "true"
+    - name: AB_JOLOKIA_AUTH_OPENSHIFT
+      value: "true"
+    - name: JAVA_DATA_DIR
+      value: "/deployments/data"
+    - name: MAVEN_ARGS
+      description: Arguments to use when calling Maven, replacing the default `package hawt-app:build -DskipTests -e`. Please be sure to run the `hawt-app:build` goal (when not already bound to the `package` execution phase), otherwise the startup scripts won't work.
+      example: "-e -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package"
+    - name: MAVEN_ARGS_APPEND
+      description: Additional Maven arguments.
+      example: "-X -am -pl"
+    - name: ARTIFACT_DIR
+      description: Path to `target/` where the jar files are created for Maven multi module builds. These are added to **$MAVEN_ARGS**.
+      example: "plugins/"
+    - name: ARTIFACT_COPY_ARGS
+      description: Arguments to use when copying artifacts from the output directory to the application directory. Useful to specify which artifacts will be part of the image. It defaults to `-r hawt-app/*` when a `hawt-app` directory is found on the build directory, otherwise jar files only will be included (`*.jar`).
+      example: "-r hawt-app/*"
+    - name: MAVEN_CLEAR_REPO
+      description: If set then the Maven repository is removed after the artifact is built. This is useful for keeping the created application image small, but prevents *incremental* builds. Defaults to *false*.
+      example: "true"
+    - name: JAVA_APP_DIR
+      description: The directory where the application resides. All paths in your application are relative to this directory.
+      example: "myapplication/"
+    - name: JAVA_LIB_DIR
+      description: Directory holding the Java jar files as well an optional `classpath` file which holds the classpath. Either as a single line classpath (colon separated) or with jar files listed line-by-line. If not set **JAVA_LIB_DIR** is the same as **JAVA_APP_DIR**.
+    - name: JAVA_OPTIONS
+      description: JVM options passed to the `java` command.
+      example: "-verbose:class"
+    - name: JAVA_ARGS
+      description: Arguments passed to the `java` application.
+    - name: JAVA_MAX_MEM_RATIO
+      description: Is used when no `-Xmx` option is given in **JAVA_OPTIONS**. This is used to calculate a default maximal heap memory based on a containers restriction. If used in a Docker container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to `0` in which case no `-Xmx` option is added.
+      example: "40"
+    - name: JAVA_DIAGNOSTICS
+      description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
+      example: "true"
+    - name: JAVA_MAIN_CLASS
+      description: A main class to use as argument for `java`. When this environment variable is given, all jar files in **JAVA_APP_DIR** are added to the classpath as well as **JAVA_LIB_DIR**.
+    - name: JAVA_APP_JAR
+      description: A jar file with an appropriate manifest so that it can be started with `java -jar` if no **JAVA_MAIN_CLASS** is set. In all cases this jar file is added to the classpath, too.
+    - name: JAVA_APP_NAME
+      description: Name to use for the process.
+      example: "demo-app"
+    - name: JAVA_CLASSPATH
+      description: The classpath to use. If not given, the startup script checks for a file `**JAVA_APP_DIR/classpath**` and use its content literally as classpath. If this file doesn't exists all jars in the app dir are added (`classes:**JAVA_APP_DIR/***`).
+    - name: JAVA_DEBUG
+      description: If set remote debugging will be switched on. **Disabled by default.**
+      example: "true"
+    - name: JAVA_DEBUG_PORT
+      description: Port used for remote debugging. Defaults to *5005*.
+      example: "8787"
+    - name: AB_HAWKULAR_REST_URL
+      description: The url of the Hawkular REST service to which the Hawkular agent will emit metrics.  This must be set to configure the Hawkular agent.
+      example: "http://myhawkularservice.example.com/hawkular"
+    - name: AB_HAWKULAR_REST_USER
+      description: The username used for basic authentication with the Hawkular REST service.
+      example: hawkW1nd
+    - name: AB_HAWKULAR_REST_PASSWORD
+      description:  The password used for basic authentication with the Hawkular REST service.
+      example: QSandC
+    - name: AB_HAWKULAR_REST_FEED_ID
+      description: The feed-id for this agent.  Must be globally unique to the Hawkular REST service.
+      example: autogenerate
+    - name: AB_HAWKULAR_REST_TENANT_ID
+      description: The tenant-id for this agent.
+      example: hawkular
+    - name: AB_HAWKULAR_REST_KEYSTORE
+      description: The name of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
+      example: keystore.jks
+    - name: AB_HAWKULAR_REST_KEYSTORE_DIR
+      description:  The location of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
+      example: /etc/hawkular-agent-volume
+    - name: AB_HAWKULAR_REST_KEYSTORE_PASSWORD
+      description:  The password for the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
+      example: tru5tM3
+    - name: AB_HAWKULAR_REST_KEYSTORE_TYPE
+      description: The type of the keystore file used to verify the identity of the Hawkular REST service when using https.  Defaults to the JVM default, jks.
+      example: jks
+    - name: AB_HAWKULAR_REST_KEY_MANAGER_ALGORITHM
+      description: The key manager algorithm to use when verifying the identity of the Hawkular REST service.  Defaults to the JVM default.
+      example: X509
+    - name: AB_HAWKULAR_REST_TRUST_MANAGER_ALGORITHM
+      description: The trust manager algorithm to use when verifying the identity of the Hawkular REST service.  Defaults to the JVM default.
+      example: X509
+    - name: AB_HAWKULAR_REST_SSL_PROTOCOL
+      description: The SSL protocol to use when verifying the identity of the Hawkular REST service. Defaults to TLSv1.
+      example: TLSv1
+    - name: AB_HAWKULAR_AGENT_OPTS
+      description: Additional options to add to the -javaagent parameter, e.g. delay=10.
+    - name: AB_HAWKULAR_AGENT_CONFIG
+      description: The location of the Hawkular agent configuration file, in yaml.  Defaults to /opt/hawkular/etc/hawkular-javaagent-config.yaml.
+      example: /opt/eap/standalone/configuration/hawkular-javaagent-config.yaml
+    - name: AB_JOLOKIA_OFF
+      description: If set disables activation of Joloka (i.e. echos an empty value). By default, Jolokia is enabled.
+      example: "true"
+    - name: AB_JOLOKIA_CONFIG
+      description: If set uses this file (including path) as Jolokia JVM agent properties (as described in Jolokia's link:https://www.jolokia.org/reference/html/agents.html#agents-jvm[reference manual]). If not set, the `/opt/jolokia/etc/jolokia.properties` will be created using the settings as defined in the manual. Otherwise the rest of the settings in this document are ignored.
+      example: "/opt/jolokia/custom.properties"
+    - name: AB_JOLOKIA_HOST
+      description: Host address to bind to. Defaults to **0.0.0.0**.
+      example: "127.0.0.1"
+    - name: AB_JOLOKIA_PORT
+      description: Port to listen to. Defaults to **8778**.
+      example: "5432"
+    - name: AB_JOLOKIA_USER
+      description: User for basic authentication. Defaults to **jolokia**.
+      example: "myusername"
+    - name: AB_JOLOKIA_PASSWORD
+      description: Password for basic authentication. By default authentication is switched off.
+      example: "mypassword"
+    - name: AB_JOLOKIA_PASSWORD_RANDOM
+      description: Determines if a random AB_JOLOKIA_PASSWORD be generated. Set to **true** to generate random password. Generated value will be written to `/opt/jolokia/etc/jolokia.pw`.
+      example: "true"
+    - name: AB_JOLOKIA_HTTPS
+      description: Switch on secure communication with https. By default self signed server certificates are generated if no `serverCert` configuration is given in **AB_JOLOKIA_OPTS**.
+      example: "true"
+    - name: AB_JOLOKIA_ID
+      description: Agent ID to use (`$HOSTNAME` by default, which is the container id).
+      example: "openjdk-app-1-xqlsj"
+    - name: AB_JOLOKIA_DISCOVERY_ENABLED
+      description: Enable Jolokia discovery. Defaults to **false**.
+      example: "true"
+    - name: AB_JOLOKIA_OPTS
+      description:  Additional options to be appended to the agent configuration. They should be given in the format `key=value,key=value,...`.
+      example: "backlog=20"
+    - name: AB_JOLOKIA_AUTH_OPENSHIFT
+      description: Switch on client authentication for OpenShift TLS communication. The value of this parameter can be a relative distinguished name which must be contained in a presented client's certificate. Enabling this parameter will automatically switch Jolokia into https communication mode. The default CA cert is set to `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt`.
+      example: "true"
+    - name: CONTAINER_CORE_LIMIT
+      description: A calculated core limit as described in https://www.kernel.org/doc/Documentation/scheduler/sched-bwc.txt.
+      example: "2"
+    - name: CONTAINER_MAX_MEMORY
+      description: Memory limit given to the container.
+      example: "1024"
+    - name: GC_MIN_HEAP_FREE_RATIO
+      description: Minimum percentage of heap free after GC to avoid expansion.
+      example: "20"
+    - name: GC_MAX_HEAP_FREE_RATIO
+      description: Maximum percentage of heap free after GC to avoid shrinking.
+      example: "40"
+    - name: GC_TIME_RATIO
+      description: Specifies the ratio of the time spent outside the garbage collection (for example, the time spent for application execution) to the time spent in the garbage collection.
+      example: "4"
+    - name: GC_ADAPTIVE_SIZE_POLICY_WEIGHT
+      description: The weighting given to the current GC time versus previous GC times.
+      example: "90"
+    - name: GC_MAX_METASPACE_SIZE
+      description: The maximum metaspace size.
+      example: "100"
+    - name: MAVEN_MIRROR_URL
+      description: The base URL of a mirror used for retrieving artifacts.
+      example: "http://10.0.0.1:8080/repository/internal/"
+    - name: https_proxy
+      description: The location of the https proxy. This takes precedence over **HTTPS_PROXY**, **http_proxy**, and **HTTP_PROXY**, and will be used for both Maven builds and Java runtime.
+      example: "myuser:mypass@127.0.0.1:8080"
+    - name: HTTPS_PROXY
+      description: The location of the https proxy. This takes precedence over **http_proxy** and **HTTP_PROXY**, and will be used for both Maven builds and Java runtime.
+      example: "myuser@127.0.0.1:8080"
+    - name: http_proxy
+      description: The location of the http proxy. This takes precedence over **HTTP_PROXY** and will be used for both Maven builds and Java runtime.
+      example: "http://127.0.0.1:8080"
+    - name: HTTP_PROXY
+      description: The location of the http proxy. This will be used for both Maven builds and Java runtime.
+      example: "127.0.0.1:8080"
+    - name: no_proxy
+      description: A comman separated lists of hosts, IP addresses or domains that can be accessed directly. This takes precedence over **NO_PROXY** and will be used for both Maven builds and Java runtime.
+      example: "*.example.com"
+    - name: NO_PROXY
+      description: A comman separated lists of hosts, IP addresses or domains that can be accessed directly. This will be used for both Maven builds and Java runtime.
+      example: "foo.example.com,bar.example.com"
 labels:
     - name: "io.openshift.s2i.scripts-url"
       value: "image:///usr/local/s2i"
@@ -199,16 +199,16 @@ labels:
     - name: org.jboss.deployments-dir
       value: "/deployments"
 packages:
- - rh-maven33
- - PyYAML
+    - rh-maven33
+    - PyYAML
 # Use the run script as default since we are working as an hybrid image which can be
 # used directly to. (If we were a plain s2i image we would print the usage info here)
 cmd:
- - "/usr/local/s2i/run"
+    - "/usr/local/s2i/run"
 ports:
- - value: 8080
- - value: 8443
- - value: 8778
+    - value: 8080
+    - value: 8443
+    - value: 8778
 sources:
     - artifact: jolokia-jvm-1.3.5.redhat-1-agent.jar
       md5: 240381af7039461f3472b7796fe9cd4b
