@@ -215,23 +215,27 @@ sources:
     - artifact: hawkular-javaagent-1.0.0.CR4-redhat-1-shaded.jar
       md5: e133776c76a474ed46ac88c856eabe34
 cct:
-      verbose: 1
-      configure:
-          - name: OpenJDK
-            modules:
-                - url: https://github.com/jboss-openshift/cct_module.git
-            changes:
-                - cct_module.s2i-common:
-                      - install_sh:
-                - cct_module.os-java-misc:
-                      - install_as_root:
-                - cct_module.os-java-s2i:
-                      - install_as_root:
-                - cct_module.os-java-jolokia:
-                      - install_as_root:
-                - cct_module.os-java-hawkular:
-                      - install_as_root:
-                - cct_module.os-java-run:
-                      - install_as_root:
+    - name: OpenJDK
+      modules:
+          - url: https://github.com/jboss-openshift/cct_module.git
+      changes:
+          - cct_module.s2i-common:
+                - install_sh:
+          - cct_module.os-java-misc:
+                - install_as_root:
+          - cct_module.os-java-s2i:
+                - install_as_root:
+          - cct_module.os-java-jolokia:
+                - install_as_root:
+          - cct_module.os-java-hawkular:
+                - install_as_root:
+          - cct_module.os-java-run:
+                - install_as_root:
 dogen:
-  version: 2.0.1
+    version: 2.1.0
+    plugins:
+        cct:
+            verbose: true
+        dist_git:
+            repo: redhat-openjdk-18-docker
+            branch: ce-1.2-openshift-openjdk-1.8-rhel-7
