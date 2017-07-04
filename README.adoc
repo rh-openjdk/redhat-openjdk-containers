@@ -5,3 +5,12 @@ NOTE: Extends link:https://github.com/jboss-container-images/jboss-openjdk-image
 # License
 
 See link:LICENSE[LICENSE] file.
+
+# TODO
+
+- [ ] Enable GitHub issue to allow people to give feedback
+- [ ] Add instructions how to recreate the image
+- [ ] Add some background information what build system is used and how it works
+- [ ] Add some information about the image features
+- [ ] Add a documentation of the environment variables
+- [ ] Add a link to the Docker Hub image, including its name
