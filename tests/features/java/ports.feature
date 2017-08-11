@@ -1,3 +1,4 @@
+@redhat-openjdk-18/openjdk18-openshift
 Feature: Openshift OpenJDK port tests
 
   Scenario: Check ports are available

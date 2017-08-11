@@ -1,3 +1,4 @@
+@redhat-openjdk-18/openjdk18-openshift
 Feature: Openshift OpenJDK Hawkular tests
 
    Scenario: Check default Hawkular

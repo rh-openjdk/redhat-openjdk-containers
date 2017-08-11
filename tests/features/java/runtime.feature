@@ -1,3 +1,4 @@
+@redhat-openjdk-18/openjdk18-openshift
 Feature: Openshift OpenJDK Runtime tests
 
   Scenario: Ensure JVM_ARGS is no longer present in the run script
