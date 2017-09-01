@@ -198,6 +198,8 @@ labels:
       value: "/tmp"
     - name: org.jboss.deployments-dir
       value: "/deployments"
+    - name: "summary"
+      value: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 1.8"
 packages:
     - rh-maven33
     - PyYAML
