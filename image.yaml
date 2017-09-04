@@ -7,7 +7,7 @@ envs:
     - name: MAVEN_VERSION
       value: "3.3.9-2.8.el7"
     - name: JOLOKIA_VERSION
-      value: "1.3.5"
+      value: "1.3.6"
     - name: PATH
       value: $PATH:"/usr/local/s2i"
     - name: AB_JOLOKIA_PASSWORD_RANDOM
@@ -187,7 +187,7 @@ labels:
     - name: io.fabric8.s2i.version.maven
       value: "3.3.9-2.8"
     - name: io.fabric8.s2i.version.jolokia
-      value: "1.3.5"
+      value: "1.3.6"
     - name: io.k8s.description
       value: "Platform for building and running plain Java applications (fat-jar and flat classpath)"
     - name: io.k8s.display-name
@@ -210,8 +210,8 @@ ports:
     - value: 8443
     - value: 8778
 sources:
-    - artifact: jolokia-jvm-1.3.5.redhat-1-agent.jar
-      md5: 240381af7039461f3472b7796fe9cd4b
+    - artifact: jolokia-jvm-1.3.6.redhat-1-agent.jar
+      md5: 75e5b5ba0b804cd9def9f20a70af649f
     - artifact: hawkular-javaagent-1.0.0.CR4-redhat-1-shaded.jar
       md5: e133776c76a474ed46ac88c856eabe34
 cct:
