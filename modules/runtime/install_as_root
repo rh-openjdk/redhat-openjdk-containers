@@ -1,0 +1,34 @@
+#!/bin/sh
+set -u
+set -e
+
+SCRIPT_DIR=$(dirname $0)
+ADDED_DIR=${SCRIPT_DIR}/added
+
+test -d /opt/run-java || mkdir /opt/run-java
+
+cp "$ADDED_DIR"/run-java.sh \
+   "$ADDED_DIR"/run-env.sh \
+   "$ADDED_DIR"/debug-options \
+   "$ADDED_DIR"/container-limits \
+   "$ADDED_DIR"/java-default-options \
+   "$ADDED_DIR"/proxy-options \
+   /opt/run-java/
+
+chmod 755 /opt/run-java/run-java.sh \
+    /opt/run-java/run-env.sh \
+    /opt/run-java/debug-options  \
+    /opt/run-java/container-limits \
+    /opt/run-java/java-default-options \
+    /opt/run-java/proxy-options
+
+# Use /dev/urandom to speed up startups.
+echo securerandom.source=file:/dev/urandom >> /usr/lib/jvm/java/jre/lib/security/java.security
+
+# Add jboss user to the root group
+usermod -g root -G jboss jboss
+
+# Necessary to permit running with a randomised UID
+mkdir -p /deployments/data \
+ && chmod -R "g+rwX" /deployments \
+ && chown -R jboss:root /deployments

@@ -1,0 +1,153 @@
+#!/bin/sh
+# ==============================================================================
+# Configure JVM options for Hawkular Agent
+#
+# Usage: JAVA_OPTIONS="$(source /opt/hawkular/hawkular-opts && get_hawkular_opts)"
+#
+# Env Vars respected:
+#
+# AB_HAWKULAR_REST_URL: The url of the Hawkular REST service to which the
+#                       Hawkular agent will emit metrics.  If not specified,
+#                       Hawkular agent configuration is skipped.
+#
+# AB_HAWKULAR_REST_USER: The username used for basic authentication with the
+#                        Hawkular REST service.
+#
+# AB_HAWKULAR_REST_PASSWORD: The password used for basic authentication with the
+#                            Hawkular REST service.
+#
+# AB_HAWKULAR_REST_FEED_ID: The feed-id for this agent.  Must be globally unique
+#                           to the Hawkular REST service.  Defaults to
+#                           autogenerate
+#
+# AB_HAWKULAR_REST_TENANT_ID: The tenant-id for this agent.  Defaults to
+#                             hawkular.
+#
+# AB_HAWKULAR_REST_KEYSTORE: The name of the keystore file used to verify the
+#                            identity of the Hawkular REST service when using
+#                            https.
+#
+# AB_HAWKULAR_REST_KEYSTORE_DIR: The location of the keystore file used to
+#                                verify the identity of the Hawkular REST
+#                                service when using https.
+#
+# AB_HAWKULAR_REST_KEYSTORE_PASSWORD: The password for the keystore file used
+#                                     to verify the identity of the Hawkular
+#                                     REST service when using https.
+#
+# AB_HAWKULAR_REST_KEYSTORE_TYPE: The type of the keystore file used to verify
+#                                 the identity of the Hawkular REST service when
+#                                 using https.  Defaults to the JVM default,
+#                                 jks.
+#
+# AB_HAWKULAR_REST_KEY_MANAGER_ALGORITHM: The key manager algorithm to use when
+#                                         verifying the identity of the Hawkular
+#                                         REST service.  Defaults to the JVM
+#                                         default.
+#
+# AB_HAWKULAR_REST_TRUST_MANAGER_ALGORITHM: The trust manager algorithm to use
+#                                           when verifying the identity of the
+#                                           Hawkular REST service.  Defaults to
+#                                           the JVM default.
+#
+# AB_HAWKULAR_REST_SSL_PROTOCOL: The SSL protocol to use when verifying the
+#                                identity of the Hawkular REST service.
+#                                Defaults to TLSv1.
+#
+# AB_HAWKULAR_AGENT_OPTS: Additional options to add to the -javaagent parameter,
+#                         e.g. delay=10.
+#
+# AB_HAWKULAR_AGENT_CONFIG: The location of the Hawkular agent configuration
+#                           file, in yaml.  Defaults to
+#                           /opt/hawkular/etc/hawkular-javaagent-config.yaml.
+#                           When specifying a user supplied configuration file,
+#                           this script looks for the following placeholders,
+#                           which are used to configure security when using a
+#                           keystore:
+#                               ###HAWKULAR_SECURITY_REALM_FIELD### - this will
+#                                   be substituted with
+#                                   "security-realm: HawkularRealm" in the
+#                                   storage-adapter configuration.
+#                               ###HAWKULAR_SECURITY_REALM_OBJECT### - this will
+#                                   be substituted with a security-realm object,
+#                                   configured using the
+#                                   AB_HAWKULAR_AGENT_KEYSTORE variables.
+#                           If the placeholders are not present in the
+#                           configuration file, the user is responsible for
+#                           configuring the security-realm appropriately for
+#                           their needs.
+#
+
+# Check whether a given config is contained in AB_HAWKULAR_AGENT_OPTS
+function is_in_hawkular_opts() {
+    local prop=$1
+    if [ -n "${AB_HAWKULAR_AGENT_OPTS}" ] && [ x"${AB_HAWKULAR_AGENT_OPTS}" != x"${AB_HAWKULAR_AGENT_OPTS/${prop}/}" ]; then
+      echo "yes"
+    else
+      echo "no"
+    fi
+}
+
+# echo's a complete -javaagent option based on the above variables.
+function get_hawkular_opts() {
+    if [ $(is_in_hawkular_opts "delay") != "yes" ]; then
+        AB_HAWKULAR_AGENT_OPTS=${AB_HAWKULAR_AGENT_OPTS:+${AB_HAWKULAR_AGENT_OPTS},}delay=10
+    fi
+    
+    if [ -n "${AB_HAWKULAR_REST_URL:+x}" ]; then
+        if [ "x${AB_HAWKULAR_AGENT_CONFIG}" = "x" ]; then
+          AB_HAWKULAR_AGENT_CONFIG="/opt/hawkular/etc/hawkular-javaagent-config.yaml"
+        fi
+        configure_keystore "${AB_HAWKULAR_AGENT_CONFIG}"
+        echo "-javaagent:/opt/hawkular/hawkular-javaagent.jar=config=${AB_HAWKULAR_AGENT_CONFIG}${AB_HAWKULAR_AGENT_OPTS:+,${AB_HAWKULAR_AGENT_OPTS}} -Dhawkular.agent.in-container=true -Dhawkular.rest.host=${AB_HAWKULAR_REST_URL}${AB_HAWKULAR_REST_USER:+ -Dhawkular.rest.user=${AB_HAWKULAR_REST_USER}}${AB_HAWKULAR_REST_PASSWORD:+ -Dhawkular.rest.password=${AB_HAWKULAR_REST_PASSWORD}}${AB_HAWKULAR_REST_FEED_ID:+ -Dhawkular.rest.feedId=${AB_HAWKULAR_REST_FEED_ID}}${AB_HAWKULAR_REST_TENANT_ID:+ -Dhawkular.rest.tenantId=${AB_HAWKULAR_REST_TENANT_ID}}"
+    fi
+}
+
+function configure_keystore() {
+    local configFile="$1"
+    local url="${AB_HAWKULAR_REST_URL}"
+    
+    if [[ "${AB_HAWKULAR_REST_URL}" =~ ^https: ]]; then
+        # need to configure security
+        if [ "x${AB_HAWKULAR_REST_KEYSTORE}${AB_HAWKULAR_REST_KEYSTORE_DIR}${AB_HAWKULAR_REST_KEYSTORE_PASSWORD}" = "x" ]; then
+            _log "WARNING! No AB_HAWKULAR_REST_KEYSTORE configuration defined.  HawkularRealm security-realm will not be configured and https access to the Hawkular REST service may fail."
+        elif [ "x${AB_HAWKULAR_REST_KEYSTORE}" = "x" -o "x${AB_HAWKULAR_REST_KEYSTORE_DIR}" = "x" -o "x${AB_HAWKULAR_REST_KEYSTORE_PASSWORD}" = "x" ]; then
+            _log "WARNING! Partial AB_HAWKULAR_REST_KEYSTORE configuration defined.  HawkularRealm security-realm will not be configured and https access to the Hawkular REST service may fail."
+        elif ! (grep -q "###HAWKULAR_SECURITY_REALM_FIELD###" ${configFile} && grep -q "###HAWKULAR_SECURITY_REALM_OBJECT###" ${configFile}); then
+            _log "WARNING! Hawkular placeholders are missing from ${configFile}.  Skipping security-realm configuration for ${AB_HAWKULAR_REST_URL}"
+        else
+            add_security_realm "${configFile}"
+            update_storage_adapter "${configFile}"
+        fi
+    elif [ "x${AB_HAWKULAR_REST_KEYSTORE}${AB_HAWKULAR_REST_KEYSTORE_DIR}${AB_HAWKULAR_REST_KEYSTORE_PASSWORD}" != "x" ]; then
+        _log "INFO: https is not being used for Hawkular REST service.  AB_HAWKULAR_REST_KEYSTORE settings will be ignored." 
+    fi
+}
+
+function update_storage_adapter() {
+    local configFile="$1"
+    sed -i "s|###HAWKULAR_SECURITY_REALM_FIELD###|security-realm: HawkularRealm|" "${configFile}"
+}
+
+function add_security_realm() {
+    local configFile="$1"
+    local securityRealm="$(cat <<EOF
+security-realm:
+- name: HawkularRealm
+  keystore-path: \\\${env.AB_HAWKULAR_REST_KEYSTORE_DIR}/\\\${env.AB_HAWKULAR_REST_KEYSTORE}
+  keystore-password: \\\${env.AB_HAWKULAR_REST_KEYSTORE_PASSWORD}
+${AB_HAWKULAR_REST_KEYSTORE_TYPE:+  keystore-type: ${AB_HAWKULAR_REST_KEYSTORE_TYPE}}
+${AB_HAWKULAR_REST_KEY_MANAGER_ALGORITHM:+  key-manager-algorithm: ${AB_HAWKULAR_REST_KEY_MANAGER_ALGORITHM}}
+${AB_HAWKULAR_REST_TRUST_MANAGER_ALGORITHM:+  trust-manager-algorithm: ${AB_HAWKULAR_REST_TRUST_MANAGER_ALGORITHM}}
+${AB_HAWKULAR_REST_SSL_PROTOCOL:+  ssl-protocol: ${AB_HAWKULAR_REST_SSL_PROTOCOL}}
+EOF
+    )"
+
+    # replace newlines with \n so we can pass them through the command line
+    securityRealm=$(echo "${securityRealm}" | sed ':a;N;$!ba;s|\n|\\n|g')
+    sed -i "s|###HAWKULAR_SECURITY_REALM_OBJECT###|${securityRealm}|" "${configFile}"
+}
+
+function _log() {
+  echo "$1" 1>&2
+}

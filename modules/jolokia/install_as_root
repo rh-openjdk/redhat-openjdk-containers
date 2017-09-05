@@ -1,0 +1,17 @@
+#!/bin/bash
+# Set up jolokia for java s2i builder image
+set -e
+
+SCRIPT_DIR=$(dirname $0)
+ADDED_DIR=${SCRIPT_DIR}/added
+
+# Jolokia agent
+mkdir -p /opt/jolokia/etc
+cp "$ADDED_DIR"/jolokia-opts /opt/jolokia/jolokia-opts
+
+cp /tmp/artifacts/jolokia-jvm-*.redhat-1-agent.jar /opt/jolokia/jolokia.jar
+
+chmod 444 /opt/jolokia/jolokia.jar
+chmod 755 /opt/jolokia/jolokia-opts
+chmod 775 /opt/jolokia/etc
+chgrp root /opt/jolokia/etc

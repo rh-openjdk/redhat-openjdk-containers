@@ -1,0 +1,17 @@
+schema_version: 1
+
+name: "xpaas.common.s2i"
+version: "2.0"
+description: "Provides common s2i settings for xpaas images."
+
+labels:
+- name: "io.openshift.s2i.scripts-url"
+  value: "image:///usr/local/s2i"
+- name: io.openshift.s2i.destination
+  value: "/tmp"
+- name: org.jboss.deployments-dir
+  value: "/deployments"
+
+run:
+  cmd:
+  - "/usr/local/s2i/run"

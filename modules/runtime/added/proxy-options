@@ -1,0 +1,48 @@
+#!/bin/sh
+
+preConfigure() {
+    unset JAVA_PROXY_OPTIONS
+}
+configure() {
+    JAVA_PROXY_OPTIONS="$(proxy_options)"
+}
+
+
+# parse the URL
+parse_url() {
+  #[scheme://][user[:password]@]host[:port][/path][?params]
+  echo "$1" | sed -e "s+^\(\([^:]*\)://\)\?\(\([^:@]*\)\(:\([^@]*\)\)\?@\)\?\([^:/?]*\)\(:\([^/?]*\)\)\?.*$+ local scheme='\2' username='\4' password='\6' hostname='\7' port='\9'+"
+}
+
+java_proxy_options() {
+  local url="$1"
+  local transport="$2"
+  local ret=""
+
+  if [ -n "$url" ] ; then
+    eval $(parse_url "$url")
+    if [ -n "$hostname" ] ; then
+      ret="-D${transport}.proxyHost=${hostname}"
+    fi
+    if [ -n "$port" ] ; then
+      ret="$ret -D${transport}.proxyPort=${port}"
+    fi
+    if [ -n "$username" -o -n "$password" ] ; then
+      echo "WARNING: Proxy URL for ${transport} contains authentication credentials, these are not supported by java" >&2
+    fi
+  fi
+  echo "$ret"
+}
+
+# Check for proxy options and echo if enabled.
+proxy_options() {
+  local ret=""
+  ret="$(java_proxy_options "${https_proxy:-${HTTPS_PROXY}}" https)"
+  ret="$ret $(java_proxy_options "${http_proxy:-${HTTP_PROXY}}" http)"
+
+  local noProxy="${no_proxy:-${NO_PROXY}}"
+  if [ -n "$noProxy" ] ; then
+    ret="$ret -Dhttp.nonProxyHosts=\"$(echo $noProxy | sed -e 's+,+|+g')\""
+  fi
+  echo "$ret"
+}

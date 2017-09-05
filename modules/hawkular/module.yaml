@@ -1,0 +1,56 @@
+schema_version: 1
+
+name: "xpaas.java.hawkular"
+version: "2.0"
+description: "Provides basic Hawkular support for Java based images."
+
+envs:
+- name: AB_HAWKULAR_REST_URL
+  description: The url of the Hawkular REST service to which the Hawkular agent will emit metrics.  This must be set to configure the Hawkular agent.
+  example: "http://myhawkularservice.example.com/hawkular"
+- name: AB_HAWKULAR_REST_USER
+  description: The username used for basic authentication with the Hawkular REST service.
+  example: hawkW1nd
+- name: AB_HAWKULAR_REST_PASSWORD
+  description:  The password used for basic authentication with the Hawkular REST service.
+  example: QSandC
+- name: AB_HAWKULAR_REST_FEED_ID
+  description: The feed-id for this agent.  Must be globally unique to the Hawkular REST service.
+  example: autogenerate
+- name: AB_HAWKULAR_REST_TENANT_ID
+  description: The tenant-id for this agent.
+  example: hawkular
+- name: AB_HAWKULAR_REST_KEYSTORE
+  description: The name of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
+  example: keystore.jks
+- name: AB_HAWKULAR_REST_KEYSTORE_DIR
+  description:  The location of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
+  example: /etc/hawkular-agent-volume
+- name: AB_HAWKULAR_REST_KEYSTORE_PASSWORD
+  description:  The password for the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
+  example: tru5tM3
+- name: AB_HAWKULAR_REST_KEYSTORE_TYPE
+  description: The type of the keystore file used to verify the identity of the Hawkular REST service when using https.  Defaults to the JVM default, jks.
+  example: jks
+- name: AB_HAWKULAR_REST_KEY_MANAGER_ALGORITHM
+  description: The key manager algorithm to use when verifying the identity of the Hawkular REST service.  Defaults to the JVM default.
+  example: X509
+- name: AB_HAWKULAR_REST_TRUST_MANAGER_ALGORITHM
+  description: The trust manager algorithm to use when verifying the identity of the Hawkular REST service.  Defaults to the JVM default.
+  example: X509
+- name: AB_HAWKULAR_REST_SSL_PROTOCOL
+  description: The SSL protocol to use when verifying the identity of the Hawkular REST service. Defaults to TLSv1.
+  example: TLSv1
+- name: AB_HAWKULAR_AGENT_OPTS
+  description: Additional options to add to the -javaagent parameter, e.g. delay=10.
+- name: AB_HAWKULAR_AGENT_CONFIG
+  description: The location of the Hawkular agent configuration file, in yaml.  Defaults to /opt/hawkular/etc/hawkular-javaagent-config.yaml.
+  example: /opt/eap/standalone/configuration/hawkular-javaagent-config.yaml
+
+execute:
+- script: install_as_root
+
+artifacts:
+#- name: hawkular-javaagent.jar
+- url: http://download.devel.redhat.com/brewroot/packages/org.hawkular.agent-hawkular-wildfly-agent-parent/1.0.0.CR4_redhat_1/1/maven/org/hawkular/agent/hawkular-javaagent/1.0.0.CR4-redhat-1/hawkular-javaagent-1.0.0.CR4-redhat-1-shaded.jar
+  md5: e133776c76a474ed46ac88c856eabe34

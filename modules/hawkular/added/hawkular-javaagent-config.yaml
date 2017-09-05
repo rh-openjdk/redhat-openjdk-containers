@@ -1,0 +1,189 @@
+#
+# Copyright 2015-2017 Red Hat, Inc. and/or its affiliates
+# and other contributors as indicated by the @author tags.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+subsystem:
+  enabled: "${hawkular.agent.enabled:true}"
+  immutable: "${hawkular.agent.immutable:true}"
+  in-container: "${hawkular.agent.in-container:false}"
+  auto-discovery-scan-period-secs: 600
+  min-collection-interval-secs: "${hawkular.agent.minCollectionIntervalCecs:30}"
+
+diagnostics:
+  enabled:    true
+  report-to:  LOG
+  interval:   1
+  time-units: minutes
+
+storage-adapter:
+  type:      HAWKULAR
+  tenant-id: "${hawkular.rest.tenantId:hawkular}"
+  feed-id:   "${hawkular.rest.feedId:autogenerate}"
+  url:       "${hawkular.rest.host}"
+  username:  "${hawkular.rest.user}"
+  password:  "${hawkular.rest.password}"
+  ###HAWKULAR_SECURITY_REALM_FIELD###
+
+###HAWKULAR_SECURITY_REALM_OBJECT###
+
+# JMX
+
+metric-set-jmx:
+- name: Runtime Metrics
+  metric-jmx:
+  - name: VM Uptime
+    attribute:    Uptime
+    interval:     30
+    time-units:   seconds
+    metric-units: milliseconds
+    metric-type:  counter
+  - name: Used Heap Memory
+    object-name:  java.lang:type=Memory
+    attribute:    HeapMemoryUsage#used
+    interval:     30
+    time-units:   seconds
+    metric-units: bytes
+    metric-type:  gauge
+  - name: Aggregate GC Collection Time
+    object-name:  "java.lang:type=GarbageCollector,name=*"
+    attribute:    CollectionTime
+    interval:     30
+    time-units:   seconds
+    metric-units: milliseconds
+- name: Memory Pool Metrics
+  metric-jmx:
+  - name: Initial
+    attribute:    Usage#init
+    interval:     2
+    time-units:   minutes
+    metric-units: bytes
+    metric-type:  gauge
+  - name: Used
+    attribute:    Usage#used
+    interval:     1
+    time-units:   minutes
+    metric-units: bytes
+    metric-type:  gauge
+  - name: Committed
+    attribute:    Usage#committed
+    interval:     1
+    time-units:   minutes
+    metric-units: bytes
+    metric-type:  gauge
+  - name: Max
+    attribute:    Usage#max
+    interval:     2
+    time-units:   minutes
+    metric-units: bytes
+    metric-type:  gauge
+
+avail-set-jmx:
+- name: Runtime Availability
+  avail-jmx:
+  - name: VM Availability
+    interval:   30
+    time-units: seconds
+    attribute:  StartTime
+    up-regex:   "[0123456789]+"
+- name: Memory Pool Availability
+  avail-jmx:
+  - name: Memory Pool Availability
+    interval:   30
+    time-units: seconds
+    attribute:  Valid
+    up-regex:   "[tT].*"
+
+resource-type-set-jmx:
+- name: Main
+  resource-type-jmx:
+  - name: Runtime MBean
+    resource-name-template: JMX [%_ManagedServerName%][%type%]
+    object-name: java.lang:type=Runtime
+    metric-sets:
+    - Runtime Metrics
+    avail-sets:
+    - Runtime Availability
+    resource-config-jmx:
+    - name: OS Name
+      attribute:   Name
+      object-name: java.lang:type=OperatingSystem
+    - name: Java VM Name
+      attribute:   VmName
+- name: Memory Pool
+  resource-type-jmx:
+  - name: Memory Pool MBean
+    parents:
+    - Runtime MBean
+    resource-name-template: JMX [%_ManagedServerName%] %type% %name%
+    object-name: "java.lang:type=MemoryPool,name=*"
+    metric-sets:
+    - Memory Pool Metrics
+    avail-sets:
+    - Memory Pool Availability
+    resource-config-jmx:
+    - name: Type
+      attribute: Type
+- name: Hawkular
+  resource-type-jmx:
+  - name: Hawkular WildFly Agent
+    resource-name-template: "Hawkular WildFly Agent"
+    object-name: "org.hawkular:type=hawkular-javaagent"
+    resource-config-jmx:
+    - name: Immutable
+      attribute: Immutable
+    - name: In Container
+      attribute: InContainer
+    operation-jmx:
+    - name: Start
+      internal-name: start
+    - name: Stop
+      internal-name: stop
+    - name: Status
+      internal-name: status
+    - name: Inventory Discovery Scan
+      internal-name: fullDiscoveryScan
+    - name: Inventory Report
+      internal-name: inventoryReport
+
+# MANAGED SERVERS
+
+managed-servers:
+  local-jmx:
+    name: Local JMX
+    enabled: true
+    wait-for:
+    - name: java.lang:type=Runtime
+    resource-type-sets:
+    - Main
+    - Memory Pool
+    - Hawkular
+
+  remote-jmx:
+  - name: Remote Jolokia Server
+    enabled: false
+    url: http://localhost:8080/jolokia-war
+    wait-for:
+    - name: java.lang:type=Runtime
+    resource-type-sets:
+    - Main
+    - Memory Pool
+
+platform:
+  enabled:      true
+  interval:     5
+  time-units:   minutes
+  #machine-id:   my-machine-id-here

@@ -1,0 +1,11 @@
+schema_version: 1
+
+name: "xpaas.java"
+version: "2.0"
+description: "Aggregate module defining all modules required for Java based images."
+
+modules:
+    install:
+    - name: xpaas.java.runtime
+    - name: xpaas.java.jolokia
+    - name: xpaas.java.hawkular

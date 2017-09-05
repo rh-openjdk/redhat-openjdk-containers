@@ -1,0 +1,67 @@
+schema_version: 1
+
+name: "xpaas.java.runtime"
+version: "2.0"
+description: "Provides basic configuration and common scripts for running Java based applications."
+
+modules:
+    install:
+    - name: xpaas.common.proxy
+
+envs:
+- name: JAVA_APP_DIR
+  description: The directory where the application resides. All paths in your application are relative to this directory.
+  example: "myapplication/"
+- name: JAVA_LIB_DIR
+  description: Directory holding the Java jar files as well an optional `classpath` file which holds the classpath. Either as a single line classpath (colon separated) or with jar files listed line-by-line. If not set **JAVA_LIB_DIR** is the same as **JAVA_APP_DIR**.
+- name: JAVA_OPTIONS
+  description: JVM options passed to the `java` command.
+  example: "-verbose:class"
+- name: JAVA_ARGS
+  description: Arguments passed to the `java` application.
+- name: JAVA_MAX_MEM_RATIO
+  description: Is used when no `-Xmx` option is given in **JAVA_OPTIONS**. This is used to calculate a default maximal heap memory based on a containers restriction. If used in a Docker container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to `0` in which case no `-Xmx` option is added.
+  example: "40"
+- name: JAVA_DIAGNOSTICS
+  description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
+  example: "true"
+- name: JAVA_MAIN_CLASS
+  description: A main class to use as argument for `java`. When this environment variable is given, all jar files in **JAVA_APP_DIR** are added to the classpath as well as **JAVA_LIB_DIR**.
+- name: JAVA_APP_JAR
+  description: A jar file with an appropriate manifest so that it can be started with `java -jar` if no **JAVA_MAIN_CLASS** is set. In all cases this jar file is added to the classpath, too.
+- name: JAVA_APP_NAME
+  description: Name to use for the process.
+  example: "demo-app"
+- name: JAVA_CLASSPATH
+  description: The classpath to use. If not given, the startup script checks for a file `**JAVA_APP_DIR/classpath**` and use its content literally as classpath. If this file doesn't exists all jars in the app dir are added (`classes:**JAVA_APP_DIR/***`).
+- name: JAVA_DEBUG
+  description: If set remote debugging will be switched on. **Disabled by default.**
+  example: "true"
+- name: JAVA_DEBUG_PORT
+  description: Port used for remote debugging. Defaults to *5005*.
+  example: "8787"
+- name: CONTAINER_CORE_LIMIT
+  description: A calculated core limit as described in https://www.kernel.org/doc/Documentation/scheduler/sched-bwc.txt.
+  example: "2"
+- name: CONTAINER_MAX_MEMORY
+  description: Memory limit given to the container.
+  example: "1024"
+- name: GC_MIN_HEAP_FREE_RATIO
+  description: Minimum percentage of heap free after GC to avoid expansion.
+  example: "20"
+- name: GC_MAX_HEAP_FREE_RATIO
+  description: Maximum percentage of heap free after GC to avoid shrinking.
+  example: "40"
+- name: GC_TIME_RATIO
+  description: Specifies the ratio of the time spent outside the garbage collection (for example, the time spent for application execution) to the time spent in the garbage collection.
+  example: "4"
+- name: GC_ADAPTIVE_SIZE_POLICY_WEIGHT
+  description: The weighting given to the current GC time versus previous GC times.
+  example: "90"
+- name: GC_MAX_METASPACE_SIZE
+  description: The maximum metaspace size.
+  example: "100"
+
+execute:
+- script: install_as_root
+- script: configure_alternatives_as_root

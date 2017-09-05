@@ -1,0 +1,47 @@
+schema_version: 1
+
+name: "xpaas.common.s2i.maven"
+version: "2.0"
+description: "Provides basic maven support for OpenShift S2I images."
+
+modules:
+    install:
+    - name: xpaas.java.runtime
+    - name: xpaas.common.s2i
+
+labels:
+- name: io.fabric8.s2i.version.maven
+  value: "3.3.9-2.8"
+
+envs:
+- name: MAVEN_VERSION
+  value: "3.3.9-2.8.el7"
+- name: PATH
+  value: $PATH:"/usr/local/s2i"
+- name: MAVEN_ARGS
+  description: Arguments to use when calling Maven, replacing the default `package hawt-app:build -DskipTests -e`. Please be sure to run the `hawt-app:build` goal (when not already bound to the `package` execution phase), otherwise the startup scripts won't work.
+  example: "-e -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package"
+- name: MAVEN_ARGS_APPEND
+  description: Additional Maven arguments.
+  example: "-X -am -pl"
+- name: ARTIFACT_DIR
+  description: Path to `target/` where the jar files are created for Maven multi module builds. These are added to **$MAVEN_ARGS**.
+  example: "plugins/"
+- name: ARTIFACT_COPY_ARGS
+  description: Arguments to use when copying artifacts from the output directory to the application directory. Useful to specify which artifacts will be part of the image. It defaults to `-r hawt-app/*` when a `hawt-app` directory is found on the build directory, otherwise jar files only will be included (`*.jar`).
+  example: "-r hawt-app/*"
+- name: MAVEN_CLEAR_REPO
+  description: If set then the Maven repository is removed after the artifact is built. This is useful for keeping the created application image small, but prevents *incremental* builds. Defaults to *false*.
+  example: "true"
+- name: MAVEN_MIRROR_URL
+  description: The base URL of a mirror used for retrieving artifacts.
+  example: "http://10.0.0.1:8080/repository/internal/"
+
+packages:
+    repositories:
+    - jboss-rhel-rhscl.repo
+    install:
+    - rh-maven33
+
+execute:
+- script: install_as_root

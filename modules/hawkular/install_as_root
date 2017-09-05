@@ -1,0 +1,19 @@
+#!/bin/bash
+# Set up Hawkular for java s2i builder image
+set -e
+
+SCRIPT_DIR=$(dirname $0)
+ADDED_DIR=${SCRIPT_DIR}/added
+
+# Hawkular agent
+mkdir -p /opt/hawkular/etc
+
+cp /tmp/artifacts/hawkular-javaagent-*.jar /opt/hawkular/hawkular-javaagent.jar
+cp "$ADDED_DIR"/hawkular-opts /opt/hawkular/hawkular-opts
+cp "$ADDED_DIR"/hawkular-javaagent-config.yaml /opt/hawkular/etc
+
+chmod 444 /opt/hawkular/hawkular-javaagent.jar
+chmod 755 /opt/hawkular/hawkular-opts
+chmod 775 /opt/hawkular/etc
+chmod 775 /opt/hawkular/etc/hawkular-javaagent-config.yaml
+chgrp -R root /opt/hawkular
