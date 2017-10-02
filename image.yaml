@@ -1,7 +1,25 @@
+schema_version: 1
+
 name: "redhat-openjdk-18/openjdk18-openshift"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 1.8"
 version: "1.2"
-user: 185
+labels:
+    - name: "io.openshift.s2i.scripts-url"
+      value: "image:///usr/local/s2i"
+    - name: io.fabric8.s2i.version.maven
+      value: "3.3.9-2.8"
+    - name: io.fabric8.s2i.version.jolokia
+      value: "1.3.6"
+    - name: io.k8s.description
+      value: "Platform for building and running plain Java applications (fat-jar and flat classpath)"
+    - name: io.k8s.display-name
+      value: "Java Applications"
+    - name: io.openshift.tags
+      value: "builder,java"
+    - name: io.openshift.s2i.destination
+      value: "/tmp"
+    - name: org.jboss.deployments-dir
+      value: "/deployments"
 from: "jboss/openjdk18-rhel7:1.1"
 envs:
     - name: MAVEN_VERSION
@@ -42,7 +60,8 @@ envs:
     - name: JAVA_ARGS
       description: Arguments passed to the `java` application.
     - name: JAVA_MAX_MEM_RATIO
-      description: Is used when no `-Xmx` option is given in **JAVA_OPTIONS**. This is used to calculate a default maximal heap memory based on a containers restriction. If used in a Docker container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to `0` in which case no `-Xmx` option is added.
+      description: Is used when no `-Xmx` option is given in **JAVA_OPTIONS**. This is used to calculate a default maximal heap memory based on a containers restriction. If used in a Docker container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism
+            by setting this value to `0` in which case no `-Xmx` option is added.
       example: "40"
     - name: JAVA_DIAGNOSTICS
       description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
@@ -69,7 +88,7 @@ envs:
       description: The username used for basic authentication with the Hawkular REST service.
       example: hawkW1nd
     - name: AB_HAWKULAR_REST_PASSWORD
-      description:  The password used for basic authentication with the Hawkular REST service.
+      description: The password used for basic authentication with the Hawkular REST service.
       example: QSandC
     - name: AB_HAWKULAR_REST_FEED_ID
       description: The feed-id for this agent.  Must be globally unique to the Hawkular REST service.
@@ -81,10 +100,10 @@ envs:
       description: The name of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
       example: keystore.jks
     - name: AB_HAWKULAR_REST_KEYSTORE_DIR
-      description:  The location of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
+      description: The location of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
       example: /etc/hawkular-agent-volume
     - name: AB_HAWKULAR_REST_KEYSTORE_PASSWORD
-      description:  The password for the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
+      description: The password for the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
       example: tru5tM3
     - name: AB_HAWKULAR_REST_KEYSTORE_TYPE
       description: The type of the keystore file used to verify the identity of the Hawkular REST service when using https.  Defaults to the JVM default, jks.
@@ -134,7 +153,7 @@ envs:
       description: Enable Jolokia discovery. Defaults to **false**.
       example: "true"
     - name: AB_JOLOKIA_OPTS
-      description:  Additional options to be appended to the agent configuration. They should be given in the format `key=value,key=value,...`.
+      description: Additional options to be appended to the agent configuration. They should be given in the format `key=value,key=value,...`.
       example: "backlog=20"
     - name: AB_JOLOKIA_AUTH_OPENSHIFT
       description: Switch on client authentication for OpenShift TLS communication. The value of this parameter can be a relative distinguished name which must be contained in a presented client's certificate. Enabling this parameter will automatically switch Jolokia into https communication mode. The default CA cert is set to `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt`.
@@ -181,61 +200,41 @@ envs:
     - name: NO_PROXY
       description: A comman separated lists of hosts, IP addresses or domains that can be accessed directly. This will be used for both Maven builds and Java runtime.
       example: "foo.example.com,bar.example.com"
-labels:
-    - name: "io.openshift.s2i.scripts-url"
-      value: "image:///usr/local/s2i"
-    - name: io.fabric8.s2i.version.maven
-      value: "3.3.9-2.8"
-    - name: io.fabric8.s2i.version.jolokia
-      value: "1.3.6"
-    - name: io.k8s.description
-      value: "Platform for building and running plain Java applications (fat-jar and flat classpath)"
-    - name: io.k8s.display-name
-      value: "Java Applications"
-    - name: io.openshift.tags
-      value: "builder,java"
-    - name: io.openshift.s2i.destination
-      value: "/tmp"
-    - name: org.jboss.deployments-dir
-      value: "/deployments"
-packages:
-    - rh-maven33
-    - PyYAML
-# Use the run script as default since we are working as an hybrid image which can be
-# used directly to. (If we were a plain s2i image we would print the usage info here)
-cmd:
-    - "/usr/local/s2i/run"
 ports:
     - value: 8080
     - value: 8443
     - value: 8778
-sources:
-    - artifact: jolokia-jvm-1.3.6.redhat-1-agent.jar
+modules:
+      repositories:
+          - git:
+                  url: https://github.com/jboss-openshift/cct_module.git
+                  ref: master
+      install:
+          - name: s2i-common
+          - name: os-java-misc
+          - name: os-java-s2i
+          - name: os-java-jolokia
+          - name: os-java-hawkular
+          - name: os-java-run
+packages:
+      repositories:
+          - jboss-os
+          - jboss-rhscl
+      install:
+          - rh-maven33
+          - PyYAML
+# Use the run script as default since we are working as an hybrid image which can be
+# used directly to. (If we were a plain s2i image we would print the usage info here)
+artifacts:
+    - path: jolokia-jvm-1.3.6.redhat-1-agent.jar
       md5: 75e5b5ba0b804cd9def9f20a70af649f
-    - artifact: hawkular-javaagent-1.0.0.CR5-redhat-1-shaded.jar
+    - path: hawkular-javaagent-1.0.0.CR5-redhat-1-shaded.jar
       md5: f5d3e0220e10c706ef86af84771cf74e
-cct:
-    - name: OpenJDK
-      modules:
-          - url: https://github.com/jboss-openshift/cct_module.git
-      changes:
-          - cct_module.s2i-common:
-                - install_sh:
-          - cct_module.os-java-misc:
-                - install_as_root:
-          - cct_module.os-java-s2i:
-                - install_as_root:
-          - cct_module.os-java-jolokia:
-                - install_as_root:
-          - cct_module.os-java-hawkular:
-                - install_as_root:
-          - cct_module.os-java-run:
-                - install_as_root:
-dogen:
-    version: 2.4.4
-    plugins:
-        cct:
-            verbose: true
-        dist_git:
-            repo: redhat-openjdk-18-docker
+run:
+      user: 185
+      cmd:
+          - "/usr/local/s2i/run"
+osbs:
+      repository:
+            name: redhat-openjdk-18-docker
             branch: ce-1.2-openshift-openjdk-1.8-rhel-7
