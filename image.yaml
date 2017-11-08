@@ -216,6 +216,7 @@ modules:
           - name: os-java-jolokia
           - name: os-java-hawkular
           - name: os-java-run
+          - name: openshift-layer
 packages:
       repositories:
           - jboss-os
