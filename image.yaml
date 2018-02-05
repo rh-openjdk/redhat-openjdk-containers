@@ -206,10 +206,15 @@ ports:
     - value: 8778
 modules:
       repositories:
-          - git:
+          - name: release
+            path: modules/release/product
+          - name: cct_module
+            git:
                   url: https://github.com/jboss-openshift/cct_module.git
                   ref: master
       install:
+          - name: os
+          - name: artifacts
           - name: s2i-common
           - name: os-java-misc
           - name: os-java-s2i
@@ -217,17 +222,9 @@ modules:
           - name: os-java-hawkular
           - name: os-java-run
 packages:
-      repositories:
-          - jboss-os
-          - jboss-rhscl
       install:
           - rh-maven33
           - PyYAML
-artifacts:
-    - path: jolokia-jvm-1.3.6.redhat-1-agent.jar
-      md5: 75e5b5ba0b804cd9def9f20a70af649f
-    - path: hawkular-javaagent-1.0.0.CR5-redhat-1-shaded.jar
-      md5: f5d3e0220e10c706ef86af84771cf74e
 run:
       user: 185
       cmd:

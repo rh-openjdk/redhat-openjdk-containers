@@ -1,6 +1,6 @@
-@redhat-openjdk-18/openjdk18-openshift
 Feature: tests for all openshift images
 
+  @redhat-openjdk-18/openjdk18-openshift
   Scenario: Check that labels are correctly set
     Given image is built
     Then the image should contain label release
@@ -8,3 +8,12 @@ Feature: tests for all openshift images
     And the image should contain label name
     And the image should contain label architecture with value x86_64
     And the image should contain label io.openshift.s2i.scripts-url with value image:///usr/local/s2i
+
+  @jboss/openjdk18-openshift
+  Scenario: Check that labels are correctly set
+    Given image is built
+    Then the image should contain label version
+    And the image should contain label name
+    And the image should contain label architecture with value x86_64
+    And the image should contain label io.openshift.s2i.scripts-url with value image:///usr/local/s2i
+    

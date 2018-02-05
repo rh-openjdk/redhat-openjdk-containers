@@ -1,0 +1,8 @@
+schema_version: 1
+
+name: "jboss/openjdk18-openshift"
+from: "jboss/openjdk18-centos7:1.2"
+modules:
+      repositories:
+           - name: release
+             path: modules/release/product
