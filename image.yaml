@@ -6,8 +6,6 @@ version: "1.3"
 labels:
     - name: "io.openshift.s2i.scripts-url"
       value: "image:///usr/local/s2i"
-    - name: io.fabric8.s2i.version.jolokia
-      value: "1.3.6"
     - name: io.k8s.description
       value: "Platform for building and running plain Java applications (fat-jar and flat classpath)"
     - name: io.k8s.display-name
@@ -20,14 +18,8 @@ labels:
       value: "/deployments"
 from: "jboss/openjdk18-rhel7:1.1"
 envs:
-    - name: JOLOKIA_VERSION
-      value: "1.3.6"
     - name: PATH
       value: $PATH:"/usr/local/s2i"
-    - name: AB_JOLOKIA_PASSWORD_RANDOM
-      value: "true"
-    - name: AB_JOLOKIA_AUTH_OPENSHIFT
-      value: "true"
     - name: JAVA_DATA_DIR
       value: "/deployments/data"
       example: "true"
@@ -63,83 +55,6 @@ envs:
     - name: JAVA_DEBUG_PORT
       description: Port used for remote debugging. Defaults to *5005*.
       example: "8787"
-    - name: AB_HAWKULAR_REST_URL
-      description: The url of the Hawkular REST service to which the Hawkular agent will emit metrics.  This must be set to configure the Hawkular agent.
-      example: "http://myhawkularservice.example.com/hawkular"
-    - name: AB_HAWKULAR_REST_USER
-      description: The username used for basic authentication with the Hawkular REST service.
-      example: hawkW1nd
-    - name: AB_HAWKULAR_REST_PASSWORD
-      description: The password used for basic authentication with the Hawkular REST service.
-      example: QSandC
-    - name: AB_HAWKULAR_REST_FEED_ID
-      description: The feed-id for this agent.  Must be globally unique to the Hawkular REST service.
-      example: autogenerate
-    - name: AB_HAWKULAR_REST_TENANT_ID
-      description: The tenant-id for this agent.
-      example: hawkular
-    - name: AB_HAWKULAR_REST_KEYSTORE
-      description: The name of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
-      example: keystore.jks
-    - name: AB_HAWKULAR_REST_KEYSTORE_DIR
-      description: The location of the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
-      example: /etc/hawkular-agent-volume
-    - name: AB_HAWKULAR_REST_KEYSTORE_PASSWORD
-      description: The password for the keystore JKS file used to verify the identity of the Hawkular REST service when using https.
-      example: tru5tM3
-    - name: AB_HAWKULAR_REST_KEYSTORE_TYPE
-      description: The type of the keystore file used to verify the identity of the Hawkular REST service when using https.  Defaults to the JVM default, jks.
-      example: jks
-    - name: AB_HAWKULAR_REST_KEY_MANAGER_ALGORITHM
-      description: The key manager algorithm to use when verifying the identity of the Hawkular REST service.  Defaults to the JVM default.
-      example: X509
-    - name: AB_HAWKULAR_REST_TRUST_MANAGER_ALGORITHM
-      description: The trust manager algorithm to use when verifying the identity of the Hawkular REST service.  Defaults to the JVM default.
-      example: X509
-    - name: AB_HAWKULAR_REST_SSL_PROTOCOL
-      description: The SSL protocol to use when verifying the identity of the Hawkular REST service. Defaults to TLSv1.
-      example: TLSv1
-    - name: AB_HAWKULAR_AGENT_OPTS
-      description: Additional options to add to the -javaagent parameter, e.g. delay=10.
-    - name: AB_HAWKULAR_AGENT_CONFIG
-      description: The location of the Hawkular agent configuration file, in yaml.  Defaults to /opt/hawkular/etc/hawkular-javaagent-config.yaml.
-      example: /opt/eap/standalone/configuration/hawkular-javaagent-config.yaml
-    - name: AB_JOLOKIA_OFF
-      description: If set disables activation of Joloka (i.e. echos an empty value). By default, Jolokia is enabled.
-      example: "true"
-    - name: AB_JOLOKIA_CONFIG
-      description: If set uses this file (including path) as Jolokia JVM agent properties (as described in Jolokia's link:https://www.jolokia.org/reference/html/agents.html#agents-jvm[reference manual]). If not set, the `/opt/jolokia/etc/jolokia.properties` will be created using the settings as defined in the manual. Otherwise the rest of the settings in this document are ignored.
-      example: "/opt/jolokia/custom.properties"
-    - name: AB_JOLOKIA_HOST
-      description: Host address to bind to. Defaults to **0.0.0.0**.
-      example: "127.0.0.1"
-    - name: AB_JOLOKIA_PORT
-      description: Port to listen to. Defaults to **8778**.
-      example: "5432"
-    - name: AB_JOLOKIA_USER
-      description: User for basic authentication. Defaults to **jolokia**.
-      example: "myusername"
-    - name: AB_JOLOKIA_PASSWORD
-      description: Password for basic authentication. By default authentication is switched off.
-      example: "mypassword"
-    - name: AB_JOLOKIA_PASSWORD_RANDOM
-      description: Determines if a random AB_JOLOKIA_PASSWORD be generated. Set to **true** to generate random password. Generated value will be written to `/opt/jolokia/etc/jolokia.pw`.
-      example: "true"
-    - name: AB_JOLOKIA_HTTPS
-      description: Switch on secure communication with https. By default self signed server certificates are generated if no `serverCert` configuration is given in **AB_JOLOKIA_OPTS**.
-      example: "true"
-    - name: AB_JOLOKIA_ID
-      description: Agent ID to use (`$HOSTNAME` by default, which is the container id).
-      example: "openjdk-app-1-xqlsj"
-    - name: AB_JOLOKIA_DISCOVERY_ENABLED
-      description: Enable Jolokia discovery. Defaults to **false**.
-      example: "true"
-    - name: AB_JOLOKIA_OPTS
-      description: Additional options to be appended to the agent configuration. They should be given in the format `key=value,key=value,...`.
-      example: "backlog=20"
-    - name: AB_JOLOKIA_AUTH_OPENSHIFT
-      description: Switch on client authentication for OpenShift TLS communication. The value of this parameter can be a relative distinguished name which must be contained in a presented client's certificate. Enabling this parameter will automatically switch Jolokia into https communication mode. The default CA cert is set to `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt`.
-      example: "true"
     - name: CONTAINER_CORE_LIMIT
       description: A calculated core limit as described in https://www.kernel.org/doc/Documentation/scheduler/sched-bwc.txt.
       example: "2"
@@ -182,7 +97,6 @@ envs:
 ports:
     - value: 8080
     - value: 8443
-    - value: 8778
 modules:
       repositories:
           - git:
@@ -202,9 +116,6 @@ packages:
           - jboss-os
       install:
           - PyYAML
-artifacts:
-    - path: jolokia-jvm-1.3.6.redhat-1-agent.jar
-      md5: 75e5b5ba0b804cd9def9f20a70af649f
 run:
       user: 185
       cmd:
