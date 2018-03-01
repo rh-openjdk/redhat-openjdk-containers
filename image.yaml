@@ -4,6 +4,8 @@ name: "redhat-openjdk-18/openjdk18-openshift"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 1.8"
 version: "1.3"
 labels:
+    - name: "com.redhat.component"
+      value: "redhat-openjdk-18-openjdk18-openshift-container"
     - name: "io.openshift.s2i.scripts-url"
       value: "image:///usr/local/s2i"
     - name: io.k8s.description
@@ -34,8 +36,7 @@ envs:
     - name: JAVA_ARGS
       description: Arguments passed to the `java` application.
     - name: JAVA_MAX_MEM_RATIO
-      description: Is used when no `-Xmx` option is given in **JAVA_OPTIONS**. This is used to calculate a default maximal heap memory based on a containers restriction. If used in a Docker container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism
-            by setting this value to `0` in which case no `-Xmx` option is added.
+      description: Is used when no `-Xmx` option is given in **JAVA_OPTIONS**. This is used to calculate a default maximal heap memory based on a containers restriction. If used in a container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to `0` in which case no `-Xmx` option is added.
       example: "40"
     - name: JAVA_DIAGNOSTICS
       description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
@@ -124,5 +125,5 @@ run:
           - "/usr/local/s2i/run"
 osbs:
       repository:
-            name: redhat-openjdk-18-docker
-            branch: ce-1.3-openshift-openjdk-1.8-rhel-7
+            name: containers/redhat-openjdk-18
+            branch: jb-openjdk-1.8-openshift-rhel-7
