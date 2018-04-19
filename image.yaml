@@ -35,12 +35,6 @@ envs:
       example: "-verbose:class"
     - name: JAVA_ARGS
       description: Arguments passed to the `java` application.
-    - name: JAVA_MAX_MEM_RATIO
-      description: Is used when no `-Xmx` option is given in **JAVA_OPTIONS**. This is used to calculate a default maximal heap memory based on a containers restriction. If used in a container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to `0` in which case no `-Xmx` option is added.
-      example: "40"
-    - name: JAVA_DIAGNOSTICS
-      description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
-      example: "true"
     - name: JAVA_MAIN_CLASS
       description: A main class to use as argument for `java`. When this environment variable is given, all jar files in **JAVA_APP_DIR** are added to the classpath as well as **JAVA_LIB_DIR**.
     - name: JAVA_APP_JAR
@@ -56,27 +50,6 @@ envs:
     - name: JAVA_DEBUG_PORT
       description: Port used for remote debugging. Defaults to *5005*.
       example: "8787"
-    - name: CONTAINER_CORE_LIMIT
-      description: A calculated core limit as described in https://www.kernel.org/doc/Documentation/scheduler/sched-bwc.txt.
-      example: "2"
-    - name: CONTAINER_MAX_MEMORY
-      description: Memory limit given to the container.
-      example: "1024"
-    - name: GC_MIN_HEAP_FREE_RATIO
-      description: Minimum percentage of heap free after GC to avoid expansion.
-      example: "20"
-    - name: GC_MAX_HEAP_FREE_RATIO
-      description: Maximum percentage of heap free after GC to avoid shrinking.
-      example: "40"
-    - name: GC_TIME_RATIO
-      description: Specifies the ratio of the time spent outside the garbage collection (for example, the time spent for application execution) to the time spent in the garbage collection.
-      example: "4"
-    - name: GC_ADAPTIVE_SIZE_POLICY_WEIGHT
-      description: The weighting given to the current GC time versus previous GC times.
-      example: "90"
-    - name: GC_MAX_METASPACE_SIZE
-      description: The maximum metaspace size.
-      example: "100"
     - name: https_proxy
       description: The location of the https proxy. This takes precedence over **HTTPS_PROXY**, **http_proxy**, and **HTTP_PROXY**, and will be used for both Maven builds and Java runtime.
       example: "myuser:mypass@127.0.0.1:8080"
@@ -112,11 +85,6 @@ modules:
           - name: os-java-run
           - name: openshift-passwd
           - name: jboss-maven
-packages:
-      repositories:
-          - jboss-os
-      install:
-          - PyYAML
 run:
       user: 185
       cmd:
