@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>25</version>
+    </parent>
+
+    <groupId>org.jboss.ce.testsuite</groupId>
+    <artifactId>openjdk-arq-testsuite</artifactId>
+    <packaging>jar</packaging>
+    <name>OpenJDK 1.8 testsuite</name>
+    <version>1.0-SNAPSHOT</version>
+    <description>Arquillian OpenJDK 1.8 testsuite</description>
+
+    <properties>
+        <version.arquillian>1.4.0.Final</version.arquillian>
+        <version.arquillian.cube>1.16.0</version.arquillian.cube>
+        <version.json-simple>1.1.1</version.json-simple>
+        <version.junit>4.12</version.junit>
+        <version.org.jboss.as.arquillian.container>7.2.0.Final</version.org.jboss.as.arquillian.container>
+        <version.ce-arq>1.3.0.Final</version.ce-arq>
+
+        <image>registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.4</image>
+        <image.stream.version>1.4</image.stream.version>
+        <image.stream.name>redhat-openjdk18-openshift</image.stream.name>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${version.arquillian}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.arquillian.cube</groupId>
+                <artifactId>arquillian-cube-bom</artifactId>
+                <version>${version.arquillian.cube}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>${version.json-simple}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-ce-httpclient</artifactId>
+            <version>${version.ce-arq}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-ce-shrinkwrap</artifactId>
+            <version>${version.ce-arq}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.arquillian.cube</groupId>
+            <artifactId>arquillian-cube-openshift</artifactId>
+            <version>${version.arquillian.cube}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <version>${version.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-jmx</artifactId>
+            <version>${version.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-arquillian-container-remote</artifactId>
+            <version>${version.org.jboss.as.arquillian.container}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.jboss</includeGroupIds>
+                            <includeTypes>test-jar</includeTypes>
+                            <includeScope>test</includeScope>
+                            <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <runOrder>alphabetical</runOrder>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <trimStackTrace>false</trimStackTrace>
+                    <forkCount>4</forkCount>
+                    <reuseForks>false</reuseForks>
+                    <includes>
+                        <include>org/jboss/**/*Test.java</include>
+                    </includes>
+                    <systemPropertyVariables>
+                        <!-- the property below ere needed to run the All in One tests, if it is not set then it
+                        will be default to cloudapps.example.com, then make sure your openshift instance can resolve this
+                        domain internally -->
+                        <route.suffix>cloudapps.example.com</route.suffix>
+                        <!-- end -->
+                        <sun.net.spi.nameservice.provider.1>dns,ArquillianCubeNameService</sun.net.spi.nameservice.provider.1>
+                        <sun.net.spi.nameservice.provider.2>default</sun.net.spi.nameservice.provider.2>
+                        <kubernetes.master>${kubernetes.master}</kubernetes.master>
+                        <kubernetes.auth.token>${kubernetes.auth.token}</kubernetes.auth.token>
+                        <arq.extension.openshift.routerHost>${router.hostIP}</arq.extension.openshift.routerHost>
+                        <image.stream.image>${image}</image.stream.image>
+                        <image.stream.name>${image.stream.name}</image.stream.name>
+                        <image.stream.version>${image.stream.version}</image.stream.version>
+                        <template.repository>jboss-openshift</template.repository>
+                        <template.branch>master</template.branch>
+                        <!-- URL to the OpenShift image streams that are officially added to OCP. These image streams are added to every test project run on OpenShift -->
+                        <openshift.imageStreams>https://raw.githubusercontent.com/openshift/origin/v3.9.0/examples/image-streams/image-streams-rhel7.json</openshift.imageStreams>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

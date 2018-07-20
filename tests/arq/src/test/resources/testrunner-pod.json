@@ -1,0 +1,50 @@
+{
+	"apiVersion":"v1",
+	"kind": "Pod",
+	"metadata": {
+		"name": "testrunner",
+		"labels": {
+			"name": "testrunner"
+		}
+	},
+	"spec": {
+		"terminationGracePeriodSeconds": 0,
+		"containers": [{
+			"name": "testrunner",
+			"readinessProbe" : {
+				"exec": {
+					"command": [
+					    "/bin/bash",
+					    "-c",
+					    "/opt/eap/bin/readinessProbe.sh"
+					]
+				}
+			},
+			"image": "jboss-eap-6/eap64-openshift:1.5",
+            "ports": [
+                {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                },
+                {
+                    "containerPort": 9990,
+                    "protocol": "TCP"
+                },
+                {
+                    "containerPort": 9999,
+                    "protocol": "TCP"
+                }
+            ],
+            "env": [
+                {
+                	"name": "ADMIN_USERNAME",
+                	"value": "admin"
+                },
+                {
+                	"name": "ADMIN_PASSWORD",
+                	"value": "Admin#70365"
+                }
+            ]
+		}]
+	}
+}
