@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class OpenJDKDatabaseTest extends OpenJDKTest {
+public abstract class OpenJDKDatabaseTest extends OpenJDKTest {
 
     private Logger log = Logger.getLogger(getClass().getName());
 

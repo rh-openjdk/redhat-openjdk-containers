@@ -245,7 +245,7 @@
                         "from": {
                             "kind": "ImageStreamTag",
                             "namespace": "${IMAGE_STREAM_NAMESPACE}",
-                            "name": "redhat-openjdk18-openshift:1.4"
+                            "name": "java:8"
                         },
                         "env": [
                             {
