@@ -1,0 +1,31 @@
+schema_version: 1
+
+from: "rhel7:7.5-released"
+name: "redhat-openjdk-18/openjdk18-openshift"
+version: "1.6"
+
+labels:
+- name: "com.redhat.component"
+  value: "redhat-openjdk-18-openjdk18-openshift-container"
+- name: "usage"
+  value: "https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift/"
+
+envs:
+- name: "JBOSS_IMAGE_NAME"
+  value: "redhat-openjdk-18/openjdk18-openshift"
+- name: "JBOSS_IMAGE_VERSION"
+  value: "1.6"
+
+packages:
+  repositories:
+    # Below two repositories are required to be defined to generate proper
+    # configuration files for OSBS
+  - name: base
+    id: rhel-7-server-rpms
+  - name: scl
+    id: rhel-server-rhscl-7-rpms
+
+osbs:
+  repository:
+    name: containers/redhat-openjdk-18
+    branch: jb-openjdk-1.8-openshift-rhel-7
