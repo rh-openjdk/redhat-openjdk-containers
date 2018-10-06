@@ -1,0 +1,24 @@
+schema_version: 1
+
+name: &name "redhat-openjdk-11/openjdk11-openshift"
+version: &version "1.0"
+
+labels:
+- name: "com.redhat.component"
+  value: "redhat-openjdk-11-openjdk11-openshift-container"
+
+envs:
+- name: "JBOSS_IMAGE_NAME"
+  value: *name
+- name: "JBOSS_IMAGE_VERSION"
+  value: *version
+
+modules:
+  install:
+  - name: jboss.container.openjdk.jdk
+    version: "11"
+
+osbs:
+  repository:
+    name: containers/redhat-openjdk-11
+    branch: jb-openjdk-11.0-openshift-rhel-7

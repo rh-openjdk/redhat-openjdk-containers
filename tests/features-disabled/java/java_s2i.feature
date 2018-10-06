@@ -1,4 +1,4 @@
-@redhat-openjdk-18
+@redhat-openjdk-18 @redhat-openjdk-11
 @centos/openjdk-18-centos7
 Feature: Openshift OpenJDK S2I tests
 # NOTE: these tests should be usable with the other images once we have refactored the JDK scripts.
@@ -279,10 +279,10 @@ Feature: Openshift OpenJDK S2I tests
     Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:proxy[ns:id='genproxy'][ns:active='true'][ns:protocol='http'][ns:host='127.0.0.1'][ns:port='8080'][ns:nonProxyHosts='foo.example.com|bar.example.com']
 
   Scenario: run an S2I build that depends on com.redhat.xpaas.repo.redhatga being defined
-    Given s2i build https://github.com/jmtd/openshift-examples from spring-boot-sample-simple using openjdk-enforce-profile
+    Given s2i build https://github.com/jboss-openshift/openshift-examples from spring-boot-sample-simple
 
   Scenario: run an S2I that should fail as MAVEN_ARGS does not define com.redhat.xpaas.repo.redhatga
-    Given failing s2i build https://github.com/jmtd/openshift-examples from spring-boot-sample-simple using openjdk-enforce-profile
+    Given failing s2i build https://github.com/jboss-openshift/openshift-examples from spring-boot-sample-simple
        | variable           | value                                            |
        | MAVEN_ARGS         | -e package                                       |
 

@@ -1,6 +1,6 @@
 schema_version: 1
 
-from: "rhel7:7.5-released"
+from: "rhel7:7-released"
 name: "redhat-openjdk-18/openjdk18-openshift"
 version: "1.6"
 

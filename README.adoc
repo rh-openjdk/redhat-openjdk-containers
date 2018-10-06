@@ -11,13 +11,29 @@ cekit build
 
 This will produce an image named `centos/openjdk-18-centos7`
 
+### JDK 11
+
+```
+cekit --overrides-file=centos7-jdk11-overrides.yaml build
+```
+
+This will produce an image named `centos/openjdk-11-centos7`
+
 ### RHEL-Based Image
 
+#### JDK 8
 ```
 cekit --overrides-file=product-overrides.yaml build
 ```
 
 This will produce an image named `redhat-openjdk-8/openjdk18-openshift`
+
+#### JDK 11
+```
+cekit --overrides-file=product-overrides.yaml --overrides-file=rhel7-jdk11-overrides.yaml build
+```
+
+This will produce an image named `redhat-openjdk-11/openjdk11-openshift`
 
 ## License
 

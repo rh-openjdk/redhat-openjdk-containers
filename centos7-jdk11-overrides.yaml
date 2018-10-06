@@ -1,0 +1,6 @@
+name: "centos/openjdk-11-centos7"
+
+modules:
+  install:
+  - name: jboss.container.openjdk.jdk
+    version: "11"
