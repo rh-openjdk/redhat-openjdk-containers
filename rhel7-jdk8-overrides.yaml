@@ -9,6 +9,12 @@ labels:
   value: "redhat-openjdk-18-openjdk18-openshift-container"
 - name: "usage"
   value: "https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift/"
+- name: "org.jboss.product"
+  value: "openjdk"
+- name: "org.jboss.product.version"
+  value: "1.8.0"
+- name: "org.jboss.product.openjdk.version"
+  value: "1.8.0"
 
 envs:
 - name: "JBOSS_IMAGE_NAME"
