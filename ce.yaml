@@ -19,6 +19,5 @@ builds:
   - name: "product-jdk11"
     descriptor: "image.yaml"
     overrides:
-      - "rhel7-jdk8-overrides.yaml"
       - "rhel7-jdk11-overrides.yaml"
 

@@ -1,5 +1,6 @@
 schema_version: 1
 
+from: "rhel7:7-released"
 name: &name "openjdk/openjdk-11-rhel7"
 version: &version "1.0"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 11"
@@ -7,6 +8,8 @@ description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJD
 labels:
 - name: "com.redhat.component"
   value: "openjdk-openjdk-11-rhel7-container"
+- name: "usage"
+  value: "https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift/"
 
 envs:
 - name: "JBOSS_IMAGE_NAME"
@@ -18,6 +21,15 @@ modules:
   install:
   - name: jboss.container.openjdk.jdk
     version: "11"
+
+packages:
+  repositories:
+    # Below two repositories are required to be defined to generate proper
+    # configuration files for OSBS
+  - name: base
+    id: rhel-7-server-rpms
+  - name: scl
+    id: rhel-server-rhscl-7-rpms
 
 osbs:
   repository:

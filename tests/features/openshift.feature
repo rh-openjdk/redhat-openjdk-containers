@@ -1,6 +1,6 @@
 Feature: Tests for all openshift images
 
-  @redhat-openjdk-18 @redhat-openjdk-11
+  @openjdk
   Scenario: Check that product labels are correctly set
     # We don't set 'release' or 'architecture' on CI builds, but it's set on OSBS builds
     # Since we base on an image which has it already set, it's kind of meaningless
@@ -10,8 +10,7 @@ Feature: Tests for all openshift images
     Then the image should contain label release
     And the image should contain label architecture with value x86_64
 
-  @redhat-openjdk-18 @redhat-openjdk-11
-  @centos/openjdk-18-centos7
+  @openjdk
   Scenario: Check that common labels are correctly set
     Given image is built
     Then the image should contain label version

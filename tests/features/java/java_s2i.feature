@@ -1,5 +1,5 @@
-@redhat-openjdk-18 @redhat-openjdk-11
-@centos/openjdk-18-centos7
+@openjdk
+@centos/openjdk-8-centos7 @centos/openjdk-11-centos7
 Feature: Openshift OpenJDK S2I tests
 # NOTE: these tests should be usable with the other images once we have refactored the JDK scripts.
 # These builds do not actually run maven. This is important, because the proxy
@@ -282,7 +282,7 @@ Feature: Openshift OpenJDK S2I tests
     Given s2i build https://github.com/jboss-openshift/openshift-examples from spring-boot-sample-simple
 
   Scenario: run an S2I that should fail as MAVEN_ARGS does not define com.redhat.xpaas.repo.redhatga
-    Given failing s2i build https://github.com/jboss-openshift/openshift-examples from spring-boot-sample-simple
+    Given failing s2i build https://github.com/jboss-openshift/openshift-examples from spring-boot-sample-simple using openjdk-enforce-profile
        | variable           | value                                            |
        | MAVEN_ARGS         | -e package                                       |
 
