@@ -11,3 +11,12 @@ Feature: Openshift OpenJDK Runtime tests
        | variable    | value               |
        | JAVA_ARGS   | Hello from CTF test |
     Then container log should contain /deployments/undertow-servlet.jar Hello from CTF test
+
+  Scenario: Ensure diagnostic options work correctly
+    Given s2i build https://github.com/jboss-openshift/openshift-quickstarts from undertow-servlet
+       | variable         | value               |
+       | JAVA_ARGS        | Hello from CTF test |
+       | JAVA_DIAGNOSTICS | true                |
+    Then container log should contain /deployments/undertow-servlet.jar Hello from CTF test
+      And container log should contain -XX:NativeMemoryTracking=summary
+      And container log should contain Jolokia: Agent started
