@@ -22,6 +22,7 @@ ports:
 - value: 8443
 
 packages:
+  content_sets_file: content_sets.yml
   repositories:
   - name: scl
     rpm: centos-release-scl
