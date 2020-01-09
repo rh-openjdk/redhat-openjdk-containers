@@ -298,7 +298,7 @@
                         },
                         "from": {
                             "kind": "DockerImage",
-                            "name": "registry.redhat.io/openjdk/openjdk-1.8-rhel8:1.1"
+                            "name": "registry.redhat.io/openjdk/openjdk-8-rhel8:1.1"
                         }
                     }
                 ]
