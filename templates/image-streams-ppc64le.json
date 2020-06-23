@@ -171,9 +171,9 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "openjdk-8-rhel8",
+                "name": "ubi8-openjdk-8",
                 "annotations": {
-                    "openshift.io/display-name": "Red Hat OpenJDK 1.8 (RHEL8)",
+                    "openshift.io/display-name": "Red Hat OpenJDK 1.8 (UBI8)",
                     "openshift.io/provider-display-name": "Red Hat, Inc.",
                     "version": "1.4.17"
                 },
@@ -184,60 +184,22 @@
             "spec": {
                 "tags": [
                     {
-                        "name": "1.0",
+                        "name": "1.3",
                         "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJDK 1.8 (RHEL8)",
-                            "description": "Build and run Java applications using Maven and OpenJDK 1.8 upon RHEL8.",
+                            "openshift.io/display-name": "Red Hat OpenJDK 1.8 (UBI8)",
+                            "description": "Build and run Java applications using Maven and OpenJDK 1.8 upon UBI8.",
                             "iconClass": "icon-rh-openjdk",
                             "tags": "builder,java,openjdk,ubi8,hidden",
                             "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
                             "sampleContextDir": "undertow-servlet",
-                            "version": "1.0"
+                            "version": "1.3"
                         },
                         "referencePolicy": {
                             "type": "Local"
                         },
                         "from": {
                             "kind": "DockerImage",
-                            "name": "registry.redhat.io/openjdk/openjdk-8-rhel8:1.0"
-                        }
-                    },
-                    {
-                        "name": "1.1",
-                        "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJDK 1.8 (RHEL8)",
-                            "description": "Build and run Java applications using Maven and OpenJDK 1.8 upon RHEL8.",
-                            "iconClass": "icon-rh-openjdk",
-                            "tags": "builder,java,openjdk,ubi8,hidden",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "1.1"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openjdk/openjdk-8-rhel8:1.1"
-                        }
-                    },
-                    {
-                        "name": "1.2",
-                        "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJDK 1.8 (RHEL8)",
-                            "description": "Build and run Java applications using Maven and OpenJDK 1.8 upon RHEL8.",
-                            "iconClass": "icon-rh-openjdk",
-                            "tags": "builder,java,openjdk,ubi8,hidden",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "1.2"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openjdk/openjdk-8-rhel8:1.2"
+                            "name": "registry.access.redhat.com/ubi8/openjdk-8:1.3"
                         }
                     }
                 ]
@@ -247,9 +209,9 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "openjdk-11-rhel8",
+                "name": "ubi8-openjdk-11",
                 "annotations": {
-                    "openshift.io/display-name": "Red Hat OpenJDK 11 (RHEL8)",
+                    "openshift.io/display-name": "Red Hat OpenJDK 11 (UBI8)",
                     "openshift.io/provider-display-name": "Red Hat, Inc.",
                     "version": "1.4.17"
                 },
@@ -260,60 +222,22 @@
             "spec": {
                 "tags": [
                     {
-                        "name": "1.0",
+                        "name": "1.3",
                         "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJDK 11 (RHEL8)",
-                            "description": "Build and run Java applications using Maven and OpenJDK 11 upon RHEL8.",
+                            "openshift.io/display-name": "Red Hat OpenJDK 11 (UBI8)",
+                            "description": "Build and run Java applications using Maven and OpenJDK 11 upon UBI8.",
                             "iconClass": "icon-rh-openjdk",
                             "tags": "builder,java,openjdk,ubi8,hidden",
                             "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
                             "sampleContextDir": "undertow-servlet",
-                            "version": "1.0"
+                            "version": "1.3"
                         },
                         "referencePolicy": {
                             "type": "Local"
                         },
                         "from": {
                             "kind": "DockerImage",
-                            "name": "registry.redhat.io/openjdk/openjdk-11-rhel8:1.0"
-                        }
-                    },
-                    {
-                        "name": "1.1",
-                        "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJDK 11 (RHEL8)",
-                            "description": "Build and run Java applications using Maven and OpenJDK 11 upon RHEL8.",
-                            "iconClass": "icon-rh-openjdk",
-                            "tags": "builder,java,openjdk,ubi8,hidden",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "1.1"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openjdk/openjdk-11-rhel8:1.1"
-                        }
-                    },
-                    {
-                        "name": "1.2",
-                        "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJDK 11 (RHEL8)",
-                            "description": "Build and run Java applications using Maven and OpenJDK 11 upon RHEL8.",
-                            "iconClass": "icon-rh-openjdk",
-                            "tags": "builder,java,openjdk,ubi8,hidden",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "1.2"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openjdk/openjdk-11-rhel8:1.2"
+                            "name": "registry.access.redhat.com/ubi8/openjdk-11:1.3"
                         }
                     }
                 ]
