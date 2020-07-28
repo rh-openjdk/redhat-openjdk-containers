@@ -4,9 +4,9 @@
 
 schema_version: 1
 
-from: "ubi8:8-released"
+from: "ubi8-minimal:8-released"
 name: &name "openj9/openj9-8-rhel8"
-version: &version "1.1"
+version: &version "1.2"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJ9 1.8"
 
 labels:
@@ -36,7 +36,8 @@ ports:
 - value: 8443
 
 packages:
-  manager: dnf
+  manager: microdnf
+  content_sets_file: content_sets_rhel8.yml
 
 modules:
   repositories:
@@ -51,9 +52,10 @@ modules:
     version: "7"
   - name: jboss.container.jolokia
     version: "7"
-  - name: jboss.container.java.s2i.bash
+  - name: jboss.container.dnf
   - name: jboss.container.maven
-    version: "8.0.3.5"
+    version: "8.2.3.6"
+  - name: jboss.container.java.s2i.bash
   - name: jboss.container.java.singleton-jdk
 
 help:
