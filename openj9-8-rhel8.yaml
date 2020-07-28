@@ -37,6 +37,7 @@ ports:
 
 packages:
   manager: microdnf
+  content_sets_file: content_sets_rhel8.yml
 
 modules:
   repositories:
