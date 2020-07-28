@@ -37,6 +37,7 @@ ports:
 
 packages:
   manager: microdnf
+  content_sets_file: content_sets_rhel8.yml
 
 modules:
   repositories:
@@ -55,6 +56,7 @@ modules:
   - name: jboss.container.maven
     version: "8.2.3.6"
   - name: jboss.container.java.s2i.bash
+  - name: jboss.container.java.singleton-jdk
 
 help:
   add: true
