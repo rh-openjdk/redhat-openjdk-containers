@@ -2,7 +2,7 @@
 
 schema_version: 1
 
-from: "registry.redhat.io/rhel7/rhel"
+from: "registry.redhat.io/rhel7/rhel:7.8"
 name: &name "openjdk/openjdk-11-rhel7"
 version: &version "1.1"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 11"

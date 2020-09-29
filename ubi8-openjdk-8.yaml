@@ -2,7 +2,7 @@
 
 schema_version: 1
 
-from: "registry.redhat.io/ubi8/ubi-minimal"
+from: "registry.redhat.io/ubi8/ubi-minimal:8.2"
 name: &name "ubi8/openjdk-8"
 version: &version "1.3"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 1.8"

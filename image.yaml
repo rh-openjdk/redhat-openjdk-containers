@@ -2,7 +2,7 @@
 
 schema_version: 1
 
-from: "registry.redhat.io/rhel7/rhel"
+from: "registry.redhat.io/rhel7/rhel:7.8"
 name: &name "redhat-openjdk-18/openjdk18-openshift"
 version: &version "1.8"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 8"
