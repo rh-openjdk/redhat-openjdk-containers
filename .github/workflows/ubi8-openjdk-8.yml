@@ -3,6 +3,7 @@ on: [push, pull_request]
 env:
   LANG: en_US.UTF-8
   CEKIT_VERSION: 3.6.0
+  BASE_IMG_VERSION: 8.2
 jobs:
   openjdkci:
     name: OpenJDK S2I Build and Test
@@ -13,8 +14,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Verify latest UBI image is present
         run: |
-          docker pull registry.access.redhat.com/ubi8/ubi-minimal:latest
-          docker tag  registry.access.redhat.com/ubi8/ubi-minimal:latest registry.redhat.io/ubi8/ubi-minimal:latest
+          docker pull registry.access.redhat.com/ubi8/ubi-minimal:${{ env.BASE_IMG_VERSION }}
+          docker tag  registry.access.redhat.com/ubi8/ubi-minimal:${{ env.BASE_IMG_VERSION }} registry.redhat.io/ubi8/ubi-minimal:${{ env.BASE_IMG_VERSION }}
           docker image ls | grep ubi8
       - name: Setup required system packages
         run: |
