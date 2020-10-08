@@ -36,7 +36,13 @@ ports:
 - value: 8443
 
 packages:
-  content_sets_file: content_sets_rhel7.yml
+  content_sets:
+    s390x:
+    - rhel-7-for-system-z-rpms
+    - rhel-7-server-for-system-z-rhscl-rpms
+    ppc64le:
+    - rhel-7-server-for-power-le-rhscl-rpms
+    - rhel-7-for-power-le-rpms
 
 modules:
   repositories:
