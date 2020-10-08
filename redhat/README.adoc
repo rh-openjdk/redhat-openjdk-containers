@@ -1,0 +1,32 @@
+# Red Hat builds of Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK
+
+For building the images internal to Red Hat, we vary the instructions
+slightly.
+
+## Image versions
+
+### UBI 8 JDK 8
+
+    cekit --redhat --descriptor ubi8-openjdk-8.yaml build --overrides-file redhat/ubi8-openjdk-8.yaml podman
+
+This will produce an image named `ubi8/openjdk-8`.
+
+### UBI 8 OpenJDK 11
+
+    cekit --redhat --descriptor ubi8-openjdk-11.yaml build --overrides-file redhat/ubi8-openjdk-11.yaml podman
+
+This will produce an image named `ubi8/openjdk-11`.
+
+### RHEL 7 OpenJDK 8
+
+    cekit --redhat --descriptor openjdk18-openshift.yaml --overrides-file redhat/openjdk18-openshift.yaml build podman
+
+This will produce an image named `redhat-openjdk-8/openjdk18-openshift`
+
+### RHEL 7 OpenJDK 11
+
+    cekit --redhat --descriptor openjdk-11-rhel7.yaml build --overrides-file redhat/openjdk-11-rhel7.yaml build podman
+
+This will produce an image named `openjdk/openjdk-11-rhel7`
+
+

@@ -53,13 +53,3 @@ modules:
 
 help:
   add: true
-
-osbs:
-  configuration:
-    container_file: container.yaml
-  repository:
-    name: containers/openjdk
-    branch: openjdk-11-rhel7
-
-packages:
-  content_sets_file: content_sets.yml

@@ -33,9 +33,6 @@ ports:
 - value: 8080
 - value: 8443
 
-packages:
-  content_sets_file: content_sets.yml
-
 modules:
   repositories:
   - name: cct_module
@@ -56,10 +53,3 @@ modules:
 
 help:
   add: true
-
-osbs:
-  configuration:
-    container_file: container.yaml
-  repository:
-    name: containers/redhat-openjdk-18
-    branch: jb-openjdk-1.8-openshift-rhel-7

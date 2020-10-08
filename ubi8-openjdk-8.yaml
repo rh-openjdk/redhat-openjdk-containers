@@ -2,7 +2,7 @@
 
 schema_version: 1
 
-from: "registry.redhat.io/ubi8/ubi-minimal"
+from: "registry.access.redhat.com/ubi8/ubi-minimal"
 name: &name "ubi8/openjdk-8"
 version: &version "1.3"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 1.8"
@@ -54,16 +54,5 @@ modules:
 help:
   add: true
 
-osbs:
-  configuration:
-    container:
-      compose:
-        pulp_repos: true
-        inherit: true
-  repository:
-    name: containers/openjdk
-    branch: openjdk-8-ubi8
-
 packages:
   manager: microdnf
-  content_sets_file: content_sets_rhel8.yml
