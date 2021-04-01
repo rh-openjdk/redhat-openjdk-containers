@@ -1,0 +1,35 @@
+schema_version: 1
+name: jboss.container.maven-runtime.s2i
+version: '1.0'
+description: ^
+  Provides s2i capabilities built around Maven.
+  Defines environment variables and labels used by Maven s2i.
+
+envs:
+- name: MAVEN_S2I_ARTIFACT_DIRS
+  description: >
+    Relative paths of source directories to scan for build output, which will
+    be copied to $DEPLOY_DIR.  Defaults to **target**
+  example: target
+
+- name: MAVEN_S2I_GOALS
+  description: >
+    Space separated list of goals to be executed with maven build, e.g.
+    mvn $MAVEN_S2I_GOALS.  Defaults to **package**
+  example: package install
+
+- name: JBOSS_CONTAINER_MAVEN_S2I_MODULE
+  value: /opt/jboss/container/maven/s2i
+
+# Deprecated environment variables
+- name: ARTIFACT_DIR
+  description: Deprecated by **MAVEN_S2I_ARTIFACT_DIRS**.
+
+execute:
+- script: configure.sh
+
+modules:
+  install:
+  - name: jboss.container.s2i-runtime.core.api
+  - name: jboss.container.s2i-runtime.core.bash
+  - name: jboss.container.util.logging.bash

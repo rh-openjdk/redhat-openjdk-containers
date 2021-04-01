@@ -1,0 +1,74 @@
+
+source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
+
+# inject our overridden maven_*() functions
+function maven_s2i_source_maven_overrides() {
+  source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/maven-overrides"
+}
+
+# Accommodate fabric8
+function maven_s2i_custom_binary_build() {
+  if [ -f "${S2I_SOURCE_DIR}/Dockerfile" ]; then
+    # This is a S2I binary build coming from fabric8-maven-plugin
+    log_info "S2I binary build from fabric8-maven-plugin detected"
+    if [ -d "${S2I_SOURCE_DIR}/maven" ]; then
+      binary_dir="${S2I_SOURCE_DIR}/maven"
+    elif [ -d "${S2I_SOURCE_DIR}/${S2I_SOURCE_DEPLOYMENTS_DIR}" ]; then
+      binary_dir="${S2I_SOURCE_DIR}/${S2I_SOURCE_DEPLOYMENTS_DIR}"
+    elif [ $(find "${S2I_SOURCE_DIR}" -maxdepth 1 -type d | grep -v -e "^${S2I_SOURCE_DIR}$" | wc -l) == 1 ]; then
+      # Found a single directory, take this
+      binary_dir=$(find "${S2I_SOURCE_DIR}" -maxdepth 1 -type d | grep -v -e "^${S2I_SOURCE_DIR}$")
+    else
+      log_error "No single directory found in ${S2I_SOURCE_DIR} but:\n $(ls -l ${S2I_SOURCE_DIR})"
+      return 1
+    fi
+  elif [ -d "${S2I_SOURCE_DIR}/${S2I_SOURCE_DEPLOYMENTS_DIR}" ]; then
+    binary_dir="${S2I_SOURCE_DIR}/${S2I_SOURCE_DEPLOYMENTS_DIR}"
+  else
+    binary_dir="${S2I_SOURCE_DIR}"
+  fi
+  log_info "Copying binaries from ${binary_dir} to ${S2I_TARGET_DEPLOYMENTS_DIR} ..."
+  rsync -rl --out-format='%n' "${binary_dir}"/ "${S2I_TARGET_DEPLOYMENTS_DIR}"
+}
+
+function maven_s2i_deploy_artifacts_override() {
+  if [ -n "${ARTIFACT_COPY_ARGS}" ]; then
+    log_warning "ARTIFACT_COPY_ARGS is deprecated.  Please use S2I_SOURCE_DEPLOYMENTS_FILTER to specify artifact types and MAVEN_S2I_ARTIFACT_DIRS to specify the build output directories to copy from."
+    if [ ! -d "${S2I_TARGET_DEPLOYMENTS_DIR}" ]; then
+      log_info "S2I_TARGET_DEPLOYMENTS_DIR does not exist, creating ${S2I_TARGET_DEPLOYMENTS_DIR}"
+      mkdir -pm 775 "${S2I_TARGET_DEPLOYMENTS_DIR}"
+    fi
+    pushd "$(_maven_s2i_legacy_get_output_dir)" > /dev/null
+    cp -v ${ARTIFACT_COPY_ARGS} "${S2I_TARGET_DEPLOYMENTS_DIR}"
+    popd > /dev/null
+    return $?
+  else
+    unset -f maven_s2i_deploy_artifacts_override
+    eval maven_s2i_deploy_artifacts $*
+    return $?
+  fi
+}
+
+function _maven_s2i_legacy_get_output_dir() {
+  local dir=""
+  # If multi module build and no ARTIFACT_DIR is set --> error
+  if [ x"${MAVEN_S2I_ARTIFACT_DIRS}" = x ]; then
+    echo " ${MAVEN_ARGS}" | grep -q ' -pl'
+    if [ $? -eq 0 ]; then
+       log_error "MAVEN_S2I_ARTIFACT_DIRS must be set for multi module Maven builds"
+       exit 1
+    fi
+    dir="${S2I_SOURCE_DIR}/target"
+  elif [ ${#MAVEN_S2I_ARTIFACT_DIRS[@]} -gt 1 ]; then
+       log_error "MAVEN_S2I_ARTIFACT_DIRS must be set to a single value when using ARTIFACT_COPY_ARGS"
+       exit 1
+  else
+    if [ "${MAVEN_S2I_ARTIFACT_DIRS:0:1}" = "/" ]; then
+       log_error "MAVEN_S2I_ARTIFACT_DIRS \"${MAVEN_S2I_ARTIFACT_DIRS}\" must not be absolute but relative to the source directory"
+       exit 1
+    fi
+    dir="${S2I_SOURCE_DIR}/${MAVEN_S2I_ARTIFACT_DIRS}"
+  fi
+
+  echo ${dir}
+}

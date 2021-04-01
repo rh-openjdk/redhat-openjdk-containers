@@ -1,0 +1,159 @@
+# include dependencies
+source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
+
+# initializes the environment used by common s2i_core_*() functions
+function s2i_core_init() {
+  # ensure all files are created with correct permissions for runtime
+  umask ug+rwx
+
+  # initialize core s2i environmet variables
+  s2i_core_env_init
+  
+  # setup file permissions for injected content
+  if [ -d "${S2I_ARTIFACTS_DIR}" ]; then
+    chmod -R ug+rwX "${S2I_ARTIFACTS_DIR}"
+  fi
+  if [ -d "${S2I_SOURCE_DIR}" ]; then
+    chmod -R ug+rwX "${S2I_SOURCE_DIR}"
+  fi
+}
+
+function s2i_core_env_init() {
+  # initialize core s2i environmet variables
+  s2i_core_env_init_hook
+  S2I_DESTINATION_DIR="${S2I_DESTINATION_DIR:-/tmp}"
+  S2I_ARTIFACTS_DIR="${S2I_DESTINATION_DIR}/artifacts"
+  S2I_SOURCE_DIR="${S2I_DESTINATION_DIR}/src"
+  S2I_SOURCE_CONFIGURATION_DIR="${S2I_SOURCE_CONFIGURATION_DIR:-configuration}"
+  S2I_SOURCE_DATA_DIR="${S2I_SOURCE_DATA_DIR:-${APP_DATADIR:-data}}"
+  S2I_SOURCE_DEPLOYMENTS_DIR="${S2I_SOURCE_DEPLOYMENTS_DIR:-deployments}"
+  S2I_TARGET_DEPLOYMENTS_DIR="${S2I_TARGET_DEPLOYMENTS_DIR:-${DEPLOYMENTS_DIR:-/deployments}}"
+  S2I_TARGET_CONFIGURATION_DIR="${S2I_TARGET_CONFIGURATION_DIR:-${S2I_TARGET_DEPLOYMENTS_DIR}}"
+  S2I_TARGET_DATA_DIR="${S2I_TARGET_DATA_DIR:-${JAVA_DATA_DIR:-${DATA_DIR:-${S2I_TARGET_DEPLOYMENTS_DIR}}}}"
+  S2I_IMAGE_SOURCE_MOUNTS="${S2I_IMAGE_SOURCE_MOUNTS:-${CUSTOM_INSTALL_DIRECTORIES}}"
+  S2I_ENABLE_INCREMENTAL_BUILDS="${S2I_ENABLE_INCREMENTAL_BUILDS:-true}"
+  
+  s2i_core_env_backward_compatibility
+}
+
+# extensions may override this method to initialize environment variables
+# to suit their own needs.
+function s2i_core_env_init_hook() {
+  : 
+}
+
+# make sure any "old" variables are setup appropriately
+function s2i_core_env_backward_compatibility() {
+  export APP_DATADIR="$S2I_SOURCE_DATA_DIR"
+  export DEPLOYMENTS_DIR="$S2I_TARGET_DEPLOYMENTS_DIR"
+  export DATA_DIR="$S2I_TARGET_DATA_DIR"
+  export JAVA_DATA_DIR="$S2I_TARGET_DATA_DIR"
+  export CUSTOM_INSTALL_DIRECTORIES="$S2I_IMAGE_SOURCE_MOUNTS"
+}
+
+# copy configuration files
+# $1 - the base directory to which $S2I_SOURCE_CONFIGURATION_DIR is appended
+function s2i_core_copy_configuration() {
+  if [ -d "${1}/${S2I_SOURCE_CONFIGURATION_DIR}" ]; then
+    if [ -z "${S2I_TARGET_CONFIGURATION_DIR}" ]; then
+      log_warning "Unable to copy configuration files.  No target directory specified for S2I_TARGET_CONFIGURATION_DIR"
+    else
+      if [ ! -d "${S2I_TARGET_CONFIGURATION_DIR}" ]; then
+        log_info "S2I_TARGET_CONFIGURATION_DIR does not exist, creating ${S2I_TARGET_CONFIGURATION_DIR}"
+        mkdir -pm 775 "${S2I_TARGET_CONFIGURATION_DIR}"
+      fi
+      log_info "Copying configuration from $(realpath --relative-to ${S2I_SOURCE_DIR} ${1}/${S2I_SOURCE_CONFIGURATION_DIR}) to ${S2I_TARGET_CONFIGURATION_DIR}..."
+      rsync -rl --out-format='%n' "${1}/${S2I_SOURCE_CONFIGURATION_DIR}"/ "${S2I_TARGET_CONFIGURATION_DIR}"
+    fi
+  fi 
+}
+
+# copy data files
+# $1 - the base directory to which $S2I_SOURCE_DATA_DIR is appended
+function s2i_core_copy_data() {
+  if [ -d "${1}/${S2I_SOURCE_DATA_DIR}" ]; then
+    if [ -z "${S2I_TARGET_DATA_DIR}" ]; then
+      log_warning "Unable to copy data files.  No target directory specified for S2I_TARGET_DATA_DIR"
+    else
+      if [ ! -d "${S2I_TARGET_DATA_DIR}" ]; then
+        log_info "S2I_TARGET_DATA_DIR does not exist, creating ${S2I_TARGET_DATA_DIR}"
+        mkdir -pm 775 "${S2I_TARGET_DATA_DIR}"
+      fi
+      log_info "Copying app data from $(realpath --relative-to ${S2I_SOURCE_DIR} ${1}/${S2I_SOURCE_DATA_DIR}) to ${S2I_TARGET_DATA_DIR}..."
+      rsync -rl --out-format='%n' "${1}/${S2I_SOURCE_DATA_DIR}"/ "${S2I_TARGET_DATA_DIR}"
+      # s2i used to be more forgiving, but the build will fail if this call
+      # fails.  emit a warning and allow the build to succeed
+      chmod -R g+rwX "${S2I_TARGET_DATA_DIR}" || log_warning "Errors occurred while adding read/write permissions to S2I_TARGET_DATA_DIR ($S2I_TARGET_DATA_DIR)."
+    fi
+  fi 
+}
+
+# copy deployment (binary) files
+# $1 - the base directory to which $S2I_SOURCE_DEPLOYMENTS_DIR is appended
+function s2i_core_copy_deployments() {
+  if [ -d "${1}/${S2I_SOURCE_DEPLOYMENTS_DIR}" ]; then
+    if [ -z "${S2I_TARGET_DEPLOYMENTS_DIR}" ]; then
+      log_warning "Unable to copy deployment files.  No target directory specified for S2I_TARGET_DEPLOYMENTS_DIR"
+    else
+      if [ ! -d "${S2I_TARGET_DEPLOYMENTS_DIR}" ]; then
+        log_info "S2I_TARGET_DEPLOYMENTS_DIR does not exist, creating ${S2I_TARGET_DEPLOYMENTS_DIR}"
+        mkdir -pm 775 "${S2I_TARGET_DEPLOYMENTS_DIR}"
+      fi
+      local relative_source=$(realpath --relative-to "${S2I_SOURCE_DIR}" "${1}/${S2I_SOURCE_DEPLOYMENTS_DIR}")
+      log_info "Copying deployments from $relative_source to ${S2I_TARGET_DEPLOYMENTS_DIR}..."
+      for filter in ${S2I_SOURCE_DEPLOYMENTS_FILTER:-*}; do
+        find "${S2I_SOURCE_DIR}/${relative_source}/" -maxdepth 1 -name "${filter}" | xargs -I '{}' -r cp -Lrv '{}' "${S2I_TARGET_DEPLOYMENTS_DIR}"
+      done
+    fi
+  fi 
+}
+
+# extension may override this method to provide additional copy functions
+# $1 - the base directory
+function s2i_core_copy_artifacts_hook() {
+  :
+}
+
+# main entry point for copying artifacts from the build to the target
+# $1 - the base directory
+function s2i_core_copy_artifacts() {
+  s2i_core_copy_configuration $*
+  s2i_core_copy_data $*
+  s2i_core_copy_deployments $*
+  s2i_core_copy_artifacts_hook $*
+}
+
+# processes any directories mounted into the build.  see S2I_IMAGE_SOURCE_MOUNTS
+function s2i_core_process_image_mounts() {
+  if [ "x${S2I_IMAGE_SOURCE_MOUNTS}" = "x" ]; then
+    return 0
+  fi
+
+  log_info "Processing ImageSource mounts: $S2I_IMAGE_SOURCE_MOUNTS"
+  IFS=',' read -a install_dir_entries <<< $S2I_IMAGE_SOURCE_MOUNTS
+  for install_dir_entry in "${install_dir_entries[@]}"; do
+    for install_dir in $(find ${S2I_SOURCE_DIR}/$install_dir_entry -maxdepth 0 2>/dev/null); do
+      log_info "Processing ImageSource from $install_dir"
+      chmod -R ug+x ${install_dir}
+      if [ -f ${install_dir}/install.sh ]; then
+        ${install_dir}/install.sh "${install_dir}"
+      else
+        s2i_core_copy_artifacts "${install_dir}"
+      fi
+    done
+  done
+}
+
+function s2i_core_cleanup() {
+  if [ -n "$(find ${S2I_SOURCE_DIR} -maxdepth 0 -type d ! -empty 2> /dev/null)" ]; then
+    log_info "Cleaning up source directory (${S2I_SOURCE_DIR})"
+    rm -rf ${S2I_SOURCE_DIR}
+  fi
+  if [ "${S2I_ENABLE_INCREMENTAL_BUILDS,,}" == "true" ]; then
+    return 0
+  fi
+  if [ -n "$(find ${S2I_ARTIFACTS_DIR} -maxdepth 0 -type d ! -empty 2> /dev/null)" ]; then
+    log_info "Cleaning up artifacts directory (${S2I_ARTIFACTS_DIR})"
+    rm -rf ${S2I_ARTIFACTS_DIR}
+  fi
+}

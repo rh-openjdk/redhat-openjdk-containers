@@ -1,0 +1,148 @@
+
+# include dependencies
+source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
+source "${JBOSS_CONTAINER_S2I_CORE_MODULE}/s2i-core"
+
+# initialization of maven s2i module
+function maven_s2i_init() {
+  # backward compatibility; s2i_core_init will initialize S2I_ENABLE_INCREMENTAL_BUILDS
+  if [ "x$S2I_ENABLE_INCREMENTAL_BUILDS" == "x" ]; then
+    if [ "${MAVEN_CLEAR_REPO,,}" == "true" ]; then
+      S2I_ENABLE_INCREMENTAL_BUILDS="false"
+    else
+      S2I_ENABLE_INCREMENTAL_BUILDS="true"
+    fi
+  fi
+  # core environment
+  s2i_core_init
+
+  # initialize maven s2i environment variables
+  # use - instead of :- to allow empty artifact dir setting for access to maven_s2i_custom_binary_build
+  MAVEN_S2I_ARTIFACT_DIRS="${MAVEN_S2I_ARTIFACT_DIRS-${ARTIFACT_DIR-target}}"
+  MAVEN_S2I_GOALS="${MAVEN_S2I_GOALS:-package}"
+
+  # make sure MAVEN_CLEAR_REPO and S2I_ENABLE_INCREMENTAL_BUILDS are in sync
+  if [ "${S2I_ENABLE_INCREMENTAL_BUILDS,,}" == "true" ]; then
+    MAVEN_CLEAR_REPO="false"
+  else
+    MAVEN_CLEAR_REPO="true"
+  fi
+  export MAVEN_CLEAR_REPO
+
+  # Internal variables:
+  # Location of Maven settings.xml file to use.
+  _MAVEN_S2I_SETTINGS_XML="${S2I_ARTIFACTS_DIR}/configuration/settings.xml"
+
+  # Location of archived local Maven repository.  Used with incremental builds.
+  _MAVEN_S2I_ARCHIVED_REPO="${S2I_ARTIFACTS_DIR}/m2"
+
+  # include maven scripts
+  if test -r "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}"/scl-enable-maven; then
+	  source "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}"/scl-enable-maven
+  fi
+  source "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}"/maven.sh
+
+  # Overrides for use with maven s2i
+  source "${JBOSS_CONTAINER_MAVEN_S2I_MODULE}"/maven-overrides
+
+  # initialize old variables
+  maven_s2i_backward_compatibility
+
+  # let users override anything if they need to
+  maven_s2i_source_maven_overrides
+
+  # initialize the maven environment
+  maven_init
+}
+
+# setup old variables in case anybody is still using them
+function maven_s2i_backward_compatibility() {
+  export ARTIFACT_DIR="$MAVEN_S2I_ARTIFACT_DIRS"
+}
+
+function maven_s2i_source_maven_overrides() {
+  # extensions can use this to override functions provided by this module
+  # For example:
+  # source custom-maven.sh
+  : #noop
+}
+
+# main entry point, perform the build
+function maven_s2i_build() {
+  maven_s2i_init
+  if [ -f "${S2I_SOURCE_DIR}/pom.xml" ]; then
+    # maven build
+    maven_s2i_maven_build
+  else
+    # binary build
+    maven_s2i_binary_build
+  fi
+  s2i_core_copy_artifacts "${S2I_SOURCE_DIR}"
+
+  s2i_core_process_image_mounts
+
+  s2i_core_cleanup
+
+  # Remove java tmp perf data dir owned by 185
+  rm -rf /tmp/hsperfdata_jboss
+}
+
+# perform a maven build, i.e.  mvn ...
+# internal method
+function maven_s2i_maven_build() { 
+  maven_build "${S2I_SOURCE_DIR}" "${MAVEN_S2I_GOALS}"
+  maven_s2i_deploy_artifacts
+  maven_cleanup
+}
+
+# copy build output to deployments folder
+# internal method
+function maven_s2i_deploy_artifacts() {
+  if [ -n "$(type -t maven_s2i_deploy_artifacts_override)" ]; then
+    eval maven_s2i_deploy_artifacts_override $*
+    return $?
+  fi
+
+  local artifact_dirs=${1:-${MAVEN_S2I_ARTIFACT_DIRS}}
+
+  if [[ ! "${S2I_SOURCE_DIR}" =~ ^\/ ]]; then
+    log_error "$FUNCNAME: Absolute path required for source directory \"$source_dir\"!"
+    exit 1
+  fi
+
+  IFS=',' read -a artifact_dirs <<< "${artifact_dirs:-target}"
+  (
+    for artifact_dir in "${artifact_dirs[@]}"
+    do
+        if [[ "${artifact_dir}" =~ ^\/ ]]; then
+          log_error "Absolute path found in MAVEN_S2I_ARTIFACT_DIRS: ${artifact_dir}"
+          exit 1
+        else
+          # temporarily override source dir so it copies from the dir we pass in
+          S2I_SOURCE_DEPLOYMENTS_DIR=${artifact_dir}
+          s2i_core_copy_deployments "${S2I_SOURCE_DIR}"
+        fi
+    done
+  )
+}
+
+# perform a binary build, basically copy what's here to deployments
+# internal method
+function maven_s2i_binary_build() {
+  log_info "S2I source build with plain binaries detected"
+  if [ -n "$(type -t maven_s2i_custom_binary_build)" ]; then
+    eval maven_s2i_custom_binary_build $*
+    return $?
+  fi
+  maven_s2i_deploy_artifacts "."
+}
+
+# persist artifacts for use with incremental builds
+function maven_s2i_save_artifacts() {
+  # only process artifacts dir if it exists and is not empty
+  if [ -n "${S2I_ARTIFACTS_DIR}" -a -n "$(find ${S2I_ARTIFACTS_DIR} -maxdepth 0 -type d ! -empty 2> /dev/null)" ]; then
+     pushd "${S2I_ARTIFACTS_DIR}" &> /dev/null
+     tar chf - *
+     popd &> /dev/null
+  fi
+}

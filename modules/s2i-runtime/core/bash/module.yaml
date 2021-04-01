@@ -1,0 +1,19 @@
+schema_version: 1
+name: jboss.container.s2i-runtime.core.bash
+version: '1.0'
+description: "Provides support for core s2i capabilities."
+
+envs:
+- name: JBOSS_CONTAINER_S2I_CORE_MODULE
+  value: /opt/jboss/container/s2i/core/
+
+execute:
+- script: configure.sh
+
+modules:
+  install:
+  - name: jboss.container.s2i-runtime.core.api
+
+packages:
+  install:
+  - findutils

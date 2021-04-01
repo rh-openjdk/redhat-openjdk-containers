@@ -1,0 +1,116 @@
+schema_version: 1
+name: jboss.container.s2i-runtime.core.api
+version: '1.0'
+description: ^
+  Defines environment variables and labels used by S2I.  Modules implementing
+  S2I capabilities should use these variables accordingly.
+
+labels:
+- name: "io.openshift.s2i.scripts-url"
+  value: "image:///usr/local/s2i"
+- name: io.openshift.s2i.destination
+  value: "/tmp"
+- name: org.jboss.container.deployments-dir
+  value: "/deployments"
+
+envs:
+- name: S2I_DESTINATION_DIR
+  description: ^
+    Root directory for S2I mount, as specified by the
+    **io.openshift.s2i.destination** label.  This should not be overridden by
+    end users.
+  example: /tmp
+
+- name: S2I_ARTIFACTS_DIR
+  description: ^
+    Location mount for artifacts persisted with **save-artifacts** script, which
+    are used with incremental builds.  This should not be overridden by end users.
+  example: "${S2I_DESTINATION_DIR}/artifacts}"
+
+- name: S2I_SOURCE_DIR
+  description: ^
+    Location of mount for source code to be built.  This should not be
+    overridden by end users.
+  example: "${S2I_DESTINATION_DIR}/src}"
+
+- name: S2I_SOURCE_CONFIGURATION_DIR
+  description: ^
+    Relative path to directory containing application configuration files to be
+    copied over to the product configuration directory, see
+    **S2I_TARGET_CONFIGURATION_DIR**.  Defaults to **configuration**.
+  example: configuration
+
+- name: S2I_TARGET_CONFIGURATION_DIR
+  description: ^
+    Absolute path to which files located in
+    $S2I_SOURCE_DIR/$S2I_SOURCE_CONFIGURATION_DIR are copied.
+  example: /opt/eap/standalone/configuration
+
+- name: S2I_SOURCE_DATA_DIR
+  description: ^
+    Relative path to directory containing application data files to be copied
+    over to the product data directory, see **S2I_TARGET_DATA_DIR**.  Defaults
+    to **data**.
+  example: data
+
+- name: S2I_TARGET_DATA_DIR
+  description: ^
+    Absolute path to which files located in
+    $S2I_SOURCE_DIR/$S2I_SOURCE_DATA_DIR are copied.
+  example: /opt/eap/standalone/data
+
+- name: S2I_SOURCE_DEPLOYMENTS_DIR
+  description: ^
+    Relative path to directory containing binary files to be copied over to the
+    product deployment directory, see **S2I_TARGET_DEPLOYMENTS_DIR**.  Defaults
+    to **deployments**.
+  example: deployments
+
+- name: S2I_SOURCE_DEPLOYMENTS_FILTER
+  description: >
+    Space separated list of filters to be applied when copying deployments.
+    Defaults to ** * **
+  value: "*"
+  example: "*.jar *.war *.ear"
+
+- name: S2I_TARGET_DEPLOYMENTS_DIR
+  description: ^
+    Absolute path to which files located in
+    $S2I_SOURCE_DIR/$S2I_SOURCE_DEPLOYMENTS_DIR are copied. Additionally, this
+    is the directory to which build output is copied
+  example: /deployments
+
+- name: S2I_IMAGE_SOURCE_MOUNTS
+  description: ^
+    Comma separated list of relative paths in source directory which should be
+    included in the image.  List may include wildcards, which are expanded
+    using find.  By default, the contents of mounted directories are processed
+    similarly to source folders, where the contents of
+    $S2I_SOURCE_CONFIGURATION_DIR, $S2I_SOURCE_DATA_DIR, and
+    $S2I_SOURCE_DEPLOYMENTS_DIR are copied to their respective target
+    directories.  Alternatively, if an **install.sh** file is located in the
+    root of the mount point, it is executed instead.  Deprecates
+    CUSTOM_INSTALL_DIRECTORIES.
+  example: extras/*
+
+- name: S2I_ENABLE_INCREMENTAL_BUILDS
+  description: ^
+    Do not remove source and intermediate build files so they can be saved for
+    use with future builds.  Defaults to true.
+  example: "true"
+
+# deprecated
+- name: APP_DATADIR
+  description: Deprecated by **S2I_SOURCE_DATA_DIR**.
+- name: DEPLOYMENTS_DIR
+  description: Deprecated by **S2I_TARGET_DEPLOYMENTS_DIR**.
+- name: DATA_DIR
+  description: Deprecated by **S2I_TARGET_DATA_DIR**.
+- name: JAVA_DATA_DIR
+  description: Deprecated by **S2I_TARGET_DATA_DIR**.
+- name: CUSTOM_INSTALL_DIRECTORIES
+  description: Deprecated by **S2I_IMAGE_SOURCE_MOUNTS**.
+
+run:
+  cmd:
+  - "/usr/local/s2i/run"

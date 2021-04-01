@@ -1,0 +1,13 @@
+
+# DEPRECATED: provided for backward compatibility
+
+source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
+source "${JBOSS_CONTAINER_S2I_CORE_MODULE}/s2i-core"
+# include our s2i_core_*() overrides/extensions
+source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/s2i-core-hooks"
+
+log_warning "s2i-setup script has been deprecated and will be removed in a future release."
+
+s2i_core_init
+
+source "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/scl-enable-maven"

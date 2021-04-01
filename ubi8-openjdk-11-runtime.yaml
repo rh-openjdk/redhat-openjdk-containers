@@ -39,6 +39,7 @@ modules:
   install:
   - name: jboss.container.openjdk.jre
     version: "11"
+  - name: jboss.container.java.s2i-runtime.bash
 
 help:
   add: true
