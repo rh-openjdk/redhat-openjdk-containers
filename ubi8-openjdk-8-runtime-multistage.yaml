@@ -1,0 +1,56 @@
+# This is an Image descriptor for Cekit
+- from: "registry.access.redhat.com/ubi8/ubi-minimal"
+  name: &name "ubi8/openjdk-8-runtime"
+  version: &version "1.3"
+  description: "Image for Red Hat OpenShift providing OpenJDK 1.8 runtime"
+
+  labels:
+  - name: "io.k8s.description"
+    value: "Platform for running plain Java applications (fat-jar and flat classpath)"
+  - name: "io.k8s.display-name"
+    value: "Java Applications"
+  - name: "io.openshift.tags"
+    value: "java"
+  - name: "maintainer"
+    value: "Red Hat OpenJDK <openjdk@redhat.com>"
+  - name: "com.redhat.component"
+    value: "openjdk-8-runtime-ubi8-container"
+  - name: "usage"
+    value: "https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift/"
+  - name: "com.redhat.license_terms"
+    value: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+
+  envs:
+  - name: "JBOSS_IMAGE_NAME"
+    value: *name
+  - name: "JBOSS_IMAGE_VERSION"
+    value: *version
+
+  ports:
+  - value: 8080
+  - value: 8443
+
+  modules:
+    repositories:
+    - path: modules
+    install:
+    - name: jboss.container.openjdk.jre
+      version: "8"
+
+  help:
+    add: true
+
+  packages:
+    manager: microdnf
+
+- name: "ubi8/openjdk-8-runtime-multistage-build"
+  from: ubi8/openjdk-8-runtime
+  description: "Provides support for running Java applications.  Basic usage is
+  $JBOSS_CONTAINER_JAVA_RUN_MODULE/run-java.sh."
+  version: "1.0"
+
+  modules:
+    repositories:
+    - path: modules
+    install:
+    - name: jboss.container.java.jre.run
