@@ -35,13 +35,23 @@ auto_detect_jar_file() {
   local old_dir=$(pwd)
   cd ${dir}
   if [ $? = 0 ]; then
-    local nr_jars=`ls *.jar 2>/dev/null | grep -v '^original-' | wc -l | tr -d '[[:space:]]'`
-    if [ ${nr_jars} = 1 ]; then
-      ls *.jar | grep -v '^original-'
-      exit 0
-    fi
+    if [ -f "quarkus-app/quarkus-run.jar" ]; then
+        echo quarkus-app/quarkus-run.jar
+    else
+        local nr_jars=`ls *.jar 2>/dev/null | grep -v '^original-' | wc -l | tr -d '[[:space:]]'`
+        if [ ${nr_jars} = 1 ]; then
+            ls *.jar | grep -v '^original-'
+            exit 0
+        fi
 
-    log_error "Neither \$JAVA_MAIN_CLASS nor \$JAVA_APP_JAR is set and ${nr_jars} JARs found in ${dir} (1 expected)"
+        nr_jars=`ls *-runner.jar 2>/dev/null | wc -l | tr -d '[[:space:]]'`
+        if [ ${nr_jars} = 1 ]; then
+            ls *-runner.jar
+            exit 0
+        fi
+
+        log_error "Neither \$JAVA_MAIN_CLASS nor \$JAVA_APP_JAR is set and ${nr_jars} JARs found in ${dir} (1 expected)"
+    fi
     cd ${old_dir}
   else
     log_error "No directory ${dir} found for auto detection"
