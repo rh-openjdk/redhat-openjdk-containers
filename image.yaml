@@ -71,3 +71,4 @@ osbs:
   repository:
     name: containers/redhat-openjdk-18
     branch: jb-openjdk-1.8-openshift-rhel-7
+  koji_target: jb-openjdk18-rhel7-1.8-containers-candidate
