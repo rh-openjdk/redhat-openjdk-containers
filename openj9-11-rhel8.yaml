@@ -1,6 +1,6 @@
 # This is an Image descriptor for Cekit
 # use the following extra override to build:
-# --overrides "{ 'osbs': { 'configuration': { 'container': { 'platforms': { 'only': [ 's390x' ] }, 'compose': { 'signing_intent': 'release', 'packages': [ 'java-11-openj9', 'java-11-openj9-devel', 'java-11-openj9-headless' ], 'inherit': true } } } } }"
+# --overrides "{ 'osbs': { 'configuration': { 'container': { 'platforms': { 'only': [ 's390x' ] }, 'compose': { 'signing_intent': 'release', 'packages': [ 'ibm-semeru-open-11-jdk' ], 'inherit': true } } } } }"
 
 schema_version: 1
 
@@ -59,7 +59,7 @@ modules:
   install:
   - name: jboss.container.util.pkg-update
   - name: jboss.container.openjdk.jdk
-    version: "openj9-11"
+    version: "semeru-11-open"
   - name: jboss.container.prometheus
     version: "7"
   - name: jboss.container.jolokia
@@ -82,9 +82,7 @@ osbs:
       compose:
         # used for requesting ODCS compose of type "tag"
         packages:
-          - java-11-openj9
-          - java-11-openj9-headless
-          - java-11-openj9-devel
+          - ibm-semeru-open-11-jdk
         signing_intent: release
         pulp_repos: true
   repository:

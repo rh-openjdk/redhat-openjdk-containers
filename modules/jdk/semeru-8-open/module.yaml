@@ -1,0 +1,32 @@
+schema_version: 1
+
+name: "jboss.container.openjdk.jdk"
+description: "Installs the JDK for OpenJ9 8."
+version: "semeru-8-open"
+
+labels:
+- name: "org.jboss.product"
+  value: "openjdk"
+- name: "org.jboss.product.version"
+  value: "1.8.0"
+- name: "org.jboss.product.openjdk.version"
+  value: "1.8.0"
+
+envs:
+- name: "JAVA_HOME"
+  value: "/usr/lib/jvm/ibm-semeru-open-8-jdk"
+- name: "JAVA_VENDOR"
+  value: "IBM"
+- name: "JAVA_VERSION"
+  value: "1.8.0"
+
+packages:
+  install:
+  - ibm-semeru-open-8-jdk
+
+modules:
+  install:
+  - name: jboss.container.user
+
+execute:
+- script: configure.sh
