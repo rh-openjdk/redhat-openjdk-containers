@@ -1,8 +1,19 @@
 #!/bin/bash
+set -e
+
+# Command line arguments given to this script
+args="$*"
+
+source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
+
+JAVA_OPTS="${JAVA_OPTS:-${JAVA_OPTIONS}}"
+export JAVA_OPTS
+export JAVA_OPTIONS="$JAVA_OPTS"
 
 # Start JVM
 startup() {
   echo "This is the Red Hat UBI8 OpenJDK ${JAVA_VERSION} Runtime container."
+  exec "${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh" $args ${JAVA_ARGS}
 }
 
 # =============================================================================
