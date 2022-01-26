@@ -16,5 +16,4 @@ modules:
   install:
   - name: jboss.container.maven.s2i
   - name: jboss.container.java.run
-  - name: jboss.container.prometheus
   - name: jboss.container.util.logging.bash
