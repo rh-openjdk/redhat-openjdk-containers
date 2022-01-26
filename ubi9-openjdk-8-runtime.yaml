@@ -1,0 +1,49 @@
+# This is an Image descriptor for Cekit
+
+schema_version: 1
+
+from: "registry.access.redhat.com/ubi9/ubi-minimal"
+name: &name "ubi9/openjdk-8-runtime"
+version: &version "1.13"
+description: "Image for Red Hat OpenShift providing OpenJDK 1.8 runtime"
+
+labels:
+- name: "io.k8s.description"
+  value: "Platform for running plain Java applications (fat-jar and flat classpath)"
+- name: "io.k8s.display-name"
+  value: "Java Applications"
+- name: "io.openshift.tags"
+  value: "java"
+- name: "maintainer"
+  value: "Red Hat OpenJDK <openjdk@redhat.com>"
+- name: "com.redhat.component"
+  value: "openjdk-8-runtime-ubi9-container"
+- name: "com.redhat.license_terms"
+  value: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+
+envs:
+- name: "JBOSS_IMAGE_NAME"
+  value: *name
+- name: "JBOSS_IMAGE_VERSION"
+  value: *version
+- name: "LANG"
+  value: "C.utf8"
+
+ports:
+- value: 8080
+- value: 8443
+
+modules:
+  repositories:
+  - path: modules
+  install:
+  - name: jboss.container.util.pkg-update
+  - name: jboss.container.openjdk.jre
+    version: "8"
+  - name: jboss.container.java.jre.run
+
+help:
+  add: true
+
+packages:
+  manager: microdnf

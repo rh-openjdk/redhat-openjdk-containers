@@ -1,0 +1,56 @@
+# This is an Image descriptor for Cekit
+
+schema_version: 1
+
+from: "registry.access.redhat.com/ubi9/ubi-minimal"
+name: &name "ubi9/openjdk-11"
+version: &version "1.13"
+description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 11"
+
+labels:
+- name: "io.k8s.description"
+  value: "Platform for building and running plain Java applications (fat-jar and flat classpath)"
+- name: "io.k8s.display-name"
+  value: "Java Applications"
+- name: "io.openshift.tags"
+  value: "builder,java"
+- name: "maintainer"
+  value: "Red Hat OpenJDK <openjdk@redhat.com>"
+- name: "com.redhat.component"
+  value: "openjdk-11-ubi9-container"
+- name: "usage"
+  value: "https://access.redhat.com/documentation/en-us/openjdk/11/html/using_openjdk_11_source-to-image_for_openshift/index"
+- name: "com.redhat.license_terms"
+  value: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+
+envs:
+- name: PATH
+  value: $PATH:"/usr/local/s2i"
+- name: "JBOSS_IMAGE_NAME"
+  value: *name
+- name: "JBOSS_IMAGE_VERSION"
+  value: *version
+- name: "LANG"
+  value: "C.utf8"
+
+ports:
+- value: 8080
+- value: 8443
+
+modules:
+  repositories:
+  - path: modules
+  install:
+  - name: jboss.container.util.pkg-update
+  - name: jboss.container.openjdk.jdk
+    version: "11"
+  - name: jboss.container.maven
+    version: "8.2.3.6"
+  - name: jboss.container.java.s2i.bash
+  - name: jboss.container.java.singleton-jdk
+
+help:
+  add: true
+
+packages:
+  manager: microdnf
