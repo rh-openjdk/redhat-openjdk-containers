@@ -1,0 +1,9 @@
+osbs:
+  configuration:
+    container:
+      platforms:
+        only:
+        - x86_64
+  repository:
+    name: containers/openjdk
+    branch: openjdk-11-ubi9
