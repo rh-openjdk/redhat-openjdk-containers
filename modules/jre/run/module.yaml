@@ -1,0 +1,64 @@
+schema_version: 1
+name: jboss.container.java.jre.run
+version: '1.0'
+description: ^
+  Provides support for running Java applications.  Basic usage is
+  $JBOSS_CONTAINER_JAVA_RUN_MODULE/run-java.sh.
+
+envs:
+- name: JBOSS_CONTAINER_JAVA_RUN_MODULE
+  value: /opt/jboss/container/java/run
+
+- name: JAVA_APP_DIR
+  description: ^
+    The directory where the application resides. All paths in your application
+    are relative to this directory.
+  example: "myapplication/"
+
+- name: JAVA_MAIN_CLASS
+  description: ^
+    A main class to use as argument for `java`. When this environment variable
+    is given, all jar files in **JAVA_APP_DIR** are added to the classpath as
+    well as **JAVA_LIB_DIR**.
+  example: "com.example.MainClass"
+
+- name: JAVA_LIB_DIR
+  description: ^
+    Directory holding the Java jar files as well an optional `classpath` file
+    which holds the classpath. Either as a single line classpath (colon
+    separated) or with jar files listed line-by-line. If not set
+    **JAVA_LIB_DIR** is the same as **JAVA_APP_DIR**.
+
+- name: JAVA_DATA_DIR
+  description: ^
+    The location of the directory which should be used by the application for
+    reading/writing application data.  Users should override the default if
+    their application should use a different directory, e.g. if a persistent
+    volume is used to persist data across restarts.
+  value: "/deployments/data"
+  example: "/var/cache/application"
+
+- name: JAVA_CLASSPATH
+  description: ^
+    The classpath to use. If not given, the startup script checks for a file
+    `**JAVA_APP_DIR/classpath**` and use its content literally as classpath. If
+    this file doesn't exists all jars in the app dir are added
+    (`classes:**JAVA_APP_DIR/***`).
+
+- name: JAVA_ARGS
+  description: Arguments passed to the `java` application.
+
+- name: JAVA_APP_NAME
+  description: To set the process or application name by the user.
+
+execute:
+- script: configure.sh
+
+modules:
+  install:
+  - name: jboss.container.java.jvm.bash
+  - name: jboss.container.util.logging.bash
+
+run:
+  cmd:
+  - "/opt/jboss/container/java/run/run-java.sh"
