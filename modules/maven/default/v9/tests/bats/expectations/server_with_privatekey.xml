@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<server>
+  <id>my_id</id>
+  <privateKey>myprivatekey</privateKey>
+  <passphrase><![CDATA[mypassphrase]]></passphrase>
+</server>

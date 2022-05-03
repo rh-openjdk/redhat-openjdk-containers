@@ -1,6 +1,6 @@
 schema_version: 1
 name: jboss.container.maven.default
-version: '1.0'
+version: '9.0'
 description: ^
   Provides basic Maven capabilities to an image, with support for configuring
   settings.xml using the environment variables described in
@@ -12,11 +12,11 @@ envs:
 
 execute:
 - script: configure.sh
-- script: backward_compatibility.sh
 
 modules:
   install:
   - name: jboss.container.maven.api
+    version: '9.0'
   - name: jboss.container.java.jvm
   - name: jboss.container.maven
   - name: jboss.container.util.logging.bash

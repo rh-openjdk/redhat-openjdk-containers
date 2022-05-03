@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<server>
+  <id>my_id</id>
+  <username>kermit</username>
+  <password><![CDATA[thefrog]]></password>
+  <privateKey>myprivatekey</privateKey>
+  <passphrase><![CDATA[mypassphrase]]></passphrase>
+</server>

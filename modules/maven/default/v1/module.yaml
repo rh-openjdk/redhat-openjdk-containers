@@ -1,0 +1,27 @@
+schema_version: 1
+name: jboss.container.maven.default
+version: '1.0'
+description: ^
+  Provides basic Maven capabilities to an image, with support for configuring
+  settings.xml using the environment variables described in
+  jboss.container.maven.api.
+
+envs:
+- name: JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE
+  value: /opt/jboss/container/maven/default/
+
+execute:
+- script: configure.sh
+- script: backward_compatibility.sh
+
+modules:
+  install:
+  - name: jboss.container.maven.api
+    version: '1.0'
+  - name: jboss.container.java.jvm
+  - name: jboss.container.maven
+  - name: jboss.container.util.logging.bash
+
+packages:
+  install:
+  - findutils
