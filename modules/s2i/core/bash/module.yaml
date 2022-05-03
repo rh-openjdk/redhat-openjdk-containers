@@ -13,6 +13,7 @@ execute:
 modules:
   install:
   - name: jboss.container.s2i.core.api
+    version: '1.0'
 
 packages:
   install:
