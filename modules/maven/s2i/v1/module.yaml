@@ -33,6 +33,7 @@ modules:
   - name: jboss.container.s2i.core.api
     version: '1.0'
   - name: jboss.container.s2i.core.bash
+    version: '1.0'
   - name: jboss.container.maven.default
     version: '1.0'
   - name: jboss.container.util.logging.bash
