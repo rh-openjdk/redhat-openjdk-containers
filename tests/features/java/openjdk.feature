@@ -6,6 +6,8 @@ Feature: Miscellaneous OpenJDK-related unit tests
   @openjdk/openjdk-1.8-ubi8
   @ubi8/openjdk-8
   @ubi8/openjdk-8-runtime
+  @ubi9/openjdk-8
+  @ubi9/openjdk-8-runtime
   Scenario: Check that only OpenJDK 8 is installed
     When container is started with args
     | arg     | value   |
@@ -17,6 +19,8 @@ Feature: Miscellaneous OpenJDK-related unit tests
   @openjdk/openjdk-11-ubi8
   @ubi8/openjdk-11
   @ubi8/openjdk-11-runtime
+  @ubi9/openjdk-11
+  @ubi9/openjdk-11-runtime
   Scenario: Check that only OpenJDK 11 is installed
     When container is started with args
     | arg     | value   |
@@ -26,6 +30,8 @@ Feature: Miscellaneous OpenJDK-related unit tests
 
   @ubi8/openjdk-17
   @ubi8/openjdk-17-runtime
+  @ubi9/openjdk-17
+  @ubi9/openjdk-17-runtime
   Scenario: Check that only OpenJDK 17 is installed
     When container is started with args
     | arg     | value   |
@@ -34,6 +40,7 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-11
 
   @ubi8
+  @ubi9
   @openjdk
   Scenario: Ensure JAVA_HOME is defined and contains Java
     When container is started with args
@@ -42,6 +49,7 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should contain OpenJDK Runtime Environment
 
   @ubi8
+  @ubi9
   Scenario: Check that certain non-UBI packages are not installed
     When container is started with args
     | arg     | value   |
@@ -53,6 +61,8 @@ Feature: Miscellaneous OpenJDK-related unit tests
 
   @ubi8/openjdk-8
   @ubi8/openjdk-8-runtime
+  @ubi9/openjdk-8
+  @ubi9/openjdk-8-runtime
   Scenario: Check that directories from other JDKs are not present (JDK8)
     When container is started with args
     | arg     | value   |
@@ -62,6 +72,8 @@ Feature: Miscellaneous OpenJDK-related unit tests
 
   @ubi8/openjdk-11
   @ubi8/openjdk-11-runtime
+  @ubi9/openjdk-11
+  @ubi9/openjdk-11-runtime
   Scenario: Check that directories from other JDKs are not present (JDK11)
     When container is started with args
     | arg     | value   |
@@ -71,6 +83,8 @@ Feature: Miscellaneous OpenJDK-related unit tests
 
   @ubi8/openjdk-17
   @ubi8/openjdk-17-runtime
+  @ubi9/openjdk-17
+  @ubi9/openjdk-17-runtime
   Scenario: Check that directories from other JDKs are not present (JDK17)
     When container is started with args
     | arg     | value   |
@@ -79,6 +93,7 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-11
 
   @ubi8
+  @ubi9
   Scenario: Ensure LANG is defined and contains UTF-8
     When container is started with args
     | arg     | value                                  |

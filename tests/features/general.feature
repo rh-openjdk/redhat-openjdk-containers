@@ -1,5 +1,6 @@
 Feature: Miscellaneous general settings unit tests
 
+  @ubi9
   @ubi8
   @redhat-openjdk-18/openjdk18-openshift
   @openjdk/openjdk-11-rhel7

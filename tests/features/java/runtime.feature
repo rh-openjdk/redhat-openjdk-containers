@@ -3,6 +3,9 @@
 @ubi8/openjdk-8
 @ubi8/openjdk-11
 @ubi8/openjdk-17
+@ubi9/openjdk-8
+@ubi9/openjdk-11
+@ubi9/openjdk-17
 Feature: Openshift OpenJDK Runtime tests
 
   @openjdk
