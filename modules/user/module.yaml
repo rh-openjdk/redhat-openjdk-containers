@@ -9,7 +9,6 @@ envs:
 
 packages:
   install:
-  - unzip
   - tar
   - rsync
   - shadow-utils # groupadd
