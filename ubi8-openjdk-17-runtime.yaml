@@ -44,6 +44,8 @@ modules:
     version: "17"
   - name: jboss.container.java.jvm
     version: "1.0"
+  - name: jboss.container.java.run
+    version: "1.0"
   - name:  jboss.container.java.jre.run
 
 help:
