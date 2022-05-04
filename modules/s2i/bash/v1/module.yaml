@@ -18,3 +18,7 @@ modules:
     version: '1.0'
   - name: jboss.container.java.run
   - name: jboss.container.util.logging.bash
+
+packages:
+  install:
+  - rsync
