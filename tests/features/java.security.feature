@@ -1,3 +1,5 @@
+# TODO: Is there any reason this is S2I specific? Should we rework this so
+# we can test the runtime images?
 @openjdk
 @ubi8/openjdk-8
 @ubi8/openjdk-11

@@ -25,6 +25,7 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-17
 
   @ubi8/openjdk-17
+  @ubi8/openjdk-17-runtime
   Scenario: Check that only OpenJDK 17 is installed
     When container is started with args
     | arg     | value   |
@@ -51,6 +52,7 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain rpm-plugin-systemd-inhibit
 
   @ubi8/openjdk-8
+  @ubi8/openjdk-8-runtime
   Scenario: Check that directories from other JDKs are not present (JDK8)
     When container is started with args
     | arg     | value   |
@@ -59,6 +61,7 @@ Feature: Miscellaneous OpenJDK-related unit tests
     And  available container log should not contain java-17
 
   @ubi8/openjdk-11
+  @ubi8/openjdk-11-runtime
   Scenario: Check that directories from other JDKs are not present (JDK11)
     When container is started with args
     | arg     | value   |
@@ -67,6 +70,7 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-17
 
   @ubi8/openjdk-17
+  @ubi8/openjdk-17-runtime
   Scenario: Check that directories from other JDKs are not present (JDK17)
     When container is started with args
     | arg     | value   |
@@ -74,12 +78,7 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-1.8.0
     Then available container log should not contain java-11
 
-  @ubi8/openjdk-8
-  @ubi8/openjdk-8-runtime
-  @ubi8/openjdk-11
-  @ubi8/openjdk-11-runtime
-  @ubi8/openjdk-17
-  @ubi8/openjdk-17-runtime
+  @ubi8
   Scenario: Ensure LANG is defined and contains UTF-8
     When container is started with args
     | arg     | value                                  |

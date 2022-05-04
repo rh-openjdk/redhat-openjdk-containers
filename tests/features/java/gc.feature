@@ -1,3 +1,7 @@
+# TODO: these tests are builder-specific, since they invoke S2I. But they  don't
+# need to be: they could start the container w/o a valid JAR and the Java CMD would
+# still be echoed. Then it would be much faster and applicable to runtime images
+# too.
 @openjdk
 @ubi8/openjdk-8
 @ubi8/openjdk-11

@@ -1,3 +1,4 @@
+# TODO: can we do this without S2I, and apply it to the runtime images?
 @openjdk
 @ubi8/openjdk-8
 @ubi8/openjdk-11
