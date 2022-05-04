@@ -25,3 +25,4 @@ modules:
 packages:
   install:
   - findutils
+  - tar
