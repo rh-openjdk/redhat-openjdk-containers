@@ -4,7 +4,7 @@
     "metadata": {
         "name": "openjdk18-image-stream",
         "annotations": {
-            "description": "ImageStream definition for Red Hat OpenJDK and OpenJ9.",
+            "description": "ImageStream definition for Red Hat OpenJDK.",
             "openshift.io/provider-display-name": "Red Hat, Inc."
         }
     },
@@ -247,163 +247,9 @@
             "kind": "ImageStream",
             "apiVersion": "image.openshift.io/v1",
             "metadata": {
-                "name": "openj9-8-rhel7",
-                "annotations": {
-                    "openshift.io/display-name": "OpenJ9 1.8.0 (RHEL7)",
-                    "openshift.io/provider-display-name": "Red Hat, Inc.",
-                    "version": "1.4.17"
-                },
-                "labels": {
-                    "xpaas": "1.4.17"
-                }
-            },
-            "spec": {
-                "tags": [
-                    {
-                        "name": "1.1",
-                        "annotations": {
-                            "openshift.io/display-name": "OpenJ9 1.8.0 (RHEL7)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 1.8.0.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9,hidden",
-                            "supports": "java:8",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "1.1"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-8-rhel7:1.1"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "kind": "ImageStream",
-            "apiVersion": "image.openshift.io/v1",
-            "metadata": {
-                "name": "openj9-11-rhel7",
-                "annotations": {
-                    "openshift.io/display-name": "OpenJ9 11 (RHEL7)",
-                    "openshift.io/provider-display-name": "Red Hat, Inc.",
-                    "version": "1.4.17"
-                },
-                "labels": {
-                    "xpaas": "1.4.17"
-                }
-            },
-            "spec": {
-                "tags": [
-                    {
-                        "name": "1.1",
-                        "annotations": {
-                            "openshift.io/display-name": "OpenJ9 11 (RHEL7)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 11.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9,hidden",
-                            "supports": "java:11",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "1.1"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-11-rhel7:1.1"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "kind": "ImageStream",
-            "apiVersion": "image.openshift.io/v1",
-            "metadata": {
-                "name": "openj9-8-rhel8",
-                "annotations": {
-                    "openshift.io/display-name": "OpenJ9 1.8.0 (RHEL8)",
-                    "openshift.io/provider-display-name": "Red Hat, Inc.",
-                    "version": "1.4.17"
-                },
-                "labels": {
-                    "xpaas": "1.4.17"
-                }
-            },
-            "spec": {
-                "tags": [
-                    {
-                        "name": "1.1",
-                        "annotations": {
-                            "openshift.io/display-name": "OpenJ9 1.8.0 (RHEL8)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 1.8.0 upon RHEL8.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9,ubi8,hidden",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "1.1"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-8-rhel8:1.1"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "kind": "ImageStream",
-            "apiVersion": "image.openshift.io/v1",
-            "metadata": {
-                "name": "openj9-11-rhel8",
-                "annotations": {
-                    "openshift.io/display-name": "Red Hat OpenJDK 11 (RHEL8)",
-                    "openshift.io/provider-display-name": "Red Hat, Inc.",
-                    "version": "1.4.17"
-                },
-                "labels": {
-                    "xpaas": "1.4.17"
-                }
-            },
-            "spec": {
-                "tags": [
-                    {
-                        "name": "1.1",
-                        "annotations": {
-                            "openshift.io/display-name": "OpenJ9 11 (RHEL8)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 11 upon RHEL8.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9,ubi8,hidden",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "1.1"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-11-rhel8:1.1"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "kind": "ImageStream",
-            "apiVersion": "image.openshift.io/v1",
-            "metadata": {
                 "name": "java",
                 "annotations": {
-                    "openshift.io/display-name": "OpenJ9",
+                    "openshift.io/display-name": "Red Hat OpenJDK",
                     "openshift.io/provider-display-name": "Red Hat, Inc.",
                     "version": "1.4.17"
                 },
@@ -454,66 +300,6 @@
                         }
                     },
                     {
-                        "name": "openj9-8-el8",
-                        "annotations": {
-                            "openshift.io/display-name": "OpenJ9 1.8.0 (RHEL 8)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 1.8.0.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9",
-                            "supports": "java:8,java",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "8"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-8-rhel8:latest"
-                        }
-                    },
-                    {
-                        "name": "openj9-8-el7",
-                        "annotations": {
-                            "openshift.io/display-name": "OpenJ9 1.8.0 (RHEL 7)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 1.8.0.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9",
-                            "supports": "java:8,java",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "8"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-8-rhel7:latest"
-                        }
-                    },
-                    {
-                        "name": "8",
-                        "annotations": {
-                            "openshift.io/display-name": "OpenJ9 1.8.0",
-                            "description": "Build and run Java applications using Maven and OpenJ9 1.8.0.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9,hidden",
-                            "supports": "java:8,java",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "8"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-8-rhel7:latest"
-                        }
-                    },
-                    {
                         "name": "openjdk-11-ubi8",
                         "annotations": {
                             "openshift.io/display-name": "Red Hat OpenJDK 11 (UBI 8)",
@@ -551,66 +337,6 @@
                         "from": {
                             "kind": "DockerImage",
                             "name": "registry.redhat.io/openjdk/openjdk-11-rhel7:latest"
-                        }
-                    },
-                    {
-                        "name": "openj9-11-el8",
-                        "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJ9 11 (RHEL 8)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 11.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9",
-                            "supports": "java:11,java",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "11"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-11-rhel8:latest"
-                        }
-                    },
-                    {
-                        "name": "openj9-11-el7",
-                        "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJ9 11 (RHEL 7)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 11.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9",
-                            "supports": "java:11,java",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "11"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-11-rhel7:latest"
-                        }
-                    },
-                    {
-                        "name": "11",
-                        "annotations": {
-                            "openshift.io/display-name": "Red Hat OpenJ9 11 (RHEL7)",
-                            "description": "Build and run Java applications using Maven and OpenJ9 11.",
-                            "iconClass": "icon-rh-openj9",
-                            "tags": "builder,java,openj9,hidden",
-                            "supports": "java:11,java",
-                            "sampleRepo": "https://github.com/jboss-openshift/openshift-quickstarts",
-                            "sampleContextDir": "undertow-servlet",
-                            "version": "11"
-                        },
-                        "referencePolicy": {
-                            "type": "Local"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "registry.redhat.io/openj9/openj9-11-rhel7:latest"
                         }
                     },
                     {
