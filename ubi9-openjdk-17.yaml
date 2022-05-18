@@ -45,7 +45,7 @@ modules:
   - name: jboss.container.openjdk.jdk
     version: "17"
   - name: jboss.container.maven
-    version: "8.2.3.6"
+    version: "8.6.3.6.17"
   - name: jboss.container.java.s2i.bash
   - name: jboss.container.java.singleton-jdk
 
