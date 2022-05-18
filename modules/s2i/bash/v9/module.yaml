@@ -1,6 +1,6 @@
 schema_version: 1
 name: jboss.container.java.s2i.bash
-version: '1.0'
+version: '9.0'
 description: Customization of common Maven S2I for Java S2I image.
 
 envs:
@@ -15,5 +15,6 @@ execute:
 modules:
   install:
   - name: jboss.container.maven.s2i
+    version: '9.0'
   - name: jboss.container.java.run
   - name: jboss.container.util.logging.bash

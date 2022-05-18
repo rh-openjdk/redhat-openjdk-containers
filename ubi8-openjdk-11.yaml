@@ -52,6 +52,7 @@ modules:
   - name: jboss.container.java.jvm
     version: "1.0"
   - name: jboss.container.java.s2i.bash
+    version: "1.0"
   # required due to jolokia
   - name: jboss.container.java.singleton-jdk
 

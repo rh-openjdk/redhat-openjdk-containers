@@ -1,0 +1,38 @@
+
+source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
+
+# inject our overridden maven_*() functions
+function maven_s2i_source_maven_overrides() {
+  source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/maven-overrides"
+}
+
+# Accommodate fabric8
+function maven_s2i_custom_binary_build() {
+  if [ -f "${S2I_SOURCE_DIR}/Dockerfile" ]; then
+    # This is a S2I binary build coming from fabric8-maven-plugin
+    log_info "S2I binary build from fabric8-maven-plugin detected"
+    if [ -d "${S2I_SOURCE_DIR}/maven" ]; then
+      binary_dir="${S2I_SOURCE_DIR}/maven"
+    elif [ -d "${S2I_SOURCE_DIR}/${S2I_SOURCE_DEPLOYMENTS_DIR}" ]; then
+      binary_dir="${S2I_SOURCE_DIR}/${S2I_SOURCE_DEPLOYMENTS_DIR}"
+    elif [ $(find "${S2I_SOURCE_DIR}" -maxdepth 1 -type d | grep -v -e "^${S2I_SOURCE_DIR}$" | wc -l) == 1 ]; then
+      # Found a single directory, take this
+      binary_dir=$(find "${S2I_SOURCE_DIR}" -maxdepth 1 -type d | grep -v -e "^${S2I_SOURCE_DIR}$")
+    else
+      log_error "No single directory found in ${S2I_SOURCE_DIR} but:\n $(ls -l ${S2I_SOURCE_DIR})"
+      return 1
+    fi
+  elif [ -d "${S2I_SOURCE_DIR}/${S2I_SOURCE_DEPLOYMENTS_DIR}" ]; then
+    binary_dir="${S2I_SOURCE_DIR}/${S2I_SOURCE_DEPLOYMENTS_DIR}"
+  else
+    binary_dir="${S2I_SOURCE_DIR}"
+  fi
+  log_info "Copying binaries from ${binary_dir} to ${S2I_TARGET_DEPLOYMENTS_DIR} ..."
+  rsync -rl --out-format='%n' "${binary_dir}"/ "${S2I_TARGET_DEPLOYMENTS_DIR}"
+}
+
+function maven_s2i_deploy_artifacts_override() {
+  unset -f maven_s2i_deploy_artifacts_override
+  eval maven_s2i_deploy_artifacts $*
+  return $?
+}

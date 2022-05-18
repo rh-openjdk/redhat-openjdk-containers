@@ -1,4 +1,4 @@
-# Overrides basic functionality by looking fore settings.xml in <source>/configuration
+# Overrides basic functionality by looking for settings.xml in <source>/configuration
 function maven_init_var_MAVEN_SETTINGS_XML() {
   if [ -f "${MAVEN_SETTINGS_XML}" ]; then
     :
