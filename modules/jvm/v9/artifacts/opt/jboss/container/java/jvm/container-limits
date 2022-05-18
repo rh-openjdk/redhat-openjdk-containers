@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Detected container limits
+# If found these are exposed as the following environment variables:
+#
+# - CONTAINER_MAX_MEMORY
+# - CONTAINER_CORE_LIMIT
+#
+# This script is meant to be sourced.
+
+max_unbounded() {
+  cat /proc/meminfo | grep 'MemTotal:' | awk '{print $2*1024}'
+}
+
+container_memory() {
+  # High number which is the max limit unit which memory is supposed to be
+  # unbounded. 
+  local mem_file="/sys/fs/cgroup/memory/memory.limit_in_bytes"
+  local max_mem_unbounded="$(max_unbounded)"
+  if [ -r "${mem_file}" ]; then
+    local max_mem="$(cat ${mem_file})"
+    if [ ${max_mem} -lt ${max_mem_unbounded} ]; then
+      echo "${max_mem}"
+    fi
+  fi
+}
+
+min() {
+  printf "%s\n" "$@" | sort -g | head -n1
+}
+
+local max_mem="$(container_memory)"
+if [ x$max_mem != x ]; then
+  export CONTAINER_MAX_MEMORY="$max_mem"
+fi

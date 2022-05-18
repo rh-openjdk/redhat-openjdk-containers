@@ -46,6 +46,8 @@ modules:
   - name: jboss.container.jolokia
     version: "7"
   - name: jboss.container.util.nss-wrapper
+  - name: jboss.container.java.jvm
+    version: "1.0"
   - name: jboss.container.java.s2i.bash
   - name: jboss.container.maven
     version: "7.0.3.6"
