@@ -1,4 +1,4 @@
-name: UBI9 OpenJDK 8 S2I Image CI
+name: UBI9 OpenJDK 17 Runtime S2I Image CI
 on: [push, pull_request]
 env:
   LANG: en_US.UTF-8
