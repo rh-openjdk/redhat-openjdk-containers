@@ -50,6 +50,14 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain os-prober
     Then available container log should not contain rpm-plugin-systemd-inhibit
 
+  # OPENJDK-947
+  @ubi8
+  Scenario: Check that rsync is installed
+    When container is started with args
+    | arg     | value   |
+    | command | rpm -qi rsync |
+    Then available container log should contain Name        : rsync
+
   @ubi8/openjdk-8
   Scenario: Check that directories from other JDKs are not present (JDK8)
     When container is started with args

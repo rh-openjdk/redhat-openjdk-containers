@@ -1,0 +1,9 @@
+schema_version: 1
+name: jboss.container.util.rsync
+version: '1.0'
+description: Installs rsync, to provide `oc rsync` support.
+  See <https://issues.redhat.com/browse/OPENJDK-947>.
+
+packages:
+  install:
+  - rsync
