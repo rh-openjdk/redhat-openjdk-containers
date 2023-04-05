@@ -137,3 +137,8 @@ Feature: Openshift OpenJDK S2I tests
     Given s2i build https://github.com/jboss-openshift/openshift-examples from spring-boot-sample-simple/target
     Then s2i build log should not contain skipping directory .
     And  run find /deployments in container and check its output for spring-boot-sample-simple-1.5.0.BUILD-SNAPSHOT.jar
+
+  Scenario: Ensure the environment is cleaned when executing mvn (OPENJDK-1549)
+      Given s2i build https://github.com/jmtd/openjdk from tests/OPENJDK-1549 with env using OPENJDK-1549-MAVEN_ARGS
+       | variable           | value    |
+       | MAVEN_ARGS         | validate |
