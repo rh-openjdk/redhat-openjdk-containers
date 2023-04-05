@@ -69,16 +69,16 @@ function maven_build() {
   local goals=${2:-package}
   log_info "Performing Maven build in $build_dir"
 
-  pushd $build_dir &> /dev/null
+  # subshell so we can exec mvn with a clean environment (OPENJDK-1549)
+  (
+    cd $build_dir
 
-  log_info "Using MAVEN_OPTS ${MAVEN_OPTS}"
-  log_info "Using $(mvn $MAVEN_ARGS --version)"
-  log_info "Running 'mvn $MAVEN_ARGS $goals'"
-  # Execute the actual build
-  mvn $MAVEN_ARGS $goals
-  
-  popd &> /dev/null
-  
+    log_info "Using MAVEN_OPTS ${MAVEN_OPTS}"
+    log_info "Using $(mvn $MAVEN_ARGS --version)"
+    log_info "Running 'mvn $MAVEN_ARGS $goals'"
+
+    exec -c mvn $MAVEN_ARGS $goals
+  )
 }
 
 # post build cleanup.  deletes local repository after a build, if MAVEN_CLEAR_REPO is set
