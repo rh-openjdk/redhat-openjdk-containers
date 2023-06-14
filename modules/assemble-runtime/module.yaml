@@ -1,0 +1,14 @@
+schema_version: 1
+name: jboss.container.java.assemble-runtime
+version: '1.0'
+description: ^
+  S2i assemble-runtime script
+
+execute:
+- script: configure.sh
+
+labels:
+- name:  "io.openshift.s2i.scripts-url"
+  value: "image:///usr/local/s2i"
+- name:  "io.openshift.s2i.assemble-input-files"
+  value: "/deployments"

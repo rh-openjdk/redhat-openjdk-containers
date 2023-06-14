@@ -42,8 +42,8 @@ modules:
   - name: jboss.container.util.pkg-update
   - name: jboss.container.openjdk.jre
     version: "17"
+  - name:  jboss.container.java.assemble-runtime
   - name:  jboss.container.java.jre.run
-
 help:
   add: true
 
