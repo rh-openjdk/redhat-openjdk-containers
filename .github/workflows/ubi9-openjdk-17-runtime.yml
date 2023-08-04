@@ -5,6 +5,9 @@ env:
   IMAGE: ubi9-openjdk-17-runtime
 jobs:
   call-openjdkci:
+    permissions:
+      packages: write
+      contents: read
     uses: ./.github/workflows/image-workflow-template.yml
     with:
       image: ubi9-openjdk-17
