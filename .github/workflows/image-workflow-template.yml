@@ -7,8 +7,12 @@ on:
         type: string
 env:
   LANG: en_US.UTF-8
+  IMAGE_URI: ghcr.io/jboss-container-images/openjdk-${{ inputs.image }}:${{ github.base_ref }}
 jobs:
   openjdkci:
+    permissions:
+      packages: write
+      contents: read
     name: OpenJDK S2I Build and Test
     runs-on: ubuntu-20.04
     strategy:
@@ -23,7 +27,7 @@ jobs:
 
       - name: Build
         run: |
-          cekit -v --descriptor ${{ inputs.image }}.yaml build docker --no-squash
+          cekit -v --descriptor ${{ inputs.image }}.yaml build docker --no-squash --tag localimage
 
       - name: Install and cache S2I CLI tool from GitHub
         uses: redhat-actions/openshift-tools-installer@v1
@@ -35,4 +39,18 @@ jobs:
       - name: Behave Tests
         run: |
           echo /home/runner/work/_temp/openshift-bin >> $GITHUB_PATH
-          cekit -v --descriptor ${{ inputs.image }}.yaml test behave
+          cekit -v --descriptor ${{ inputs.image }}.yaml test --image localimage behave
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        if: github.event_name == 'push'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag and push container image
+        if: github.event_name == 'push'
+        run: |
+          docker tag localimage ${{ env.IMAGE_URI }}
+          docker push ${{ env.IMAGE_URI }}
