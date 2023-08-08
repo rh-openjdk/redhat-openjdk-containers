@@ -498,6 +498,10 @@
                         },
                         "referencePolicy": {
                             "type": "Local"
+
+                            this is not a valid
+                            json file
+
                         },
                         "from": {
                             "kind": "DockerImage",
