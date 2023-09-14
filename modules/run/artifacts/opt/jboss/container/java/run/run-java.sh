@@ -3,6 +3,13 @@
 # Fail on a single failed command
 set -eo pipefail
 
+#These are defined explicitly here to avoid defining them in templates/jlink/Dockerfile
+export JBOSS_CONTAINER_UTIL_LOGGING_MODULE="/opt/jboss/container/util/logging"
+export JBOSS_CONTAINER_JAVA_RUN_MODULE="/opt/jboss/container/java/run"
+
+#This is moved here after deleting run-env.sh
+export JAVA_APP_DIR=/deployments
+
 source "$JBOSS_CONTAINER_UTIL_LOGGING_MODULE/logging.sh"
 
 # ==========================================================
@@ -96,13 +103,8 @@ load_env() {
   if [ -z "${JAVA_APP_DIR}" ]; then
     # XXX: is this correct?  This is defaulted above to /deployments.  Should we
     # define a default to the old /opt/java-run?
-    JAVA_APP_DIR="${JBOSS_CONTAINER_JAVA_RUN_MODULE}"
-  else
-    if [ -f "${JAVA_APP_DIR}/${run_env_sh}" ]; then
-      source "${JAVA_APP_DIR}/${run_env_sh}"
-    fi
+    export JAVA_APP_DIR="${JBOSS_CONTAINER_JAVA_RUN_MODULE}"
   fi
-  export JAVA_APP_DIR
 
   # JAVA_LIB_DIR defaults to JAVA_APP_DIR
   export JAVA_LIB_DIR="${JAVA_LIB_DIR:-${JAVA_APP_DIR}}"
