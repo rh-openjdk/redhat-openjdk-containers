@@ -3,14 +3,12 @@
 # Fail on a single failed command
 set -eo pipefail
 
-#These are defined explicitly here to avoid defining them in templates/jlink/Dockerfile
 export JBOSS_CONTAINER_UTIL_LOGGING_MODULE="${JBOSS_CONTAINER_UTIL_LOGGING_MODULE-/opt/jboss/container/util/logging}"
 export JBOSS_CONTAINER_JAVA_RUN_MODULE="${JBOSS_CONTAINER_JAVA_RUN_MODULE-/opt/jboss/container/java/run}"
 
-#This is moved here after deleting run-env.sh
 # Default the application dir to the S2I deployment dir
 if [ -z "$JAVA_APP_DIR" ]
-then JAVA_APP_DIR=/deployments
+  then JAVA_APP_DIR=/deployments
 fi
 
 source "$JBOSS_CONTAINER_UTIL_LOGGING_MODULE/logging.sh"
