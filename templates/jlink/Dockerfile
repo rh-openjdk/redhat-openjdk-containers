@@ -18,19 +18,14 @@ FROM registry.access.redhat.com/ubi9/ubi-micro AS lean-runtime
 COPY --from=ubi9-jlinked-image /mnt/jrootfs/ /
 COPY --from=ubi9-jlinked-image /deployments /deployments
 COPY --from=ubi9-jlinked-image /tmp/jre /usr/lib/jvm/java
-COPY --from=ubi9-jlinked-image /opt/jboss/container/java/run/run-java.sh /opt/jboss/container/java/run/run-java.sh
-COPY --from=ubi9-jlinked-image /opt/jboss/container/util/logging/logging.sh /opt/jboss/container/util/logging/logging.sh
-COPY --from=ubi9-jlinked-image /opt/jboss/container/java/run/run-env.sh /opt/jboss/container/java/run/run-env.sh 
-RUN ls -LR /opt/jboss/container/
+COPY --from=ubi9-jlinked-image /opt/jboss/container/ /opt/jboss/container/
+RUN ls -la /opt/jboss/container/*
 
 ENV JAVA_HOME="/usr/lib/jvm/java"
 RUN echo $JAVA_HOME
 
 ENV PATH="$JAVA_HOME/bin/:$PATH"
 RUN echo $PATH
-
-ENV JBOSS_CONTAINER_UTIL_LOGGING_MODULE=/opt/jboss/container/util/logging
-ENV JBOSS_CONTAINER_JAVA_RUN_MODULE=/opt/jboss/container/java/run
 
 CMD /opt/jboss/container/java/run/run-java.sh
 
