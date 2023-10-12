@@ -171,3 +171,7 @@ Feature: Openshift OpenJDK S2I tests
       Given s2i build https://github.com/jboss-container-images/openjdk from tests/OPENJDK-1549 with env using ubi9
        | variable           | value    |
        | MAVEN_ARGS         | validate |
+
+  Scenario: Ensure that run-env.sh placed in the JAVA_APP_DIR is sourced in the run script before launching java
+    Given s2i build https://github.com/jhuttana/openjdk-test-applications/tree/run_env_sh_test_coverage1 from quarkus-quickstarts/getting-started-3.0.1.Final-nos2i
+    Then container log should contain INFO exec -a "someUniqueString" java  -cp "." -jar
