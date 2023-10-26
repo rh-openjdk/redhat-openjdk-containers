@@ -174,4 +174,8 @@ Feature: Openshift OpenJDK S2I tests
 
   Scenario: Ensure that run-env.sh placed in the JAVA_APP_DIR is sourced in the run script before launching java
     Given s2i build https://github.com/jhuttana/openjdk-test-applications from quarkus-quickstarts/getting-started-3.0.1.Final-nos2i using run_env_sh_test_coverage1
+    | variable            | value        |
+    | S2I_ENABLE_JLINK    | true         |
+    | S2I_SOURCE_DATA_DIR | ./           |
+    | S2I_TARGET_DATA_DIR | /deployments |
     Then container log should contain INFO exec -a "someUniqueString" java  -cp "." -jar
