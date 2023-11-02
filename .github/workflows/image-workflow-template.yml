@@ -35,4 +35,4 @@ jobs:
       - name: Behave Tests
         run: |
           echo /home/runner/work/_temp/openshift-bin >> $GITHUB_PATH
-          cekit -v --descriptor ${{ inputs.image }}.yaml test behave
+          cekit -v --descriptor ${{ inputs.image }}.yaml test behave --steps-url https://github.com/jmtd/behave-test-steps
