@@ -1,5 +1,3 @@
-# temporarily marking 'ignore' so these tests are skipped on GHA
-@ignore
 @ubi9/openjdk-11
 @ubi9/openjdk-17
 @ubi9/openjdk-21
@@ -9,7 +7,7 @@ Feature: Openshift OpenJDK S2I tests
 # when the test specifies e.g. a dummy HTTP proxy value
 
   Scenario: run s2i and check settings.xml is configured for maven mirror and http proxy
-   Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+   Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
       | variable           | value                                            |
       | MAVEN_ARGS         | -v                                               |
       | MAVEN_MIRROR_URL   | http://127.0.0.1:8080/repository/internal/       |
@@ -22,7 +20,7 @@ Feature: Openshift OpenJDK S2I tests
 
   # proxy auth configuration (success case) + nonProxyHosts
   Scenario: run s2i and check settings.xml is configured for http proxy including user,pass and nonProxyHosts
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable           | value                                            |
        | MAVEN_ARGS         | -v                                               |
        | http_proxy         | myuser:mypass@127.0.0.1:8080                     |
@@ -33,7 +31,7 @@ Feature: Openshift OpenJDK S2I tests
     Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:proxy[ns:id='genproxy'][ns:active='true'][ns:protocol='http'][ns:host='127.0.0.1'][ns:port='8080'][ns:username='myuser'][ns:password='mypass'][ns:nonProxyHosts='*.example.com']
 
   Scenario: run s2i and check settings.xml is configured for http proxy including user (no password)
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable           | value                                            |
        | MAVEN_ARGS         | -v                                               |
        | http_proxy         | myuser@127.0.0.1:8080                            |
@@ -44,7 +42,7 @@ Feature: Openshift OpenJDK S2I tests
 
   # HTTP_PROXY (all caps) ignored
   Scenario: run s2i, check http_proxy overrides HTTP_PROXY
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable           | value                                            |
        | MAVEN_ARGS         | -v                                               |
        | http_proxy         | 127.0.0.2:9090                                   |
@@ -56,7 +54,7 @@ Feature: Openshift OpenJDK S2I tests
     Then XML file /tmp/artifacts/configuration/settings.xml should have 0 elements on XPath //ns:proxy[ns:id='genproxy'][ns:active='true'][ns:protocol='http'][ns:host='127.0.0.1'][ns:port='8080']
 
   Scenario: run s2i and check settings.xml is configured for https proxy
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable           | value                                            |
        | MAVEN_ARGS         | -v                                               |
        | https_proxy        | 127.0.0.1:8080                                   |
@@ -66,7 +64,7 @@ Feature: Openshift OpenJDK S2I tests
     Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:proxy[ns:id='genproxy'][ns:active='true'][ns:protocol='https'][ns:host='127.0.0.1'][ns:port='8080']
 
   Scenario: run s2i and check settings.xml is configured for https proxy (including user and pass) and nonProxyHosts
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable           | value                                            |
        | MAVEN_ARGS         | -v                                               |
        | https_proxy        | myuser:mypass@127.0.0.1:8080                     |
@@ -77,7 +75,7 @@ Feature: Openshift OpenJDK S2I tests
     Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:proxy[ns:id='genproxy'][ns:active='true'][ns:protocol='https'][ns:host='127.0.0.1'][ns:port='8080'][ns:username='myuser'][ns:password='mypass'][ns:nonProxyHosts='*.example.com']
 
   Scenario: run s2i and check settings.xml is configured for https proxy (without user and pass) when user only specified
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable           | value                                            |
        | MAVEN_ARGS         | -v                                               |
        | https_proxy        | myuser@127.0.0.1:8080                            |
@@ -87,7 +85,7 @@ Feature: Openshift OpenJDK S2I tests
     Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:proxy[ns:id='genproxy'][ns:active='true'][ns:protocol='https'][ns:host='127.0.0.1'][ns:port='8080']
 
   Scenario: run s2i and check no_proxy is honoured with multiple entries
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable           | value                                            |
        | MAVEN_ARGS         | -v                                               |
        | http_proxy         | http://127.0.0.1:8080                            |
@@ -103,12 +101,12 @@ Feature: Openshift OpenJDK S2I tests
     And s2i build log should not contain \r
 
   Scenario: Ensure binary-only mode recursively copies binaries into the target image (CLOUD-3095)
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
     Then s2i build log should not contain skipping directory .
-    And  run find /deployments in container and check its output for spring-boot-sample-simple-1.5.0.BUILD-SNAPSHOT.jar
+    And  run find /deployments in container and check its output for undertow-servlet.jar
 
   Scenario: run s2i and check multiple MAVEN_REPOS have been defined in settings.xml (OPENJDK-1954)
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable                | value                                |
        | MAVEN_REPOS             | TESTREPO,ANOTHER                     |
        | TESTREPO_MAVEN_REPO_URL | http://repo.example.com:8080/maven2/ |
@@ -124,7 +122,7 @@ Feature: Openshift OpenJDK S2I tests
     Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:profile[ns:id='another-profile']/ns:repositories/ns:repository[ns:url='https://repo.example.org:8888/']
 
   Scenario: Check MAVEN_REPO_URL and MAVEN_REPO_ID generate Maven server and profile configuration (OPENJDK-1961)
-    Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target
+    Given s2i build https://github.com/jmtd/openjdk-test-applications from undertow-servlet/target using add-undertow-binary
        | variable       | value                                |
        | MAVEN_REPO_URL | http://repo.example.com:8080/maven2/ |
        | MAVEN_REPO_ID  | myrepo                               |
