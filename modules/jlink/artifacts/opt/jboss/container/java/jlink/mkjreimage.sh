@@ -16,8 +16,7 @@ function generate_jre_image() {
 	# Workaround for JDK11 jlinked-image inflating in size
 	# https://bugzilla.redhat.com/show_bug.cgi?id=1652177
 	# https://bugzilla.redhat.com/attachment.cgi?id=1508295
-	JAVA_MAJOR_VERSION=$(java -version 2>&1 | sed -E -n 's/.* version "([^.-]*).*"/\1/p' | cut -d' ' -f1)
-	if [ $JAVA_MAJOR_VERSION -eq 11 ]; then
+	if [ $JAVA_VERSION -eq 11 ]; then
 		echo -n "Replacing shared libraries from JDK image '$S2I_JLINK_OUTPUT_PATH' with shared libraries from '$JAVA_HOME'... "
 
 		pushd $S2I_JLINK_OUTPUT_PATH > /dev/null
