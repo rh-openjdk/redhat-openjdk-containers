@@ -1,3 +1,16 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  generation: 1
+  name: jlinked-image
+  namespace: default
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: image-registry.openshift-image-registry.svc:5000/default/jlinked-image
+  publicDockerImageRepository: default-route-openshift-image-registry.apps-crc.testing/default/jlinked-image
+---
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata: 
@@ -7,7 +20,7 @@ spec:
     dockerfile: |
 	#Stage-1: ubi9-jlinked-image is builder image + application + jlinked JVM
 	# install additional system dependencies (for ubi-micro) to /mnt/jrootfs
-	FROM ubi9-jlinked-image AS ubi9-jlinked-image  # Replace this with appropriate base image
+	FROM - AS ubi9-jlinked-image  # Replace this with appropriate base image
 	USER 0
 	RUN mkdir -p /mnt/jrootfs
 	RUN microdnf install --installroot /mnt/jrootfs --releasever 9 --setopt install_weak_deps=0 --nodocs -y \

@@ -1,0 +1,33 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata: 
+  name: jlinked-image
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/jboss-container-images/openjdk.git
+      ref: jlink-dev
+  strategy:
+    type: Docker
+    dockerStrategy:
+    from:
+      kind: DockerImage
+      name: ubi9-jlinked-image:latest  # Base image for the first stage
+    dockerfilePath: templates/jlink/Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: jlinked-image:latest  # Tag for the final output image
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChange:
+        from:
+          kind: ImageStreamTag
+          name: ubi9-jlinked-image:latest  # ImageStreamTag to trigger the build (stage-1 image in Dockerfile)
+    - type: ImageChange
+      imageChange:
+        from:
+          kind: ImageStreamTag
+          name: lean-runtime:latest  # ImageStreamTag for the final output image (stage-2 runtime-image in Dockerfile)
