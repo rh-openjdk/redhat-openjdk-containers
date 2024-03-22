@@ -33,11 +33,11 @@ objects:
             --setopt=varsdir=/etc/dnf/vars \
             grep gawk
         RUN rm -rf /mnt/jrootfs/var/cache/* /mnt/jrootfs/var/lib/rpm /mnt/jrootfs/var/lib/dnf
-#    strategy:
-#      dockerStrategy:
-#        from:
-#          kind: "ImageStreamTag"
-#          name: "jlinked-image:latest"  # placeholder. Correct value is defined by Josh's Phase-2 template output.
+    strategy:
+      dockerStrategy:
+        from:
+          kind: "ImageStreamTag"
+          name: "jlinked-image:latest"  # placeholder. Correct value is defined by Josh's Phase-2 template output.
     output:
       to:
         kind: ImageStreamTag
@@ -59,21 +59,21 @@ objects:
         #Stage-2:copy application JAR and jlinked JRE to runtime image
         FROM registry.access.redhat.com/ubi9/ubi-micro
         # Tempororily comment COPY instructions as ubi9-jlinked-image is not available
-#        COPY --from=ubi9-jlinked-image /mnt/jrootfs/ /
-#        COPY --from=ubi9-jlinked-image /deployments /deployments
-#        COPY --from=ubi9-jlinked-image /tmp/jre ${JAVA_HOME}
-#        COPY --from=ubi9-jlinked-image /opt/jboss/container/ /opt/jboss/container/
+        COPY --from=ubi9-jlinked-image /mnt/jrootfs/ /
+        COPY --from=ubi9-jlinked-image /deployments /deployments
+        COPY --from=ubi9-jlinked-image /tmp/jre ${JAVA_HOME}
+        COPY --from=ubi9-jlinked-image /opt/jboss/container/ /opt/jboss/container/
 
         # these are in the micro image
         RUN rm -rf /var/lib/dnf /var/lib/rpm
 
         USER 185
         CMD /opt/jboss/container/java/run/run-java.sh
-#    strategy:
-#      dockerStrategy:
-#        from:
-#          kind: "ImageStreamTag"
-#          name: "jlinked-image:latest"  # placeholder. ImageStreamTag for registry.access.redhat.com/ubi9/ubi-micro
+    strategy:
+      dockerStrategy:
+        from:
+          kind: "ImageStreamTag"
+          name: "jlinked-image:latest"  # placeholder. ImageStreamTag for registry.access.redhat.com/ubi9/ubi-micro
       dockerArgs:
         - name: "JAVA_HOME"
           value: "/usr/lib/jvm/java"
