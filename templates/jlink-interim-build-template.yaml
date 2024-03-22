@@ -1,0 +1,60 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: Template to produce an imagestream and buildconfig for a Jlinked intermediate image
+  name: s2i-build-template
+parameters:
+- name: APP_NAME
+  description: Name of the application
+  required: true
+- name: GIT_URI
+  description: Git repository URL
+  required: true
+- name: GIT_REF
+  description: Git branch or tag to build
+  required: true
+- name: CONTEXT_DIR
+  description: Context directory which is a directory within git repo
+  required: true  
+- name: BUILDER_IMAGE
+  description: Name of the S2I builder image
+  required: true
+- name: OUTPUT_IMAGE_TAG
+  description: Tag for the output image
+  required: true
+objects:
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    name: ${APP_NAME}-s2i-build
+  spec:
+    source:
+      type: Git
+      git:
+        uri: ${GIT_URI}
+        ref: ${GIT_REF}
+        contextDir: ${CONTEXT_DIR}
+    strategy:
+      type: Source
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: ${BUILDER_IMAGE}
+          pullPolicy: Always  # equivalent for --pull-policy
+        env:
+          - name: S2I_ENABLE_JLINK
+            value: ${S2I_ENABLE_JLINK}
+          - name: S2I_DELETE_SOURCE
+            value: ${S2I_DELETE_SOURCE}
+          - name: LOGGING_SCRIPT_DEBUG
+            value: ${LOGGING_SCRIPT_DEBUG}
+          - name: QUARKUS_PACKAGE_TYPE
+            value: ${QUARKUS_PACKAGE_TYPE}
+          - name: DEBUG    # equivalent for --loglevel
+            value: "5"
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:${OUTPUT_IMAGE_TAG}
