@@ -24,7 +24,29 @@ parameters:
 - name: OUTPUT_IMAGE_TAG
   description: Tag for the output image
   required: true
+- name: S2I_ENABLE_JLINK
+  description: To specify jlink build
+  required: true
+- name: S2I_DELETE_SOURCE
+  description: #place holder
+  required: true
+- name: LOGGING_SCRIPT_DEBUG
+  description: #place holder
+  required: true
+- name: QUARKUS_PACKAGE_TYPE
+  description: #place holder
+  required: true
+- name: JDK_VERSION
+  description: #place holder
+  required: true
 objects:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    name: ${APP_NAME}-${JDK_VERSION}
+  spec:
+    lookupPolicy:
+      local: false
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
@@ -57,4 +79,4 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: ${APP_NAME}:${OUTPUT_IMAGE_TAG}
+        name: ${APP_NAME}-${JDK_VERSION}:${OUTPUT_IMAGE_TAG}
