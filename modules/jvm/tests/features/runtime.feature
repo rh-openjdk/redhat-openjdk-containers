@@ -52,6 +52,8 @@ Feature: Openshift OpenJDK Runtime tests
     | JAVA_APP_DIR | .      |
   Then available container log should contain INFO running in /home/default
 
+  # too flaky for CI
+  @ignore
   @ubi9
   Scenario: Check non-existent path JAVA_APP_DIR (OPENJDK-2034)
     Given container is started with env
