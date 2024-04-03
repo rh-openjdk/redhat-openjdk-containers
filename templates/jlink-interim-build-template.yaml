@@ -63,7 +63,7 @@ objects:
       git:
         uri: ${GIT_URI}
         ref: ${GIT_REF}
-        contextDir: ${CONTEXT_DIR}
+      contextDir: ${CONTEXT_DIR}
     strategy:
       type: Source
       sourceStrategy:
