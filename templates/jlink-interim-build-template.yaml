@@ -17,15 +17,9 @@ parameters:
   required: true
 - name: CONTEXT_DIR
   description: Context directory which is a directory within git repo
-  required: true  
-- name: BUILDER_IMAGE
-  description: Name of the S2I builder image
   required: true
 - name: OUTPUT_IMAGE_TAG
   description: Tag for the output image
-  required: true
-- name: S2I_ENABLE_JLINK
-  description: To specify jlink build
   required: true
 - name: S2I_DELETE_SOURCE
   description: #place holder
@@ -63,11 +57,10 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: ${BUILDER_IMAGE}
+          name: ubi9-openjdk-${JDK_VERSION}-jlink:latest
+          namespace: phase-1
           pullPolicy: Always  # equivalent for --pull-policy
         env:
-          - name: S2I_ENABLE_JLINK
-            value: ${S2I_ENABLE_JLINK}
           - name: S2I_DELETE_SOURCE
             value: ${S2I_DELETE_SOURCE}
           - name: LOGGING_SCRIPT_DEBUG
