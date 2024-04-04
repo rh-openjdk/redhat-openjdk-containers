@@ -48,7 +48,7 @@ objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    name: ${APP_NAME}-${JDK_VERSION}
+    name: ${APP_NAME}-jdk-${JDK_VERSION}
   spec:
     lookupPolicy:
       local: false
@@ -56,7 +56,7 @@ objects:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
-    name: ${APP_NAME}-s2i-build
+    name: ${APP_NAME}-s2i-build-jdk-${JDK_VERSION}
   spec:
     source:
       type: Git
@@ -83,4 +83,4 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: ${APP_NAME}-${JDK_VERSION}:${OUTPUT_IMAGE_TAG}
+        name: ${APP_NAME}-jdk-${JDK_VERSION}:${OUTPUT_IMAGE_TAG}
