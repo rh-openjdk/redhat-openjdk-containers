@@ -89,3 +89,10 @@ Feature: Miscellaneous OpenJDK-related unit tests
     | arg     | value |
     | command | tar   |
     Then available container log should not contain command not found
+
+  @ubi9
+  Scenario: Ensure tzdata RPM is properly installed (OPENJDK-2519)
+    When container is started with args
+    | arg     | value         |
+    | command | rpm -V tzdata |
+    Then available container log should not contain missing

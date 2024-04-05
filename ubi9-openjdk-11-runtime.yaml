@@ -51,7 +51,8 @@ modules:
   - name: jboss.container.tar
   - name: jboss.container.openjdk.jre
     version: "11"
-  - name:  jboss.container.java.jre.run
+  - name: jboss.container.util.tzdata
+  - name: jboss.container.java.jre.run
 
 help:
   add: true
