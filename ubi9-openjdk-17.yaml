@@ -22,8 +22,6 @@ labels:
   value: &docs "https://jboss-container-images.github.io/openjdk/"
 - name: "com.redhat.license_terms"
   value: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
-- name: "org.opencontainers.image.source"
-  value: "https://github.com/jboss-container-images/openjdk"
 - name: "org.opencontainers.image.documentation"
   value: *docs
 - name: "name"
