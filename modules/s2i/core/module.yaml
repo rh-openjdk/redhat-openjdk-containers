@@ -112,6 +112,12 @@ envs:
     Delete source files at the end of build.  Defaults to true.
   example: "false"
 
+- name: S2I_ENABLE_JLINK
+  description: ^
+    Enables the Jdeps/JLink workflow to minimize JRE size
+  example: "false"
+  value: false
+
 run:
   cmd:
   - "/usr/local/s2i/run"

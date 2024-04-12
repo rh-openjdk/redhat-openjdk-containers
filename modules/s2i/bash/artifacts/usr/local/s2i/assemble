@@ -14,3 +14,24 @@ source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/maven-s2i-overrides"
 # invoke the build
 maven_s2i_build
 
+# run the pathfinder scripts to define JAVA_APP_JAR and JAVA_LIB_DIR
+source "${JBOSS_CONTAINER_UTIL_PATHFINDER_MODULE}/pathfinder.sh"
+echo "Setting up java app and lib variables"
+setup_java_app_and_lib
+
+# include our jlink scripts
+source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkdeps.sh"
+echo "Invoking mkdeps"
+generate_deps
+
+source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkstrippeddeps.sh"
+echo "Stripping dependencies"
+mkstrippeddeps
+
+source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/generatejdkdeps.sh"
+echo "Generating JDK dependencies"
+generatejdkdeps
+
+source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkjreimage.sh"
+echo "Linking jre"
+generate_jre_image

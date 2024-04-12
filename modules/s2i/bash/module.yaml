@@ -16,6 +16,8 @@ modules:
   - name: jboss.container.maven.s2i
   - name: jboss.container.java.run
   - name: jboss.container.util.logging
+  - name: jboss.container.java.jlink
+  - name: jboss.container.util.pathfinder
 
 packages:
   install:

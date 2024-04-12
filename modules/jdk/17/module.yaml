@@ -25,6 +25,7 @@ envs:
 packages:
   install:
   - java-17-openjdk-devel
+  - java-17-openjdk-jmods
 
 modules:
   install:
