@@ -9,26 +9,6 @@ envs:
 - name: JBOSS_CONTAINER_JAVA_RUN_MODULE
   value: /opt/jboss/container/java/run
 
-- name: JAVA_APP_DIR
-  description: ^
-    The directory where the application resides. All paths in your application
-    are relative to this directory.
-  example: "myapplication/"
-
-- name: JAVA_MAIN_CLASS
-  description: ^
-    A main class to use as argument for `java`. When this environment variable
-    is given, all jar files in **JAVA_APP_DIR** are added to the classpath as
-    well as **JAVA_LIB_DIR**.
-  example: "com.example.MainClass"
-
-- name: JAVA_LIB_DIR
-  description: ^
-    Directory holding the Java jar files as well an optional `classpath` file
-    which holds the classpath. Either as a single line classpath (colon
-    separated) or with jar files listed line-by-line. If not set
-    **JAVA_LIB_DIR** is the same as **JAVA_APP_DIR**.
-
 - name: JAVA_DATA_DIR
   description: ^
     The location of the directory which should be used by the application for
