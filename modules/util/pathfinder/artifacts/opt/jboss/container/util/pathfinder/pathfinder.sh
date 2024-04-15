@@ -26,10 +26,12 @@ auto_detect_jar_file() {
   local old_dir=$(pwd)
   cd ${dir}
   if [ $? = 0 ]; then
+
     if quarkus="$(is_quarkus_fast_jar)"; then
       echo "$quarkus"
       return
     fi
+
     local nr_jars=`ls *.jar 2>/dev/null | grep -v '^original-' | wc -l | tr -d '[[:space:]]'`
     if [ ${nr_jars} = 1 ]; then
       ls *.jar | grep -v '^original-'
@@ -76,15 +78,10 @@ setup_java_app_and_lib() {
 
   # Check also $JAVA_APP_DIR. Overrides other defaults
   # It's valid to set the app dir in the default script
-  if [ -z "${JAVA_APP_DIR}" ]; then
-    # XXX: is this correct?  This is defaulted above to /deployments.  Should we
-    # define a default to the old /opt/java-run?
-    JAVA_APP_DIR="${JBOSS_CONTAINER_JAVA_RUN_MODULE}"
-  else
-    if [ -f "${JAVA_APP_DIR}/${run_env_sh}" ]; then
+  if [ -f "${JAVA_APP_DIR}/${run_env_sh}" ]; then
       source "${JAVA_APP_DIR}/${run_env_sh}"
-    fi
   fi
+
   export JAVA_APP_DIR
 
   # JAVA_LIB_DIR defaults to JAVA_APP_DIR
@@ -94,7 +91,6 @@ setup_java_app_and_lib() {
     check_error "${JAVA_APP_JAR}"
   fi
 
- 
   if [ "x${JAVA_APP_JAR}" != x ]; then
     local jar="$(get_jar_file ${JAVA_APP_JAR} ${JAVA_APP_DIR} ${JAVA_LIB_DIR})"
     check_error "${jar}"
