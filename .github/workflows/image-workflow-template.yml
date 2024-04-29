@@ -8,6 +8,16 @@ on:
 env:
   LANG: en_US.UTF-8
 jobs:
+  validateYAML:
+    name: Validate YAML and JSON files touched by commit
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Find YAML and JSON files and verify their syntax
+        run: ./tools/lint.sh
   openjdkci:
     name: OpenJDK S2I Build and Test
     timeout-minutes: 60
