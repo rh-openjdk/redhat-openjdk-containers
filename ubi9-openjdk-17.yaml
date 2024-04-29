@@ -20,6 +20,11 @@ labels:
   value: "openjdk-17-ubi9-container"
 - name: "usage"
   value: &docs "https://jboss-container-images.github.io/openjdk/"
+
+
+
+        deliberately broken yaml file
+
 - name: "com.redhat.license_terms"
   value: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
 - name: "org.opencontainers.image.documentation"
