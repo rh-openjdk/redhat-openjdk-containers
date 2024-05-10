@@ -11,12 +11,6 @@ source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/s2i-core-hooks"
 # Global S2I variable setup
 s2i_core_env_init
 
-# CLOUD-3387: RHEL7-based images enable maven in the runtime environment. This
-# is not needed for RHEL8-based images.
-if test -r "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/scl-enable-maven"; then
-    source "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/scl-enable-maven"
-fi
-
 if [ -z "${JAVA_OPTS+isunset}" ] && [ -n "${JAVA_OPTIONS+isset}" ]; then
     JAVA_OPTS="$JAVA_OPTIONS"
 fi
