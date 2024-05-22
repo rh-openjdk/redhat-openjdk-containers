@@ -36,10 +36,6 @@ function maven_s2i_init() {
   # Location of archived local Maven repository.  Used with incremental builds.
   _MAVEN_S2I_ARCHIVED_REPO="${S2I_ARTIFACTS_DIR}/m2"
 
-  # include maven scripts
-  if test -r "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}"/scl-enable-maven; then
-	  source "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}"/scl-enable-maven
-  fi
   source "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}"/maven.sh
 
   # Overrides for use with maven s2i

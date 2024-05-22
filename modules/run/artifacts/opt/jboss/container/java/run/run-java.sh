@@ -247,6 +247,16 @@ mask_passwords() {
     echo "${result% }"
 }
 
+handle_java_options() {
+  # JAVA_OPTIONS is a deprecated name for JAVA_OPTS. It is not supported
+  # in the images from UBI9 onwards.
+  if [ -z "${JAVA_OPTS+isunset}" ] && [ -n "${JAVA_OPTIONS+isset}" ]; then
+    JAVA_OPTS="$JAVA_OPTIONS"
+  fi
+  export JAVA_OPTS
+  export JAVA_OPTIONS="$JAVA_OPTS"
+}
+
 # Start JVM
 startup() {
   # Initialize environment
@@ -273,4 +283,13 @@ startup() {
 
 # =============================================================================
 # Fire up
-startup $*
+
+handle_java_options
+
+if [ -f "${S2I_TARGET_DEPLOYMENTS_DIR}/bin/run.sh" ]; then
+    echo "Starting the application using the bundled ${S2I_TARGET_DEPLOYMENTS_DIR}/bin/run.sh ..."
+    exec ${DEPLOYMENTS_DIR}/bin/run.sh $* ${JAVA_ARGS}
+else
+    echo "Starting the Java application using ${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh $*..."
+    startup $* ${JAVA_ARGS}
+fi

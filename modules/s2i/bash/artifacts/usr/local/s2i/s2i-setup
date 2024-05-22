@@ -9,5 +9,3 @@ source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/s2i-core-hooks"
 log_warning "s2i-setup script has been deprecated and will be removed in a future release."
 
 s2i_core_init
-
-source "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/scl-enable-maven"

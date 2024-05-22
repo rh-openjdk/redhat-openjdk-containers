@@ -45,6 +45,14 @@ Feature: Openshift OpenJDK Runtime tests
        | JAVA_ARGS   | Hello from CTF test |
     Then container log should contain /deployments/undertow-servlet.jar Hello from CTF test
 
+  @ubi8
+  # alternative to previous test which can run against runtimes
+  Scenario: OPENJDK-2968 Ensure JAVA_ARGS is passed to the running Java application
+    Given container is started with env
+       | variable    | value                 |
+       | JAVA_ARGS   | Hello from Cekit test |
+    Then container log should match regex ^INFO exec -a "java" java.*Hello from Cekit test$
+
   Scenario: Ensure diagnostic options work correctly
     Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from undertow-servlet
        | variable         | value               |

@@ -1,12 +1,9 @@
-@ubi8/openjdk-8
-@ubi8/openjdk-11
-@ubi8/openjdk-17
-@ubi8/openjdk-21
-Feature: OpenJDK JAVA s2i Runtime tests
+@ubi8
+Feature: OpenJDK run script option handling
 
   Scenario: JAVA_OPTIONS sets JAVA_OPTS and overrides defaults (OPENJDK-2009)
     Given container is started with env
     | variable     | value          |
     | JAVA_OPTIONS | --show-version |
     Then container log should not contain -XX:MaxRAMPercentage
-    And  container log should contain --show-version
+    And  container log should match regex ^INFO exec.*java --show-version

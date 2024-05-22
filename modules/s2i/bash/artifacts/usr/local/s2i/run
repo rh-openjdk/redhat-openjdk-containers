@@ -11,16 +11,6 @@ source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/s2i-core-hooks"
 # Global S2I variable setup
 s2i_core_env_init
 
-# CLOUD-3387: RHEL7-based images enable maven in the runtime environment. This
-# is not needed for RHEL8-based images.
-if test -r "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/scl-enable-maven"; then
-    source "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/scl-enable-maven"
-fi
-
-if [ -z "${JAVA_OPTS+isunset}" ] && [ -n "${JAVA_OPTIONS+isset}" ]; then
-    JAVA_OPTS="$JAVA_OPTIONS"
-fi
-
 if [ -f "${JBOSS_CONTAINER_JOLOKIA_MODULE}/jolokia-opts" ]; then
     # Always include jolokia-opts, which can be empty if switched off via env
     S2I_RUN_OPTS="${S2I_RUN_OPTS} $(${JBOSS_CONTAINER_JOLOKIA_MODULE}/jolokia-opts)"
@@ -30,13 +20,10 @@ if [ -f "${JBOSS_CONTAINER_PROMETHEUS_MODULE}/prometheus-opts" ]; then
 fi
 
 export S2I_RUN_OPTS
-export JAVA_OPTS
-export JAVA_OPTIONS="$JAVA_OPTS"
 
-if [ -f "${S2I_TARGET_DEPLOYMENTS_DIR}/bin/run.sh" ]; then
-    echo "Starting the application using the bundled ${S2I_TARGET_DEPLOYMENTS_DIR}/bin/run.sh ..."
-    exec ${DEPLOYMENTS_DIR}/bin/run.sh $args ${JAVA_ARGS}
-else
-    echo "Starting the Java application using ${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh $args..."
-    exec "${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh" $args ${JAVA_ARGS}
-fi
+# XXX this is needed to support a user-provided alternative run script but we
+# should probably export all relevant S2I variables, possibly by moving the
+# above `source` statements into run-java.sh
+export S2I_TARGET_DEPLOYMENTS_DIR
+
+exec "${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh" $args
