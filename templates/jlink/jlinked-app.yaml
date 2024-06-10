@@ -213,3 +213,43 @@ objects:
           from:
             kind: ImageStreamTag
             name: ubimicro:latest  # ImageStreamTag for registry.access.redhat.com/ubi9/ubi-micro
+##############################################################################
+# Deployment and Route object specs
+- apiVersion: apps.openshift.io/v1
+  kind: Deployment
+  metadata:
+    name: jlinked-app
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: jlinked-app
+    template:
+      metadata:
+        labels:
+          app: jlinked-app
+      spec:
+        containers:
+          - name: jlinked-app-container
+            image: 'openshift/jlinked-app:latest'
+            ports:
+              - containerPort: 8080
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: jlinked-app-service
+  spec:
+    selector:
+      app: jlinked-app
+    ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8080
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: jlinked-app-route
+  spec:
+    to:
+      kind: Service
+      name: jlinked-app-service
