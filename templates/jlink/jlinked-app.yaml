@@ -231,7 +231,8 @@ objects:
       spec:
         containers:
           - name: jlinked-app-container
-            image: 'openshift/jlinked-app:latest'
+            image: lightweight-image:latest
+            imagePullPolicy: IfNotPresent
             ports:
               - containerPort: 8080
 - apiVersion: v1
