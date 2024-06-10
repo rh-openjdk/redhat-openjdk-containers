@@ -215,7 +215,7 @@ objects:
             name: ubimicro:latest  # ImageStreamTag for registry.access.redhat.com/ubi9/ubi-micro
 ##############################################################################
 # Deployment and Route object specs
-- apiVersion: apps.openshift.io/v1
+- apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: jlinked-app
