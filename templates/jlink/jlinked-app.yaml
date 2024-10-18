@@ -12,6 +12,10 @@ parameters:
   name: JDK_VERSION
   value: "11"
   required: true
+- description: OpenJDK builder image version tag
+  name: BUILDER_IMAGE_TAG
+  value: "latest"
+  required: true
 - description: Application to run the jlink workflow on
   name: APP_URI
   required: true
@@ -68,7 +72,7 @@ objects:
       dockerStrategy:
         from: 
           kind: ImageStreamTag
-          name: ubi9-openjdk-${JDK_VERSION}:1.18  # Refer README.md to create this ImageStream
+          name: ubi9-openjdk-${JDK_VERSION}:${BUILDER_IMAGE_TAG}  # Refer README.md to create this ImageStream
     output:
       to:
         kind: ImageStreamTag
@@ -79,7 +83,7 @@ objects:
         imageChange:
           from:
             kind: ImageStreamTag
-            name: ubi9-openjdk-${JDK_VERSION}:1.18  # UBI9 OpenJDK ImageStreams with `jlink-dev` support
+            name: ubi9-openjdk-${JDK_VERSION}:${BUILDER_IMAGE_TAG}
 ##############################################################################
 # stage-2: Output ImageStream
 - apiVersion: image.openshift.io/v1
