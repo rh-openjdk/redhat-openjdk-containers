@@ -221,30 +221,30 @@ objects:
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
-    name: jlinked-app
+    name: ${APPNAME}-jlinked-app
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app: jlinked-app
+        app: ${APPNAME}-jlinked-app
     template:
       metadata:
         labels:
-          app: jlinked-app
+          app: ${APPNAME}-jlinked-app
       spec:
         containers:
-          - name: jlinked-app-container
-            image: lightweight-image:latest
+          - name: ${APPNAME}-jlinked-app-container
+            image: ${APPNAME}-lightweight-image:latest
             imagePullPolicy: IfNotPresent
             ports:
               - containerPort: 8080
 - apiVersion: v1
   kind: Service
   metadata:
-    name: jlinked-app-service
+    name: ${APPNAME}-jlinked-app-service
   spec:
     selector:
-      app: jlinked-app
+      app: ${APPNAME}-jlinked-app
     ports:
       - protocol: TCP
         port: 80
@@ -252,8 +252,8 @@ objects:
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
-    name: jlinked-app-route
+    name: ${APPNAME}-jlinked-app-route
   spec:
     to:
       kind: Service
-      name: jlinked-app-service
+      name: ${APPNAME}-jlinked-app-service
