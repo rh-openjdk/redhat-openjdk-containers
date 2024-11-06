@@ -29,6 +29,9 @@ parameters:
   generate: expression
   from: "[a-zA-Z0-9]{16}"
   required: true
+- description: Target port for the created Route
+  name: TARGET_PORT
+  required: true
 message: "... The GitHub webhook secret is ${GITHUB_WEBHOOK_SECRET} ..."
 ##############################################################################
 # Following are the objects(imagestream and buildconfigs) for all the 3-stages
@@ -217,27 +220,32 @@ objects:
             kind: ImageStreamTag
             name: ${APPNAME}-ubimicro:latest  # ImageStreamTag for registry.access.redhat.com/ubi9/ubi-micro
 ##############################################################################
-# Deployment and Route object specs
-- apiVersion: apps/v1
-  kind: Deployment
+# DeploymentConfig and Route object specs
+# DeploymentConfigs are discouraged, however the documentation sugggests to still
+# use them if features are missing from Deployments, which in our case they are.
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
   metadata:
-    name: ${APPNAME}-jlinked-app
+    name: ${APPNAME}-jlinked-app-deployment
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
   spec:
     replicas: 1
     selector:
       matchLabels:
         app: ${APPNAME}-jlinked-app
-    template:
-      metadata:
-        labels:
-          app: ${APPNAME}-jlinked-app
-      spec:
-        containers:
-          - name: ${APPNAME}-jlinked-app-container
-            image: ${APPNAME}-lightweight-image:latest
-            imagePullPolicy: IfNotPresent
-            ports:
-              - containerPort: 8080
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APPNAME}-jlinked-app-container
+        from: 
+          kind: ImageStreamTag
+          name: ${APPNAME}-lightweight-image:latest
+      type: ImageChange
+    strategy:
+      type: Rolling
 - apiVersion: v1
   kind: Service
   metadata:
@@ -257,3 +265,5 @@ objects:
     to:
       kind: Service
       name: ${APPNAME}-jlinked-app-service
+    port:
+      targetPort: ${TARGET_PORT}
