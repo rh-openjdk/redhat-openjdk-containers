@@ -232,20 +232,32 @@ objects:
   spec:
     replicas: 1
     selector:
-      matchLabels:
-        app: ${APPNAME}-jlinked-app
-    triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${APPNAME}-jlinked-app-container
-        from: 
-          kind: ImageStreamTag
-          name: ${APPNAME}-lightweight-image:latest
-      type: ImageChange
+      app: ${APPNAME}-jlinked-app
+    template:
+      metadata:
+        labels:
+          app: ${APPNAME}-jlinked-app
+      spec:
+        containers:
+          - name: ${APPNAME}-jlinked-app-container
+            image: >-
+              ${APPNAME}-lightweight-image:latest
+            ports:
+              - containerPort: 8080
+                protocol: TCP
     strategy:
       type: Rolling
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - ${APPNAME}-jlinked-app-container
+        from:
+          kind: ImageStreamTag
+          name: '${APPNAME}-lightweight-image:latest'
+          namespace: default
+    - type: ConfigChange
 - apiVersion: v1
   kind: Service
   metadata:
