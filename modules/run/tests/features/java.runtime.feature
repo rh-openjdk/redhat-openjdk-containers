@@ -8,8 +8,6 @@ Feature: Openshift OpenJDK Runtime tests (OPENJDK-474, OPENJDK-2805)
        | JAVA_DIAGNOSTICS | true   |
     Then container log should contain /deployments/undertow-servlet.jar unique
      And container log should contain -XX:NativeMemoryTracking=summary
-     And file /usr/local/s2i/run should exist
-     And file /usr/local/s2i/run should not contain JVM_ARGS
      And file /usr/libexec/s2i/run should exist
      And file /usr/libexec/s2i/run should not contain JVM_ARGS
      And container log should not contain unique unique
