@@ -57,6 +57,8 @@ Some suitable test values for the parameters are
  * REF: master
  * CONTEXT_DIR: quarkus-quickstarts/getting-started-3.9.2-uberjar
  * APPNAME: quarkus-quickstart
+ * TARGET_PORT: 8080
+ * SERVICE_PORT: 8080
 
         oc process \
             -p JDK_VERSION=17 \
@@ -64,6 +66,8 @@ Some suitable test values for the parameters are
             -p REF=master \
             -p CONTEXT_DIR=quarkus-quickstarts/getting-started-3.9.2-uberjar \
             -p APPNAME=quarkus-quickstart \
+            -p TARGET_PORT=8080 \
+            -p SERVICE_PORT=8080 \
             templates/jlink-app-template \
             | oc create -f -
 

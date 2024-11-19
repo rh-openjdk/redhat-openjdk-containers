@@ -31,6 +31,11 @@ parameters:
   required: true
 - description: Target port for the created Route
   name: TARGET_PORT
+  value: "8080"
+  required: true
+- description: Port for the created Service to listen on
+  name: SERVICE_PORT
+  value: "8181"
   required: true
 message: "... The GitHub webhook secret is ${GITHUB_WEBHOOK_SECRET} ..."
 ##############################################################################
@@ -267,8 +272,9 @@ objects:
       app: ${APPNAME}-jlinked-app
     ports:
       - protocol: TCP
-        port: 80
-        targetPort: 8080
+        name: target-${TARGET_PORT}-tcp
+        port: ${{SERVICE_PORT}}
+        targetPort: ${{TARGET_PORT}}
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
