@@ -56,12 +56,14 @@ Some suitable test values for the parameters are
  * APP_URI: https://github.com/jboss-container-images/openjdk-test-applications
  * REF: master
  * CONTEXT_DIR: quarkus-quickstarts/getting-started-3.9.2-uberjar
+ * APPNAME: quarkus-quickstart
 
         oc process \
             -p JDK_VERSION=17 \
             -p APP_URI=https://github.com/jboss-container-images/openjdk-test-applications \
             -p REF=master \
             -p CONTEXT_DIR=quarkus-quickstarts/getting-started-3.9.2-uberjar \
+            -p APPNAME=quarkus-quickstart \
             templates/jlink-app-template \
             | oc create -f -
 

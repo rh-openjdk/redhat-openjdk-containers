@@ -15,6 +15,8 @@ parameters:
 - description: OpenJDK builder image version tag
   name: BUILDER_IMAGE_TAG
   value: "latest"
+- description: A name for the application used to ensure created resources are uniquely named
+  name: APPNAME
   required: true
 - description: Application to run the jlink workflow on
   name: APP_URI
@@ -39,7 +41,7 @@ objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    name: ubi9-openjdk-${JDK_VERSION}-jlink
+    name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink
   spec:
     lookupPolicy:
       local: false
@@ -48,9 +50,9 @@ objects:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata: 
-    name: jlink-builder-jdk-${JDK_VERSION}
+    name: ${APPNAME}-jlink-builder-jdk-${JDK_VERSION}
     labels:
-      app: jlink-builder-jdk-${JDK_VERSION}
+      app: ${APPNAME}-jlink-builder-jdk-${JDK_VERSION}
   spec:
     source:
       dockerfile: |
@@ -76,7 +78,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: ubi9-openjdk-${JDK_VERSION}-jlink:latest
+        name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -89,7 +91,7 @@ objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    name: intermediate
+    name: ${APPNAME}-intermediate
   spec:
     lookupPolicy:
       local: false
@@ -98,9 +100,9 @@ objects:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
-    name: jlink-s2i-jdk-${JDK_VERSION}
+    name: ${APPNAME}-jlink-s2i-jdk-${JDK_VERSION}
     labels:
-      app: jlink-s2i-jdk-${JDK_VERSION}
+      app: ${APPNAME}-jlink-s2i-jdk-${JDK_VERSION}
   spec:
     source:
       type: Git
@@ -112,7 +114,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: ubi9-openjdk-${JDK_VERSION}-jlink:latest # Output Imagestream from stage-1
+          name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest # Output Imagestream from stage-1
           pullPolicy: Always
         env:
           - name: S2I_ENABLE_JLINK
@@ -122,14 +124,14 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: intermediate:latest
+        name: ${APPNAME}-intermediate:latest
     triggers:
       - type: ConfigChange
       - type: ImageChange
         imageChange:
           from:
             kind: ImageStreamTag
-            name: ubi9-openjdk-${JDK_VERSION}-jlink:latest  # Output of stage-1 which serves as input to stage-2
+            name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest  # Output of stage-1 which serves as input to stage-2
       - type: GitHub
         github:
           secret: ${GITHUB_WEBHOOK_SECRET}
@@ -139,7 +141,7 @@ objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    name: ubimicro
+    name: ${APPNAME}-ubimicro
   spec:
     lookupPolicy:
       local: true
@@ -155,7 +157,7 @@ objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    name: lightweight-image
+    name: ${APPNAME}-lightweight-image
   spec:
     lookupPolicy:
       local: false
@@ -164,13 +166,13 @@ objects:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata: 
-    name: multistage-buildconfig
+    name: ${APPNAME}-multistage-buildconfig
   spec:
     source:
       images:
       - from:
           kind: ImageStreamTag
-          name: intermediate:latest
+          name: ${APPNAME}-intermediate:latest
         paths:
         - sourcePath:     /mnt/jrootfs
           destinationDir: jrootfs
@@ -200,20 +202,20 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: ubimicro:latest
+          name: ${APPNAME}-ubimicro:latest
     output:
       to:
         kind: ImageStreamTag
-        name: lightweight-image:latest  # Tag for the final output image
+        name: ${APPNAME}-lightweight-image:latest  # Tag for the final output image
     triggers:
       - type: ConfigChange
       - type: ImageChange
         imageChange:
           from:
             kind: ImageStreamTag
-            name: intermediate:latest  # output of stage-2
+            name: ${APPNAME}-intermediate:latest  # output of stage-2
       - type: ImageChange
         imageChange:
           from:
             kind: ImageStreamTag
-            name: ubimicro:latest  # ImageStreamTag for registry.access.redhat.com/ubi9/ubi-micro
+            name: ${APPNAME}-ubimicro:latest  # ImageStreamTag for registry.access.redhat.com/ubi9/ubi-micro
