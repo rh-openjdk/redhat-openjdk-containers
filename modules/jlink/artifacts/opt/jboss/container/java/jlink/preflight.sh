@@ -1,3 +1,14 @@
+jlink_techpreview_warning()
+{
+  {
+    echo "WARNING WARNING WARNING"
+    echo "        Jlink integration is a Tech Preview feature!"
+    echo "        See <https://access.redhat.com/support/offerings/techpreview/>"
+    echo "        for more information."
+    echo "WARNING WARNING WARNING"
+  } >&2
+}
+
 jlink_preflight_check()
 {
     # preflight check: do we have what we need?

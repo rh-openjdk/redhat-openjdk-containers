@@ -1,12 +1,12 @@
 @ubi9/openjdk-17
 @ubi9/openjdk-21
 Feature: Openshift OpenJDK S2I tests (jlink specific)
-Scenario: Ensure jlinked builder is used to build the containerized application image
-      Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from quarkus-quickstarts/getting-started-3.0.1.Final-nos2i
+
+  Scenario: tech preview warning is printed (OPENJDK-3038)
+      Given failing s2i build https://github.com/jboss-container-images/openjdk-test-applications from spring-boot-sample-simple/target using master
        | variable            | value        |
        | S2I_ENABLE_JLINK    | true         |
-       | QUARKUS_PACKAGE_TYPE| uber-jar     |
-      Then run ls /tmp/jre in container and check its output for bin
+      Then s2i build log should contain Jlink integration is a Tech Preview feature
 
 Scenario: Ensure S2I_ENABLE_JLINK is not set to true
       Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from quarkus-quickstarts/getting-started-3.0.1.Final-nos2i
