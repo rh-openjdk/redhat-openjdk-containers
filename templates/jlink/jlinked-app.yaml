@@ -285,3 +285,14 @@ objects:
       name: ${APPNAME}-jlinked-app-service
     port:
       targetPort: ${TARGET_PORT}
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: ${APPNAME}-jlinked-app-pod
+  spec:
+    containers:
+    - image: ${APPNAME}-lightweight-image:latest
+      name: ${APPNAME}-jlinked-app-container
+      ports:
+      - containerPort: ${{TARGET_PORT}}
+        protocol: TCP
