@@ -5,8 +5,6 @@ metadata:
   annotations:
     description: Template to produce imagestreams and buildconfigs for jlinked application 
   name: jlink-app-template
-  labels:
-    jlink-app-name: ${APPNAME}
 ##############################################################################
 # List of parameters required to create template
 parameters:
@@ -50,7 +48,8 @@ objects:
   metadata:
     name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink
     labels:
-      jlink-app-name: ${APPNAME}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
       local: false
@@ -61,8 +60,8 @@ objects:
   metadata: 
     name: ${APPNAME}-jlink-builder-jdk-${JDK_VERSION}
     labels:
-      app: ${APPNAME}-jlink-builder-jdk-${JDK_VERSION}
-      jlink-app-name: ${APPNAME}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     source:
       dockerfile: |
@@ -103,7 +102,8 @@ objects:
   metadata:
     name: ${APPNAME}-intermediate
     labels:
-      jlink-app-name: ${APPNAME}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
       local: false
@@ -114,8 +114,8 @@ objects:
   metadata:
     name: ${APPNAME}-jlink-s2i-jdk-${JDK_VERSION}
     labels:
-      app: ${APPNAME}-jlink-s2i-jdk-${JDK_VERSION}
-      jlink-app-name: ${APPNAME}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     source:
       type: Git
@@ -156,7 +156,8 @@ objects:
   metadata:
     name: ${APPNAME}-ubimicro
     labels:
-      jlink-app-name: ${APPNAME}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
       local: true
@@ -173,6 +174,9 @@ objects:
   kind: ImageStream
   metadata:
     name: ${APPNAME}-lightweight-image
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
       local: false
@@ -182,6 +186,9 @@ objects:
   kind: BuildConfig
   metadata: 
     name: ${APPNAME}-multistage-buildconfig
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     source:
       images:
@@ -245,22 +252,23 @@ objects:
     annotations:
       template.alpha.openshift.io/wait-for-ready: "true"
     labels:
-      jlink-app-name: ${APPNAME}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     replicas: 1
     selector:
-      app: ${APPNAME}-jlinked-app
+      app: ${APPNAME}
     template:
       metadata:
         labels:
-          app: ${APPNAME}-jlinked-app
+          app: ${APPNAME}
+          app.kubernetes.io/part-of: ${APPNAME}
       spec:
         containers:
           - name: ${APPNAME}-jlinked-app-container
-            image: >-
-              ${APPNAME}-lightweight-image:latest
+            image: ${APPNAME}-lightweight-image:latest
             ports:
-              - containerPort: 8080
+              - containerPort: ${{TARGET_PORT}}
                 protocol: TCP
     strategy:
       type: Rolling
@@ -280,10 +288,11 @@ objects:
   metadata:
     name: ${APPNAME}-jlinked-app-service
     labels:
-      jlink-app-name: ${APPNAME}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     selector:
-      app: ${APPNAME}-jlinked-app
+      app: ${APPNAME}
     ports:
       - protocol: TCP
         name: target-${TARGET_PORT}-tcp
@@ -294,23 +303,11 @@ objects:
   metadata:
     name: ${APPNAME}-jlinked-app-route
     labels:
-      jlink-app-name: ${APPNAME}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     to:
       kind: Service
       name: ${APPNAME}-jlinked-app-service
     port:
-      targetPort: ${TARGET_PORT}
-- apiVersion: v1
-  kind: Pod
-  metadata:
-    name: ${APPNAME}-jlinked-app-pod
-    labels:
-      jlink-app-name: ${APPNAME}
-  spec:
-    containers:
-    - image: ${APPNAME}-lightweight-image:latest
-      name: ${APPNAME}-jlinked-app-container
-      ports:
-      - containerPort: ${{TARGET_PORT}}
-        protocol: TCP
+      targetPort: ${{TARGET_PORT}}
