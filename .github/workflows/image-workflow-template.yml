@@ -20,7 +20,7 @@ jobs:
         run:  docker pull registry.access.redhat.com/ubi8/ubi-minimal:latest
 
       - name: Install CEKit
-        uses: cekit/actions-setup-cekit@v1.1.5
+        uses: cekit/actions-setup-cekit@v1.1.7
 
       - name: Build
         run: |
