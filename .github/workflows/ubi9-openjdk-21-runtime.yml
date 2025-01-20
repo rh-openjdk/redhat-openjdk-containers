@@ -2,9 +2,9 @@ name: UBI9 OpenJDK 21 Runtime S2I Image CI
 on: [push, pull_request]
 env:
   LANG: en_US.UTF-8
-  IMAGE: ubi9-openjdk-21-runtime
+  IMAGE: openjdk-21-jlink-rhel9-runtime
 jobs:
   call-openjdkci:
     uses: ./.github/workflows/image-workflow-template.yml
     with:
-      image: ubi9-openjdk-21-runtime
+      image: openjdk-21-jlink-rhel9-runtime

@@ -1,5 +1,5 @@
 @ubi9/openjdk-17
-@ubi9/openjdk-21
+@openjdk-tech-preview/openjdk-21-jlink-rhel9
 Feature: Openshift OpenJDK S2I tests (jlink specific)
 Scenario: Ensure jlinked builder is used to build the containerized application image
       Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from quarkus-quickstarts/getting-started-3.0.1.Final-nos2i
