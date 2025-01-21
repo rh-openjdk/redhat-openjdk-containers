@@ -3,6 +3,7 @@ set -euo pipefail
 shopt -s globstar
 
 function generate_deps() {
+  exit 2
   # Create a temporary directory for a module path
   # This works around "Module java.xml.bind not found, required by java.ws.rs"
   mkdir dependencies
