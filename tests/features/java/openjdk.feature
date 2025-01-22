@@ -20,8 +20,8 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-11
     Then available container log should not contain java-21
 
-  @openjdk-tech-preview/openjdk-21-jlink-rhel9
-  @openjdk-tech-preview/openjdk-21-jlink-rhel9-runtime
+  @ubi9/openjdk-21
+  @ubi9/openjdk-21-runtime
   Scenario: Check that only OpenJDK 21 is installed
     When container is started with args
     | arg     | value   |
@@ -66,8 +66,8 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-11
     Then available container log should not contain java-21
 
-  @openjdk-tech-preview/openjdk-21-jlink-rhel9
-  @openjdk-tech-preview/openjdk-21-jlink-rhel9-runtime
+  @ubi9/openjdk-21
+  @ubi9/openjdk-21-runtime
   Scenario: Check that directories from other JDKs are not present (JDK21)
     When container is started with args
     | arg     | value   |
