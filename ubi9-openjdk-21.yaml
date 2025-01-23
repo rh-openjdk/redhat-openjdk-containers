@@ -3,7 +3,7 @@
 schema_version: 1
 
 from: "registry.access.redhat.com/ubi9/ubi-minimal"
-name: &name "ubi9/openjdk-21"
+name: &name "openjdk-tech-preview/openjdk-21-jlink-rhel9"
 version: &version "1.18"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 21"
 

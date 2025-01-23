@@ -1,6 +1,6 @@
 @ubi9/openjdk-11
 @ubi9/openjdk-17
-@ubi9/openjdk-21
+@openjdk-tech-preview/openjdk-21-jlink-rhel9
 Feature: Openshift OpenJDK port tests
 
   Scenario: Check ports are available

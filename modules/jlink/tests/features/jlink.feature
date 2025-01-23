@@ -1,5 +1,5 @@
 @ubi9/openjdk-17
-@ubi9/openjdk-21
+@openjdk-tech-preview/openjdk-21-jlink-rhel9
 Feature: Openshift OpenJDK S2I tests (jlink specific)
 
   Scenario: tech preview warning is printed (OPENJDK-3038)
