@@ -22,6 +22,7 @@ setup_java_app_and_lib
 if [ "$S2I_ENABLE_JLINK" = "true" ]; then
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/preflight.sh"
+    jlink_techpreview_warning
     jlink_preflight_check
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkdeps.sh"
