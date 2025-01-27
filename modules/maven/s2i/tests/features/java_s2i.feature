@@ -175,6 +175,17 @@ Feature: Openshift OpenJDK S2I tests
        | variable           | value    |
        | MAVEN_ARGS         | validate |
 
+  Scenario: Ensure no custom settings.xml fails for specific application (OPENJDK-3597)
+      Given failing s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from OPENJDK-3597-custom-settings-xml using master
+      Then s2i build log should contain [ERROR] Profile "testCustomProfile" is not activated
+
+  Scenario: Ensure custom settings.xml copied in via MAVEN_SETTINGS_XML (OPENJDK-3597)
+      Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from OPENJDK-3597-custom-settings-xml with env
+       | variable           | value                 |
+       | MAVEN_ARGS         | validate              |
+       | MAVEN_SETTINGS_XML | /tmp/src/settings.xml |
+      Then s2i build log should contain Rule 0: org.apache.maven.enforcer.rules.RequireActiveProfile passed
+
   Scenario: Ensure that run-env.sh placed in the JAVA_APP_DIR is sourced in the run script before launching java
       Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from quarkus-quickstarts/getting-started-3.0.1.Final-nos2i
        | variable            | value        |
