@@ -28,29 +28,29 @@ if [ "$S2I_ENABLE_JLINK" = "true" ]; then
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkdeps.sh"
     echo "Invoking mkdeps"
     generate_deps || {
-        log_error "mkdeps failed, return code: $1"
-        exit $1
+        log_error "mkdeps failed, return code: $?"
+        exit 1
     }
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkstrippeddeps.sh"
     echo "Stripping dependencies"
     mkstrippeddeps || {
-        log_error "stripping dependencies failed, return code: $1"
-        exit $1
+        log_error "stripping dependencies failed, return code: $?"
+        exit 1
     }
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/generatejdkdeps.sh"
     echo "Generating JDK dependencies"
     generatejdkdeps || {
-        log_error "generating JDK dependencies failed, return code: $1"
-        exit $1
+        log_error "generating JDK dependencies failed, return code: $?"
+        exit 1
     }
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkjreimage.sh"
     echo "Linking jre"
     generate_jre_image || {
-        log_error "Linking JRE failed, return code: $1"
-        exit $1
+        log_error "Linking JRE failed, return code: $?"
+        exit 1
     }
 
 fi
