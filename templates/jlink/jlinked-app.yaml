@@ -42,6 +42,9 @@ objects:
   kind: ImageStream
   metadata:
     name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
       local: false
@@ -52,7 +55,8 @@ objects:
   metadata: 
     name: ${APPNAME}-jlink-builder-jdk-${JDK_VERSION}
     labels:
-      app: ${APPNAME}-jlink-builder-jdk-${JDK_VERSION}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     source:
       dockerfile: |
@@ -102,7 +106,8 @@ objects:
   metadata:
     name: ${APPNAME}-jlink-s2i-jdk-${JDK_VERSION}
     labels:
-      app: ${APPNAME}-jlink-s2i-jdk-${JDK_VERSION}
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     source:
       type: Git
@@ -142,6 +147,9 @@ objects:
   kind: ImageStream
   metadata:
     name: ${APPNAME}-ubimicro
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
       local: true
@@ -158,6 +166,9 @@ objects:
   kind: ImageStream
   metadata:
     name: ${APPNAME}-lightweight-image
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
       local: false
@@ -167,6 +178,9 @@ objects:
   kind: BuildConfig
   metadata: 
     name: ${APPNAME}-multistage-buildconfig
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     source:
       images:
