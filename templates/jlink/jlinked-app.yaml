@@ -49,7 +49,7 @@ objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink
+    name: ${APPNAME}-openjdk-${JDK_VERSION}-jlink-tech-preview
     labels:
       app: ${APPNAME}
       app.kubernetes.io/part-of: ${APPNAME}
@@ -86,18 +86,18 @@ objects:
       dockerStrategy:
         from: 
           kind: ImageStreamTag
-          name: ubi9-openjdk-${JDK_VERSION}:${BUILDER_IMAGE_TAG}  # Refer README.md to create this ImageStream
+          name: openjdk-${JDK_VERSION}-jlink-tech-preview:1.18  # Refer README.md to create this ImageStream
     output:
       to:
         kind: ImageStreamTag
-        name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest
+        name: ${APPNAME}-openjdk-${JDK_VERSION}-jlink-tech-preview:latest
     triggers:
       - type: ConfigChange
       - type: ImageChange
         imageChange:
           from:
             kind: ImageStreamTag
-            name: ubi9-openjdk-${JDK_VERSION}:${BUILDER_IMAGE_TAG}
+            name: openjdk-${JDK_VERSION}-jlink-tech-preview:${BUILDER_IMAGE_TAG}
 ##############################################################################
 # stage-2: Output ImageStream
 - apiVersion: image.openshift.io/v1
@@ -130,7 +130,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest # Output Imagestream from stage-1
+          name: ${APPNAME}-openjdk-${JDK_VERSION}-jlink-tech-preview:latest # Output Imagestream from stage-1
           pullPolicy: Always
         env:
           - name: S2I_ENABLE_JLINK
@@ -147,7 +147,7 @@ objects:
         imageChange:
           from:
             kind: ImageStreamTag
-            name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest  # Output of stage-1 which serves as input to stage-2
+            name: ${APPNAME}-openjdk-${JDK_VERSION}-jlink-tech-preview:latest  # Output of stage-1 which serves as input to stage-2
       - type: GitHub
         github:
           secret: ${GITHUB_WEBHOOK_SECRET}
