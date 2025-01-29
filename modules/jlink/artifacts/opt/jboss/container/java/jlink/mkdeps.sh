@@ -21,10 +21,7 @@ function generate_deps() {
         --module-path dependencies \
         "$JAVA_APP_JAR" \
         "$JAVA_LIB_DIR"/**/*.jar \
-        > deps.txt || {
-        echo "jdeps failed: return code $?"
-        exit $?
-      }
+        > deps.txt
   else 
     $JAVA_HOME/bin/jdeps --multi-release $JAVA_VERSION -R -s \
       --module-path dependencies \

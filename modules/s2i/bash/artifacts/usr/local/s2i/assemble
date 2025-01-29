@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -eo pipefail
 
 source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
 source "${JBOSS_CONTAINER_MAVEN_S2I_MODULE}/maven-s2i"
@@ -22,22 +22,35 @@ setup_java_app_and_lib
 if [ "$S2I_ENABLE_JLINK" = "true" ]; then
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/preflight.sh"
+    jlink_techpreview_warning
     jlink_preflight_check
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkdeps.sh"
     echo "Invoking mkdeps"
-    generate_deps
+    generate_deps || {
+        log_error "mkdeps failed, return code: $?"
+        exit 1
+    }
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkstrippeddeps.sh"
     echo "Stripping dependencies"
-    mkstrippeddeps
+    mkstrippeddeps || {
+        log_error "stripping dependencies failed, return code: $?"
+        exit 1
+    }
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/generatejdkdeps.sh"
     echo "Generating JDK dependencies"
-    generatejdkdeps
+    generatejdkdeps || {
+        log_error "generating JDK dependencies failed, return code: $?"
+        exit 1
+    }
 
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkjreimage.sh"
     echo "Linking jre"
-    generate_jre_image
+    generate_jre_image || {
+        log_error "Linking JRE failed, return code: $?"
+        exit 1
+    }
 
 fi
