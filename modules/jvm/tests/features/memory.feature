@@ -33,7 +33,6 @@ Feature: OPENJDK-559 JVM Memory tests
     And  container log should not contain -Xms
 
   # Not the runtime images
-  @ubi9/openjdk-11
   @ubi9/openjdk-17
   @ubi9/openjdk-21
   Scenario: Ensure Maven doesn't use MaxRAMPercentage=80

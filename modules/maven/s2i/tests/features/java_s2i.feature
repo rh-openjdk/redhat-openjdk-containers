@@ -1,6 +1,5 @@
 # temporarily marking 'ignore' so these tests are skipped on GHA
 @ignore
-@ubi9/openjdk-11
 @ubi9/openjdk-17
 @ubi9/openjdk-21
 Feature: Openshift OpenJDK S2I tests

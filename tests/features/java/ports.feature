@@ -1,4 +1,3 @@
-@ubi9/openjdk-11
 @ubi9/openjdk-17
 @ubi9/openjdk-21
 Feature: Openshift OpenJDK port tests
