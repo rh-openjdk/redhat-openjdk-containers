@@ -1,5 +1,4 @@
-@ubi9/openjdk-17
-@ubi9/openjdk-21
+@ubi10/openjdk-21
 Feature: Openshift OpenJDK S2I tests
 
   # test incremental builds

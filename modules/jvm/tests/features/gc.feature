@@ -1,4 +1,4 @@
-@ubi9
+@ubi10
 Feature: Openshift OpenJDK GC tests
 
   Scenario: Check default GC configuration

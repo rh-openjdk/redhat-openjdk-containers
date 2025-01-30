@@ -1,4 +1,4 @@
-@ubi9
+@ubi10
 Feature: OpenJDK run script tests
   Scenario: Ensure command-line options containing 'password' are masked in logs
     Given container is started with env
