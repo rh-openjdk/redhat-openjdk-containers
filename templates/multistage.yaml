@@ -1,0 +1,96 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: quarkus-quickstart-runtime
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+    name: quarkus-quickstart-runtime
+spec:
+  replicas: 1
+  selector:
+    app: quarkus-quickstart-runtime
+  template:
+    metadata:
+      labels:
+        app: quarkus-quickstart-runtime
+    spec:
+      containers:
+      - image: ' '
+        name: quarkus-quickstart-runtime
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChangeParams:
+      automatic: true
+      containerNames:
+      - quarkus-quickstart-runtime
+      from:
+        kind: ImageStreamTag
+        name: quarkus-quickstart-runtime:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quarkus-quickstart-runtime
+spec:
+  selector:
+    app: quarkus-quickstart-runtime
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: quarkus-quickstart-runtime
+spec:
+  to:
+    kind: Service
+    name: quarkus-quickstart-runtime
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: quarkus-quickstart-runtime
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: quarkus-quickstart-runtime:latest
+  source:
+    images:
+    - from:
+        kind: ImageStreamTag
+        name: quarkus-quickstart:latest
+      paths:
+      - sourcePath: /deployments
+        destinationDir: ./deployments
+    dockerfile: |-
+      FROM -
+      COPY deployments /
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: java-runtime:latest
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChange:
+      automatic: true
+      from:
+        kind: ImageStreamTag
+        name: quarkus-quickstart:latest
+  - type: ImageChange
+    imageChange:
+      automatic: true
+      from:
+        kind: ImageStreamTag
+        name: java-runtime:latest
