@@ -28,6 +28,8 @@ labels:
   value: *name
 - name: "version"
   value: *version
+- name: "org.opencontainers.image.source"
+  value: "https://github.com/jboss-container-images/openjdk"
 
 envs:
 - name: "JBOSS_IMAGE_NAME"
