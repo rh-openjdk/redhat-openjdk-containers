@@ -86,7 +86,7 @@ objects:
       dockerStrategy:
         from: 
           kind: ImageStreamTag
-          name: openjdk-${JDK_VERSION}-jlink-tech-preview:latest  # Refer README.md to create this ImageStream
+          name: openjdk-${JDK_VERSION}-jlink-tech-preview:${BUILDER_IMAGE_TAG}  # Refer README.md to create this ImageStream
     output:
       to:
         kind: ImageStreamTag
