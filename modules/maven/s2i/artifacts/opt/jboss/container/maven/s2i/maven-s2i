@@ -76,7 +76,7 @@ function maven_s2i_build() {
   s2i_core_cleanup
 
   # Remove java tmp perf data dir owned by 185
-  rm -rf /tmp/hsperfdata_jboss
+  rm -rf "/tmp/hsperfdata_${USER}"
 }
 
 # perform a maven build, i.e.  mvn ...
