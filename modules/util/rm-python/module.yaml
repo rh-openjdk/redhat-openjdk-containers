@@ -1,0 +1,7 @@
+schema_version: 1
+name: jboss.container.util.rm-python
+version: '1.0'
+description: Remove python packages
+
+execute:
+- script: execute.sh
