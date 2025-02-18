@@ -1,0 +1,35 @@
+# This is an Image descriptor for <https://cekit.io/>
+schema_version: 1
+
+from: "quay.io/centos/centos:stream10-minimal"
+name: &name "ubi10/openjdk-21"
+version: &version "1.21"
+description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 21"
+
+labels:
+- name: "com.redhat.component"
+  value: "openjdk-21-ubi10-container"
+- name: "name"
+  value: *name
+- name: "version"
+  value: *version
+
+envs:
+- name: "JBOSS_IMAGE_NAME"
+  value: *name
+- name: "JBOSS_IMAGE_VERSION"
+  value: *version
+
+modules:
+  repositories:
+  - path: modules
+  install:
+  - name: common
+  - name: jboss.container.util.RHEL-67389
+  - name: jboss.container.util.rm-python
+  - name: jboss.container.util.pkg-update
+  - name: jboss.container.openjdk.jdk
+    version: "21"
+  - name: jboss.container.maven
+    version: "3.8.21"
+  - name: jboss.container.java.s2i.bash

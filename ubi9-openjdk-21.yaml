@@ -47,6 +47,7 @@ modules:
   repositories:
   - path: modules
   install:
+  - name: jboss.container.rm-python
   - name: jboss.container.util.pkg-update
   - name: jboss.container.openjdk.jdk
     version: "21"
