@@ -13,13 +13,6 @@ pushd ${ARTIFACTS_DIR}
 cp -pr * /
 popd
 
-# Set this JDK as the alternative in use
-_arch="$(uname -i)"
-alternatives --set java java-21-openjdk.${_arch}
-alternatives --set javac java-21-openjdk.${_arch}
-alternatives --set java_sdk_openjdk java-21-openjdk.${_arch}
-alternatives --set jre_openjdk java-21-openjdk.${_arch}
-
 # Update securerandom.source for quicker starts (must be done after removing jdk 8, or it will hit the wrong files)
 JAVA_SECURITY_FILE=/usr/lib/jvm/java/conf/security/java.security
 SECURERANDOM=securerandom.source
