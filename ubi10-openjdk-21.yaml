@@ -3,21 +3,21 @@
 schema_version: 1
 
 from: "registry.access.redhat.com/ubi9/ubi-minimal"
-name: &name "ubi9/openjdk-21-runtime"
+name: &name "ubi10/openjdk-21"
 version: &version "1.21"
-description: "Image for Red Hat OpenShift providing OpenJDK 21 runtime"
+description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 21"
 
 labels:
 - name: "io.k8s.description"
-  value: "Platform for running plain Java applications (fat-jar and flat classpath)"
+  value: "Platform for building and running plain Java applications (fat-jar and flat classpath)"
 - name: "io.k8s.display-name"
   value: "Java Applications"
 - name: "io.openshift.tags"
-  value: "java"
+  value: "builder,java"
 - name: "maintainer"
   value: "Red Hat OpenJDK <openjdk@redhat.com>"
 - name: "com.redhat.component"
-  value: "openjdk-21-runtime-ubi9-container"
+  value: "openjdk-21-ubi10-container"
 - name: "usage"
   value: &docs "https://rh-openjdk.github.io/redhat-openjdk-containers/"
 - name: "com.redhat.license_terms"
@@ -30,6 +30,8 @@ labels:
   value: *version
 
 envs:
+- name: PATH
+  value: $PATH:"/usr/local/s2i"
 - name: "JBOSS_IMAGE_NAME"
   value: *name
 - name: "JBOSS_IMAGE_VERSION"
@@ -46,11 +48,13 @@ modules:
   - path: modules
   install:
   - name: jboss.container.util.pkg-update
-  - name: jboss.container.tar
-  - name: jboss.container.openjdk.jre
+  - name: jboss.container.openjdk.jdk
     version: "21"
+  - name: jboss.container.maven
+    version: "3.8.21"
   - name: jboss.container.util.tzdata
-  - name: jboss.container.java.jre.run
+  - name: jboss.container.java.s2i.bash
+  - name: jboss.container.util.tzdata
 
 help:
   add: true
