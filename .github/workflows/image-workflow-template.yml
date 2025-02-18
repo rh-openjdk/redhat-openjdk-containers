@@ -1,4 +1,4 @@
-name: UBI9 OpenJDK S2I Image CI template
+name: UBI10 OpenJDK S2I Image CI template
 on:
   workflow_call:
     inputs:
