@@ -14,7 +14,7 @@ Scenario: Ensure S2I_ENABLE_JLINK is not set to true
       And run bash -c "test ! -d /tmp/jre && echo PASS" in container and immediately check its output for PASS
 
 Scenario: Check that /tmp/jre/bin/java and /tmp/jre/lib/modules exist post s2i build if jlink is enabled.
-      Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from quarkus-quickstarts/getting-started-3.0.1.Final-nos2i
+      Given s2i build https://github.com/jboss-container-images/openjdk-test-applications from quarkus-quickstarts/getting-started-3.9.2-uberjar
        | variable            | value        |
        | S2I_ENABLE_JLINK    | true         |
       Then container log should contain S2I_ENABLE_JLINK=true
