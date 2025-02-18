@@ -37,8 +37,8 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 5. tag and push the dev image into it. The OpenShift console gives you the
    exact URI for your instance
 
-        docker tag openjdk-tech-preview/openjdk-21-jlink-rhel9:1.18 default-route-openshift-image-registry.apps-crc.testing/jlink1/ubi9-openjdk-21-jlink-tech-preview:1.18
-        docker push default-route-openshift-image-registry.apps-crc.testing/jlink1/ubi9-openjdk-21:1.18
+        docker tag openjdk-tech-preview/openjdk-21-jlink-rhel9:latest default-route-openshift-image-registry.apps-crc.testing/jlink1/ubi9-openjdk-21-jlink-tech-preview:latest
+        docker push default-route-openshift-image-registry.apps-crc.testing/jlink1/ubi9-openjdk-21:latest
 
 ## Stage 1: Load the template into OpenShift and instantiate it
 
@@ -77,16 +77,18 @@ See all the OpenShift objects that were created:
 
 There will be three BuildConfigs, called something like
 
-1. jlink-builder-jdk-21
-2. jlink-s2i-jdk-21
-3. multistage-buildconfig
+1. $APPNAME-jlink-builder-jdk-21
+2. $APPNAME-jlink-s2i-jdk-21
+3. $APPNAME-multistage-buildconfig
+
+Where $APPNAME is the parameter initially passed to the template.
 
 Start a build for (1). Once complete, builds for (2) and (3) should be
 automatically triggered in sequence.
 
 ## Stage 4: create deployment
 
-The ImageStreamTag `lightweight-image:latest` will be populated with the new
+The ImageStreamTag `$APPNAME-lightweight-image:latest` will be populated with the new
 application container image.
 
 Create a deployment to see it work. E.g., in the Developer Perspective, select
