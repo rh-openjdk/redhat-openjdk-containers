@@ -1,6 +1,6 @@
 Feature: Miscellaneous general settings unit tests
 
-  @ubi9
+  @ubi10
   Scenario: Check the attributes of /home/default using stat
     When container is started with args
     | arg     | value              |
