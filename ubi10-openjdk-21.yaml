@@ -2,7 +2,7 @@
 
 schema_version: 1
 
-from: "registry.access.redhat.com/ubi9/ubi-minimal"
+from: "quay.io/centos/centos:stream10-minimal"
 name: &name "ubi10/openjdk-21"
 version: &version "1.21"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 21"
