@@ -33,7 +33,6 @@ function s2i_core_env_init() {
   S2I_IMAGE_SOURCE_MOUNTS="${S2I_IMAGE_SOURCE_MOUNTS:-${CUSTOM_INSTALL_DIRECTORIES}}"
   S2I_ENABLE_INCREMENTAL_BUILDS="${S2I_ENABLE_INCREMENTAL_BUILDS:-true}"
   S2I_DELETE_SOURCE="${S2I_DELETE_SOURCE:-true}"
-  S2I_ENABLE_JLINK="${S2I_ENABLE_JLINK:-false}"
 }
 
 # extensions may override this method to initialize environment variables
@@ -89,13 +88,11 @@ function s2i_core_copy_deployments() {
       if [ ! -d "${S2I_TARGET_DEPLOYMENTS_DIR}" ]; then
         log_info "S2I_TARGET_DEPLOYMENTS_DIR does not exist, creating ${S2I_TARGET_DEPLOYMENTS_DIR}"
         mkdir -pm 775 "${S2I_TARGET_DEPLOYMENTS_DIR}"
-        echo "created $S2I_TARGET_DEPLOYMENTS_DIR"
       fi
       local relative_source=$(realpath --relative-to "${S2I_SOURCE_DIR}" "${1}/${S2I_SOURCE_DEPLOYMENTS_DIR}")
       log_info "Copying deployments from $relative_source to ${S2I_TARGET_DEPLOYMENTS_DIR}..."
       for filter in ${S2I_SOURCE_DEPLOYMENTS_FILTER:-*}; do
         find "${S2I_SOURCE_DIR}/${relative_source}/" -maxdepth 1 -name "${filter}" | xargs -I '{}' -r cp -Lrpv '{}' "${S2I_TARGET_DEPLOYMENTS_DIR}"
-        echo "Copying $filter to $S2I_TARGET_DEPLOYMENTS_DIR"
       done
     fi
   fi 
