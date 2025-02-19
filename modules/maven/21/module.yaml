@@ -1,0 +1,21 @@
+schema_version: 1
+name: jboss.container.maven
+version: '3.8.21'
+description: Provides Maven v3.8 capabilities to an image.
+
+envs:
+- name: JBOSS_CONTAINER_MAVEN_38_MODULE
+  value: /opt/jboss/container/maven/38/
+- name: MAVEN_VERSION
+  value: '3.8'
+
+modules:
+  install:
+  - name: jboss.container.maven.module
+
+packages:
+  install:
+  - maven-openjdk21
+
+execute:
+- script: configure.sh

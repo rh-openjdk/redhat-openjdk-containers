@@ -4,7 +4,7 @@ schema_version: 1
 
 from: "registry.access.redhat.com/ubi9/ubi-minimal"
 name: &name "openjdk-tech-preview/openjdk-21-jlink-rhel9"
-version: &version "1.18"
+version: &version "1.21"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 21"
 
 labels:
@@ -19,9 +19,11 @@ labels:
 - name: "com.redhat.component"
   value: "openjdk-21-jlink-tech-preview-ubi9-container"
 - name: "usage"
-  value: "https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift/"
+  value: &docs "https://rh-openjdk.github.io/redhat-openjdk-containers/"
 - name: "com.redhat.license_terms"
   value: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+- name: "org.opencontainers.image.documentation"
+  value: *docs
 - name: "name"
   value: *name
 - name: "version"
@@ -49,9 +51,10 @@ modules:
   - name: jboss.container.openjdk.jdk
     version: "21"
   - name: jboss.container.maven
-    version: "3.8.17"
+    version: "3.8.21"
+  - name: jboss.container.util.tzdata
   - name: jboss.container.java.s2i.bash
-  - name: jboss.container.java.singleton-jdk
+  - name: jboss.container.util.tzdata
 
 help:
   add: true
