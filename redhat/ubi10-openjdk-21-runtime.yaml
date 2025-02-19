@@ -12,7 +12,7 @@ osbs:
         signing_intent: release
   repository:
     name: containers/openjdk
-    branch: openjdk-21-runtime-ubi9
+    branch: openjdk-21-runtime-ubi10
 
 packages:
   manager: microdnf
