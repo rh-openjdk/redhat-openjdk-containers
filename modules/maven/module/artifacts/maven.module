@@ -1,5 +1,5 @@
 [maven]
 name=maven
-stream=3.8
+stream=3.9
 profiles=
 state=enabled
