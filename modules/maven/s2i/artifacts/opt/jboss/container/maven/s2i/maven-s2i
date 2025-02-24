@@ -45,18 +45,8 @@ function maven_s2i_init() {
   # Overrides for use with maven s2i
   source "${JBOSS_CONTAINER_MAVEN_S2I_MODULE}"/maven-overrides
 
-  # let users override anything if they need to
-  maven_s2i_source_maven_overrides
-
   # initialize the maven environment
   maven_init
-}
-
-function maven_s2i_source_maven_overrides() {
-  # extensions can use this to override functions provided by this module
-  # For example:
-  # source custom-maven.sh
-  : #noop
 }
 
 # main entry point, perform the build
