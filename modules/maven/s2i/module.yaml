@@ -23,9 +23,6 @@ envs:
 - name: JBOSS_CONTAINER_MAVEN_S2I_MODULE
   value: /opt/jboss/container/maven/s2i
 
-execute:
-- script: configure.sh
-
 modules:
   install:
   - name: jboss.container.user
@@ -36,3 +33,9 @@ modules:
 packages:
   install:
   - tar
+
+artifacts:
+  - path: artifacts/s2i
+    dest: /opt/jboss/container/maven/s2i
+  - path: artifacts/save-artifacts
+    dest: /usr/libexec/s2i

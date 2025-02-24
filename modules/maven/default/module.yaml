@@ -8,6 +8,10 @@ description: ^
 execute:
 - script: configure.sh
 
+artifacts:
+  - path: artifacts/default
+    dest: /opt/jboss/container/maven/default
+
 modules:
   install:
   - name: jboss.container.user
