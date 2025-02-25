@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Verify latest UBI image is present
-        run:  docker pull registry.access.redhat.com/ubi9/ubi-minimal:latest
+        run:  docker pull quay.io/centos/centos:stream10-minimal
 
       - name: Install CEKit
         uses: cekit/actions-setup-cekit@v1.1.7
