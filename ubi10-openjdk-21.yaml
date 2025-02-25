@@ -52,7 +52,7 @@ modules:
   - name: jboss.container.openjdk.jdk
     version: "21"
   - name: jboss.container.maven
-    version: "3.8.21"
+    version: "3.9.21"
   - name: jboss.container.util.tzdata
   - name: jboss.container.java.s2i.bash
   - name: jboss.container.util.tzdata
