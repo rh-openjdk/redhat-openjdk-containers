@@ -7,9 +7,6 @@ envs:
 - name: JBOSS_CONTAINER_JAVA_S2I_MODULE
   value: /opt/jboss/container/java/s2i
 
-execute:
-- script: configure.sh
-
 modules:
   install:
   - name: jboss.container.user
@@ -20,3 +17,9 @@ modules:
 packages:
   install:
   - rsync
+
+artifacts:
+  - path: artifacts/libexec
+    dest: /usr/libexec/s2i
+  - path: artifacts/opt
+    dest: /opt/jboss/container/java/s2i

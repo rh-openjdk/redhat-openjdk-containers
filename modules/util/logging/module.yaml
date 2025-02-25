@@ -14,5 +14,6 @@ modules:
   install:
   - name: jboss.container.user
 
-execute:
-- script: configure.sh
+artifacts:
+  - path: artifacts/logging.sh
+    dest: /opt/jboss/container/util/logging
