@@ -12,8 +12,9 @@ packages:
   - rsync
 
 labels:
+  # XXX this modules does not install files in this path
 - name: "io.openshift.s2i.scripts-url"
-  value: "image:///usr/local/s2i"
+  value: "image:///usr/libexec/s2i"
 - name: io.openshift.s2i.destination
   value: "/tmp"
 - name: org.jboss.container.deployments-dir
@@ -114,7 +115,8 @@ envs:
 
 run:
   cmd:
-  - "/usr/local/s2i/run"
+    # XXX this script is in a different module
+  - "/usr/libexec/s2i/run"
 
 modules:
   install:
