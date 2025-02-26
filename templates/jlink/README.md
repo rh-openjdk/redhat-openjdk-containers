@@ -79,19 +79,19 @@ See all the OpenShift objects that were created:
 
 ## Stage 3: Kick off builds
 
-There will be three BuildConfigs, called something like
+Instantiating the template will cause 3 separate BuildConfigs to be created and will automatically start their builds in sequence:
 
-1. jlink-builder-jdk-17
-2. jlink-s2i-jdk-17
-3. multistage-buildconfig
+1. $APPNAME-jlink-builder-jdk-$JDK_VERSION
+2. $APPNAME-jlink-s2i-jdk-$JDK_VERSION
+3. $APPNAME-multistage-buildconfig
 
-Start a build for (1). Once complete, builds for (2) and (3) should be
-automatically triggered in sequence.
+Where $APPNAME and $JDK_VERSION are the paremeters initially passed to the template.
+
+A build will automatically start for (1). Once complete, builds for (2) and (3) should be automatically triggered in sequence.
 
 ## Stage 4: create deployment
 
-The ImageStreamTag `lightweight-image:latest` will be populated with the new
-application container image.
+The ImageStreamTag `$APPNAME-lightweight-image:latest` will be populated with the new application container image.
 
 Create a deployment to see it work. E.g., in the Developer Perspective, select
 "+Add", "Container Images", "Image stream tag from internal registry", ...,
