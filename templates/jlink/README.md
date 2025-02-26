@@ -20,7 +20,7 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 
 2. Within your OpenShift project,
 
-        oc create imagestream ubi9-openjdk-21-jlink-tech-preview
+        oc create imagestream openjdk-${JDK_VERSION}-jlink-tech-preview
 
 3. You may need to configure your container engine to not TLS-verify the OpenShift
    registry. For Docker, add the following to `/etc/docker/daemon.json` and restart
@@ -37,8 +37,8 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 5. tag and push the dev image into it. The OpenShift console gives you the
    exact URI for your instance
 
-        docker tag openjdk-tech-preview/openjdk-21-jlink-rhel9:latest default-route-openshift-image-registry.apps-crc.testing/jlink1/ubi9-openjdk-21-jlink-tech-preview:latest
-        docker push default-route-openshift-image-registry.apps-crc.testing/jlink1/ubi9-openjdk-21:latest
+        docker tag openjdk-tech-preview/openjdk-21-jlink-rhel9:latest default-route-openshift-image-registry.apps-crc.testing/jlink1/openjdk-21-jlink-tech-preview:latest
+        docker push default-route-openshift-image-registry.apps-crc.testing/jlink1/openjdk-21-jlink-tech-preview:latest
 
 ## Stage 1: Load the template into OpenShift and instantiate it
 
