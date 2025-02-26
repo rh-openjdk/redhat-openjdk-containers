@@ -7,6 +7,8 @@ you need:
 2. UBI9 OpenJDK ImageStreams that include `jlink-dev` changes (see below)
 3. The template [jlinked-app.yaml](jlinked-app.yaml).
 
+DISCLAIMER: This template requires OpenShift to be able to resolve ImageStreams, as such it can only be used in projects where the openshift.io/run-level label set to 0 or 1. This means it cannot be used with default, kube-public, kube-system, openshift, openshift-infra, openshift-node, and other system-created projects.
+
 ## Stage 0: UBI9 OpenJDK ImageStreams with jlink-dev changes
 
 Until the `jlink-dev` work is merged, prior to trying out the template, we must first
@@ -18,11 +20,16 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 
         cekit --descriptor ubi9-openjdk-17.yaml build docker
 
-2. Within your OpenShift project,
+2. Create an OpenShift project and namespace
+
+        oc new-project jlink-dev
+        oc create namespace jlink
+
+3. Within your OpenShift project,
 
         oc create imagestream openjdk-17-jlink-tech-preview
 
-3. You may need to configure your container engine to not TLS-verify the OpenShift
+4. You may need to configure your container engine to not TLS-verify the OpenShift
    registry. For Docker, add the following to `/etc/docker/daemon.json` and restart
    the daemon:
 
@@ -30,11 +37,11 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
           "insecure-registries": [ "default-route-openshift-image-registry.apps-crc.testing" ]
         }
 
-4. Log into the OpenShift registry, e.g.
+5. Log into the OpenShift registry, e.g.
 
         REGISTRY_AUTH_PREFERENCE=docker oc registry login
 
-5. tag and push the dev image into it. The OpenShift console gives you the
+6. tag and push the dev image into it. The OpenShift console gives you the
    exact URI for your instance
 
         docker tag openjdk-tech-preview/openjdk-17-jlink-rhel9:1.18 default-route-openshift-image-registry.apps-crc.testing/jlink1/openjdk-17-jlink-tech-preview:1.18
@@ -52,7 +59,7 @@ Process it to create the needed objects. You can list the parameters using
 
 Some suitable test values for the parameters are
 
- * JDK_VERSION: 17
+ * JDK_VERSION: 21
  * APP_URI: https://github.com/jboss-container-images/openjdk-test-applications
  * REF: master
  * CONTEXT_DIR: quarkus-quickstarts/getting-started-3.9.2-uberjar

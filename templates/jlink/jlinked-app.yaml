@@ -10,7 +10,7 @@ metadata:
 parameters:
 - description: JDK version to produce a jmods image and imagestream for
   name: JDK_VERSION
-  value: "11"
+  value: "21"
   required: true
 - description: OpenJDK builder image version tag
   name: BUILDER_IMAGE_TAG
@@ -182,7 +182,8 @@ objects:
       app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
-      local: false
+      # Must be true for the Deployment to resolve the ImageStream
+      local: true
 ##############################################################################
 # stage-3: BuildConfig
 - apiVersion: build.openshift.io/v1
@@ -248,24 +249,26 @@ objects:
 # DeploymentConfig and Route object specs
 # DeploymentConfigs are discouraged, however the documentation sugggests to still
 # use them if features are missing from Deployments, which in our case they are.
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${APPNAME}-jlinked-app-deployment
-    annotations:
-      template.alpha.openshift.io/wait-for-ready: "true"
     labels:
       app: ${APPNAME}
       app.kubernetes.io/part-of: ${APPNAME}
   spec:
     replicas: 1
     selector:
-      app: ${APPNAME}
+      matchLabels:
+        app: ${APPNAME}
     template:
       metadata:
         labels:
           app: ${APPNAME}
           app.kubernetes.io/part-of: ${APPNAME}
+        annotations:
+          # Allows Deployments to use ImageStreams
+          alpha.image.policy.openshift.io/resolve-names: '*'
       spec:
         containers:
           - name: ${APPNAME}-jlinked-app-container
@@ -274,18 +277,7 @@ objects:
               - containerPort: ${{TARGET_PORT}}
                 protocol: TCP
     strategy:
-      type: Rolling
-    triggers:
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-          - ${APPNAME}-jlinked-app-container
-        from:
-          kind: ImageStreamTag
-          name: '${APPNAME}-lightweight-image:latest'
-          namespace: default
-    - type: ConfigChange
+      type: RollingUpdate
 - apiVersion: v1
   kind: Service
   metadata:
