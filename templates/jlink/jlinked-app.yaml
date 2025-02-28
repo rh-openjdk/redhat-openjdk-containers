@@ -10,7 +10,7 @@ metadata:
 parameters:
 - description: JDK version to produce a jmods image and imagestream for
   name: JDK_VERSION
-  value: "11"
+  value: "21"
   required: true
 - description: OpenJDK builder image version tag
   name: BUILDER_IMAGE_TAG
@@ -32,6 +32,14 @@ parameters:
   generate: expression
   from: "[a-zA-Z0-9]{16}"
   required: true
+- description: Target port for the created Route
+  name: TARGET_PORT
+  value: "8080"
+  required: true
+- description: Port for the created Service to listen on
+  name: SERVICE_PORT
+  value: "8181"
+  required: true
 message: "... The GitHub webhook secret is ${GITHUB_WEBHOOK_SECRET} ..."
 ##############################################################################
 # Following are the objects(imagestream and buildconfigs) for all the 3-stages
@@ -41,7 +49,7 @@ objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink
+    name: ${APPNAME}-openjdk-${JDK_VERSION}-jlink-tech-preview
     labels:
       app: ${APPNAME}
       app.kubernetes.io/part-of: ${APPNAME}
@@ -78,24 +86,27 @@ objects:
       dockerStrategy:
         from: 
           kind: ImageStreamTag
-          name: ubi9-openjdk-${JDK_VERSION}:${BUILDER_IMAGE_TAG}  # Refer README.md to create this ImageStream
+          name: openjdk-${JDK_VERSION}-jlink-tech-preview:${BUILDER_IMAGE_TAG}  # Refer README.md to create this ImageStream
     output:
       to:
         kind: ImageStreamTag
-        name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest
+        name: ${APPNAME}-openjdk-${JDK_VERSION}-jlink-tech-preview:latest
     triggers:
       - type: ConfigChange
       - type: ImageChange
         imageChange:
           from:
             kind: ImageStreamTag
-            name: ubi9-openjdk-${JDK_VERSION}:${BUILDER_IMAGE_TAG}
+            name: openjdk-${JDK_VERSION}-jlink-tech-preview:${BUILDER_IMAGE_TAG}
 ##############################################################################
 # stage-2: Output ImageStream
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
     name: ${APPNAME}-intermediate
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
       local: false
@@ -119,7 +130,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest # Output Imagestream from stage-1
+          name: ${APPNAME}-openjdk-${JDK_VERSION}-jlink-tech-preview:latest # Output Imagestream from stage-1
           pullPolicy: Always
         env:
           - name: S2I_ENABLE_JLINK
@@ -136,7 +147,7 @@ objects:
         imageChange:
           from:
             kind: ImageStreamTag
-            name: ${APPNAME}-ubi9-openjdk-${JDK_VERSION}-jlink:latest  # Output of stage-1 which serves as input to stage-2
+            name: ${APPNAME}-openjdk-${JDK_VERSION}-jlink-tech-preview:latest  # Output of stage-1 which serves as input to stage-2
       - type: GitHub
         github:
           secret: ${GITHUB_WEBHOOK_SECRET}
@@ -171,7 +182,8 @@ objects:
       app.kubernetes.io/part-of: ${APPNAME}
   spec:
     lookupPolicy:
-      local: false
+      # Must be true for the Deployment to resolve the ImageStream
+      local: true
 ##############################################################################
 # stage-3: BuildConfig
 - apiVersion: build.openshift.io/v1
@@ -233,3 +245,64 @@ objects:
           from:
             kind: ImageStreamTag
             name: ${APPNAME}-ubimicro:latest  # ImageStreamTag for registry.access.redhat.com/ubi9/ubi-micro
+##############################################################################
+# DeploymentConfig and Route object specs
+# DeploymentConfigs are discouraged, however the documentation sugggests to still
+# use them if features are missing from Deployments, which in our case they are.
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: ${APPNAME}-jlinked-app-deployment
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: ${APPNAME}
+    template:
+      metadata:
+        labels:
+          app: ${APPNAME}
+          app.kubernetes.io/part-of: ${APPNAME}
+        annotations:
+          # Allows Deployments to use ImageStreams
+          alpha.image.policy.openshift.io/resolve-names: '*'
+      spec:
+        containers:
+          - name: ${APPNAME}-jlinked-app-container
+            image: ${APPNAME}-lightweight-image:latest
+            ports:
+              - containerPort: ${{TARGET_PORT}}
+                protocol: TCP
+    strategy:
+      type: RollingUpdate
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${APPNAME}-jlinked-app-service
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
+  spec:
+    selector:
+      app: ${APPNAME}
+    ports:
+      - protocol: TCP
+        name: target-${TARGET_PORT}-tcp
+        port: ${{SERVICE_PORT}}
+        targetPort: ${{TARGET_PORT}}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: ${APPNAME}-jlinked-app-route
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}
+  spec:
+    to:
+      kind: Service
+      name: ${APPNAME}-jlinked-app-service
+    port:
+      targetPort: ${{TARGET_PORT}}
