@@ -18,16 +18,15 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
    repository](https://github.com/jboss-container-images/openjdk),
    branch `jlink-dev`. e.g.
 
-        cekit --descriptor ubi9-openjdk-17.yaml build docker
+        cekit --descriptor ubi9-openjdk-21.yaml build podman
 
-2. Create an OpenShift project and namespace
+2. Create an OpenShift project
 
-        oc new-project jlink-dev
-        oc create namespace jlink
+        oc new-project $PROJECT
 
 3. Within your OpenShift project,
 
-        oc create imagestream openjdk-17-jlink-tech-preview
+        oc create imagestream openjdk-21-jlink-tech-preview
 
 4. You may need to configure your container engine to not TLS-verify the OpenShift
    registry. For Docker, add the following to `/etc/docker/daemon.json` and restart
@@ -44,8 +43,8 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 6. tag and push the dev image into it. The OpenShift console gives you the
    exact URI for your instance
 
-        docker tag openjdk-tech-preview/openjdk-17-jlink-rhel9:1.18 default-route-openshift-image-registry.apps-crc.testing/jlink1/openjdk-17-jlink-tech-preview:1.18
-        docker push default-route-openshift-image-registry.apps-crc.testing/jlink1/ubi9-openjdk-17:1.18
+        podman tag openjdk-tech-preview/openjdk-21-jlink-rhel9:1.18 default-route-openshift-image-registry.apps-crc.testing/$PROJECT/openjdk-21-jlink-tech-preview:1.18
+        podman push default-route-openshift-image-registry.apps-crc.testing/$PROJECT/openjdk-21-jlink-tech-preview:1.18
 
 ## Stage 1: Load the template into OpenShift and instantiate it
 
