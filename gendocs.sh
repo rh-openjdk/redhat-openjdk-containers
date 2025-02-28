@@ -67,18 +67,16 @@ workdir="$(mktemp -td gendocs.XXXXXX)"
 cp ./gendocs.py "$workdir/gendocs.py"
 cp ./docs/README.adoc "$workdir/README.adoc"
 
-# documentation for development branches
-addToIndex "\n== Development branches ==\n"
-for branch in ubi8 ubi9; do
-    addToIndex "\n=== $branch ===\n"
-    handleRef "$branch" "$branch"
-done
-
-# documentation for tagged releases
-addToIndex "\n== Released images =="
-for tag in $(git tag -l 'ubi?-openjdk-containers*' | sort -r); do
-    addToIndex "\n=== $tag ===\n"
-    handleRef "$tag"
+for ubi in ubi9 ubi8; do
+    UBI=${ubi^^}
+    addToIndex "\n== $UBI\n"
+    addToIndex "\n=== development\n"
+    handleRef "$ubi"
+    for tag in $(git tag -l "${ubi}-openjdk-containers*" | sort -r); do
+        version=${tag/${ubi}-openjdk-containers-/}
+        addToIndex "\n=== $version\n"
+        handleRef "$tag"
+    done
 done
 
 asciidoctor "$workdir/README.adoc" -o docs/index.html

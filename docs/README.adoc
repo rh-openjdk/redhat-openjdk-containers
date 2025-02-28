@@ -1,10 +1,11 @@
-# Red Hat UBI OpenJDK container images
+= Red Hat UBI OpenJDK container images
+:toc: right
 
 This is auto-generated documentation for the
 link:https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image[Red
 Hat Universal Base Image] (UBI) OpenJDK container images.
 
-* link:https://github.com/jboss-container-images/openjdk[container image source repository]
+* link:https://rh-openjdk.github.io/redhat-openjdk-containers/[container image source repository]
 
 Container images are available from the
 link:https://catalog.redhat.com/software/containers/explore[Red Hat Ecosystem
