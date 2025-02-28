@@ -4,7 +4,7 @@ schema_version: 1
 
 from: "registry.access.redhat.com/ubi9/ubi-minimal"
 name: &name "ubi9/openjdk-11"
-version: &version "1.18"
+version: &version "1.21"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 11"
 
 labels:
@@ -19,7 +19,7 @@ labels:
 - name: "com.redhat.component"
   value: "openjdk-11-ubi9-container"
 - name: "usage"
-  value: &docs "https://jboss-container-images.github.io/openjdk/"
+  value: &docs "https://rh-openjdk.github.io/redhat-openjdk-containers/"
 - name: "com.redhat.license_terms"
   value: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
 - name: "org.opencontainers.image.source"
@@ -54,6 +54,7 @@ modules:
     version: "11"
   - name: jboss.container.maven
     version: "3.8.11"
+  - name: jboss.container.util.tzdata
   - name: jboss.container.java.s2i.bash
 
 help:

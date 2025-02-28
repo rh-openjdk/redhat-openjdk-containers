@@ -1,0 +1,5 @@
+schema_version: 1
+
+name: "jboss.container.openjdk"
+description: "A dummy descriptor to couple tests with jdk modules"
+version: "0"

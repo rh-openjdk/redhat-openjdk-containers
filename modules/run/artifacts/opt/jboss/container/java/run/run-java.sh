@@ -10,6 +10,11 @@ export JBOSS_CONTAINER_UTIL_LOGGING_MODULE="${JBOSS_CONTAINER_UTIL_LOGGING_MODUL
 export JBOSS_CONTAINER_JAVA_RUN_MODULE="${JBOSS_CONTAINER_JAVA_RUN_MODULE-/opt/jboss/container/java/run}"
 export JBOSS_CONTAINER_UTIL_PATHFINDER_MODULE="${JBOSS_CONTAINER_UTIL_PATHFINDER_MODULE-/opt/jboss/container/util/pathfinder}"
 
+# Default the application dir to the S2I deployment dir
+if [ -z "$JAVA_APP_DIR" ]
+  then JAVA_APP_DIR=/deployments
+fi
+
 source "$JBOSS_CONTAINER_UTIL_LOGGING_MODULE/logging.sh"
 source "$JBOSS_CONTAINER_UTIL_PATHFINDER_MODULE/pathfinder.sh"
 
@@ -109,6 +114,27 @@ get_classpath() {
   echo "${cp_path}"
 }
 
+# Mask secrets before printing
+mask_passwords() {
+    local content="$1"
+    local result=""
+
+    IFS=' ' read -r -a key_value_pairs <<< "$content"
+
+    for pair in "${key_value_pairs[@]}"; do
+        key=$(echo "$pair" | cut -d '=' -f 1)
+        value=$(echo "$pair" | cut -d '=' -f 2-)
+
+        if [[ $key =~ [Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd] ]]; then
+            result+="$key=***** "
+        else
+            result+="$pair "
+        fi
+    done
+
+    echo "${result% }"
+}
+
 # Start JVM
 startup() {
   # Initialize environment
@@ -123,9 +149,11 @@ startup() {
      args="-jar ${JAVA_APP_JAR}"
   fi
 
-  procname="${JAVA_APP_NAME-java}"
+  local procname="${JAVA_APP_NAME-java}"
 
-  log_info "exec -a \"${procname}\" java $(get_java_options) -cp \"$(get_classpath)\" ${args} $*"
+  local masked_opts=$(mask_passwords "$(get_java_options)")
+
+  log_info "exec -a \"${procname}\" java ${masked_opts} -cp \"$(get_classpath)\" ${args} $*"
   log_info "running in $PWD"
   exec -a "${procname}" java $(get_java_options) -cp "$(get_classpath)" ${args} $*
 }
