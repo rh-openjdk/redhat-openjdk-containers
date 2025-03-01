@@ -43,8 +43,8 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 6. tag and push the dev image into it. The OpenShift console gives you the
    exact URI for your instance
 
-        podman tag openjdk-tech-preview/openjdk-21-jlink-rhel9:1.18 default-route-openshift-image-registry.apps-crc.testing/$PROJECT/openjdk-21-jlink-tech-preview:1.18
-        podman push default-route-openshift-image-registry.apps-crc.testing/$PROJECT/openjdk-21-jlink-tech-preview:1.18
+        podman tag openjdk-tech-preview/openjdk-21-jlink-rhel9:latest default-route-openshift-image-registry.apps-crc.testing/$PROJECT/openjdk-21-jlink-tech-preview:latest
+        podman push default-route-openshift-image-registry.apps-crc.testing/$PROJECT/openjdk-21-jlink-tech-preview:latest
 
 ## Stage 1: Load the template into OpenShift and instantiate it
 
@@ -67,7 +67,7 @@ Some suitable test values for the parameters are
  * SERVICE_PORT: 8080
 
         oc process \
-            -p JDK_VERSION=17 \
+            -p JDK_VERSION=21 \
             -p APP_URI=https://github.com/jboss-container-images/openjdk-test-applications \
             -p REF=master \
             -p CONTEXT_DIR=quarkus-quickstarts/getting-started-3.9.2-uberjar \
