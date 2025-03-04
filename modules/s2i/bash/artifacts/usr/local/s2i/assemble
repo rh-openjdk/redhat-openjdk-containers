@@ -29,7 +29,7 @@ if [ "$S2I_ENABLE_JLINK" = "true" ]; then
         log_info "S2I_JLINK_TEMP_PATH does not exist, creating ${S2I_JLINK_TEMP_PATH}"
         mkdir -pm 775 "${S2I_JLINK_TEMP_PATH}"
     fi
-    
+
     source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkdeps.sh"
     echo "Invoking mkdeps"
     generate_deps || {
@@ -61,8 +61,8 @@ if [ "$S2I_ENABLE_JLINK" = "true" ]; then
 fi
 
 if [ "$S2I_DELETE_SOURCE" == "true" ]; then
-  if [ -n "$(find /tmp/jlink -maxdepth 0 -type d ! -empty 2> /dev/null)" ]; then
-    log_info "Cleaning up temporary file directory /tmp/jlink"
-    rm -rf /tmp/jlink
+  if [ -n "$(find $S2I_JLINK_TEMP_PATH -maxdepth 0 -type d ! -empty 2> /dev/null)" ]; then
+    log_info "Cleaning up temporary file directory $S2I_JLINK_TEMP_PATH"
+    rm -rf $S2I_JLINK_TEMP_PATH
   fi
 fi
