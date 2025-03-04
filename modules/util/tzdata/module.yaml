@@ -1,0 +1,14 @@
+schema_version: 1
+name: jboss.container.util.tzdata
+version: '1.0'
+description: Reinstall the tzdata package, to ensure zoneinfo is present.
+
+# if the base image tzdata version is not available on the RPM mirrors (such as
+# when it has been updated), the reinstall action will fail. To prevent this,
+# run pkg-update first.
+modules:
+  install:
+  - name: jboss.container.util.pkg-update
+
+execute:
+- script: execute.sh
