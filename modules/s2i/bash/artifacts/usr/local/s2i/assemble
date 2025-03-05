@@ -58,11 +58,11 @@ if [ "$S2I_ENABLE_JLINK" = "true" ]; then
         exit 1
     }
 
+    if [ "$S2I_DELETE_SOURCE" == "true" ]; then
+      if [ -n "$(find $S2I_JLINK_TEMP_PATH -maxdepth 0 -type d ! -empty 2> /dev/null)" ]; then
+        log_info "Cleaning up temporary file directory $S2I_JLINK_TEMP_PATH"
+        rm -rf $S2I_JLINK_TEMP_PATH
+      fi
+    fi
 fi
 
-if [ "$S2I_DELETE_SOURCE" == "true" ]; then
-  if [ -n "$(find $S2I_JLINK_TEMP_PATH -maxdepth 0 -type d ! -empty 2> /dev/null)" ]; then
-    log_info "Cleaning up temporary file directory $S2I_JLINK_TEMP_PATH"
-    rm -rf $S2I_JLINK_TEMP_PATH
-  fi
-fi
