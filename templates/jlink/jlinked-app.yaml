@@ -71,7 +71,6 @@ objects:
         FROM -
         RUN if [ ! -f "/opt/jboss/container/java/jlink/preflight.sh" ]; then echo "jlink scripts doesn't exist" 2>&1; exit 1; fi
         USER 0
-        RUN microdnf --setopt=install_weak_deps=0 --setopt=tsflags=nodocs install -y java-${JDK_VERSION}-openjdk-jmods
         RUN mkdir -p /mnt/jrootfs
         RUN microdnf install --installroot /mnt/jrootfs --releasever 9 --setopt install_weak_deps=0 --nodocs -y \
         --config=/etc/dnf/dnf.conf \
