@@ -26,3 +26,11 @@ Scenario: Check that /tmp/jlink is deleted when S2I_DELETE_SOURCE is set
        | S2I_DELETE_SOURCE   | true         |
       Then s2i build log should contain Cleaning up temporary file directory /tmp/jlink
        And file /tmp/jlink should not exist
+
+Scenario: Check that /tmp/jlink is not deleted when S2I_DELETE_SOURCE is set to false
+    Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications from quarkus-quickstarts/getting-started-3.9.2-uberjar
+       | variable            | value        |
+       | S2I_ENABLE_JLINK    | true         |
+       | S2I_DELETE_SOURCE   | false         |
+      Then s2i build log should not contain Cleaning up temporary file directory /tmp/jlink
+       And file /tmp/jlink should exist
