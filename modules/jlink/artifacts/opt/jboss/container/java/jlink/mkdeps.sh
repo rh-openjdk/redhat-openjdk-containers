@@ -21,12 +21,12 @@ function generate_deps() {
         --module-path dependencies \
         "$JAVA_APP_JAR" \
         "$JAVA_LIB_DIR"/**/*.jar \
-        > deps.txt
+        > $S2I_JLINK_TEMP_PATH/deps.txt
   else 
     $JAVA_HOME/bin/jdeps --multi-release $JAVA_VERSION -R -s \
       --module-path dependencies \
       "$JAVA_APP_JAR" \
-      > deps.txt
-    cat deps.txt
+      > $S2I_JLINK_TEMP_PATH/deps.txt
+    cat $S2I_JLINK_TEMP_PATH/deps.txt
   fi
 }

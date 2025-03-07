@@ -2,7 +2,7 @@
 # TODO: Still Needed?
 set -euo pipefail
 
-depsfile="module-deps.txt"
+depsfile="$S2I_JLINK_TEMP_PATH/module-deps.txt"
 
 function generate_jre_image() {
 	test -f $depsfile
