@@ -23,7 +23,7 @@ labels:
 - name: "com.redhat.license_terms"
   value: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
 - name: "org.opencontainers.image.source"
-  value: "https://github.com/jboss-container-images/openjdk"
+  value: "https://github.com/rh-openjdk/redhat-openjdk-containers"
 - name: "org.opencontainers.image.documentation"
   value: *docs
 - name: "name"
