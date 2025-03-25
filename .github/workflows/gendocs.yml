@@ -29,7 +29,7 @@ jobs:
           fetch-depth: 0 # all branches and tags
 
       - name: Install CEKit
-        uses: cekit/actions-setup-cekit@v1.1.5
+        uses: cekit/actions-setup-cekit@v1.1.7
 
       - name: Setup required packages for docs
         run: |
