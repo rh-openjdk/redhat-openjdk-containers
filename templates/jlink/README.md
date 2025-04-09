@@ -11,11 +11,12 @@ DISCLAIMER: This template requires OpenShift to be able to resolve ImageStreams,
 
 ## Stage 0: UBI9 OpenJDK ImageStreams with jlink-dev changes
 
-Until the `jlink-dev` work is merged, prior to trying out the template, we must first
-prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
+Whilst the `jlink-dev` feature is in Tech Preview, we must prepare separate
+UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 
-1. Build a suitable OpenJDK container image from [this
-   repository](https://github.com/jboss-container-images/openjdk),
+1. Obtain a suitable OpenJDK container image with Jlink integration.
+   Either download [the Tech Preview Image](https://catalog.redhat.com/software/containers/openjdk-tech-preview/openjdk-21-jlink-rhel9/678e61ffd77a3837d6962f3f?),
+   or build your own from [this repository](https://github.com/jboss-container-images/openjdk),
    branch `jlink-dev`. e.g.
 
         cekit --descriptor ubi9-openjdk-21.yaml build podman
@@ -36,9 +37,19 @@ prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
           "insecure-registries": [ "default-route-openshift-image-registry.apps-crc.testing" ]
         }
 
+   For podman, add the following to `~/.config/containers/registries.conf`:
+
+        [[registry]]
+        location = "default-route-openshift-image-registry.apps-crc.testing"
+        insecure = true
+
 5. Log into the OpenShift registry, e.g.
 
         REGISTRY_AUTH_PREFERENCE=docker oc registry login
+
+   or
+
+        oc registry login
 
 6. tag and push the dev image into it. The OpenShift console gives you the
    exact URI for your instance
