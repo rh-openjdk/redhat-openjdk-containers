@@ -59,3 +59,7 @@ modules:
   - name: jboss.container.user
   - name: jboss.container.java.jvm
   - name: jboss.container.util.logging
+
+artifacts:
+  - path: artifacts/run-java.sh
+    dest: /opt/jboss/container/java/run
