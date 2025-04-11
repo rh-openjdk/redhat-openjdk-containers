@@ -15,3 +15,10 @@ Feature: Tests for all openshift images
   Scenario: Check that builder labels are correctly set
     Given image is built
     Then the image should contain label io.openshift.s2i.scripts-url with value image:///usr/local/s2i
+
+  @ubi9
+  Scenario: Check installed scripts are executable by all users (OPENJDK-3655)
+    When container is started with args
+    | arg     | value                                                             |
+    | command | find /opt/jboss/container -type f -perm -g+x ( ! -perm -o+x ) -ls |
+    Then available container log should not contain /opt/jboss/container
