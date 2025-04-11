@@ -8,7 +8,6 @@ ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
 # configure artifact permissions
 chown -R $USER:root $ARTIFACTS_DIR
 chmod -R ug+rwX $ARTIFACTS_DIR
-chmod ug+x ${ARTIFACTS_DIR}/opt/jboss/container/maven/default/maven.sh
 
 # install artifacts
 pushd ${ARTIFACTS_DIR}

@@ -7,7 +7,7 @@ ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
 
 chown -R $USER:root $SCRIPT_DIR
 chmod -R ug+rwX $SCRIPT_DIR
-chmod ug+x ${ARTIFACTS_DIR}/opt/jboss/container/java/jvm/*
+chmod +x ${ARTIFACTS_DIR}/opt/jboss/container/java/jvm/*
 
 pushd ${ARTIFACTS_DIR}
 cp -pr * /
