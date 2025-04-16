@@ -7,7 +7,7 @@ schema_version: 1
 # products. This image is maintained by Red Hat and updated regularly.
 from: "registry.redhat.io/rhel9-osbs/osbs-ubi9-minimal"
 name: &name "openjdk-els/openjdk-11-runtime-rhel9"
-version: &version "1.21"
+version: &version "1.22"
 description: "Image for Red Hat OpenShift providing OpenJDK 11 runtime"
 
 labels:
