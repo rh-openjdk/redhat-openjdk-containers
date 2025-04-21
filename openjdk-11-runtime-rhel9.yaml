@@ -5,9 +5,9 @@ schema_version: 1
 # This OSBS Base Image is designed and engineered to be the base layer for
 # Red Hat products. This base image is only supported for approved Red Hat
 # products. This image is maintained by Red Hat and updated regularly.
-from: "registry.redhat.io/rhel9-osbs/osbs-ubi9-minimal"
+from: "registry.access.redhat.com/ubi9/ubi-minimal"
 name: &name "openjdk-els/openjdk-11-runtime-rhel9"
-version: &version "1.21"
+version: &version "1.22"
 description: "Image for Red Hat OpenShift providing OpenJDK 11 runtime"
 
 labels:
