@@ -14,9 +14,17 @@ DISCLAIMER: This template requires OpenShift to be able to resolve ImageStreams,
 Until the `jlink-dev` work is merged, prior to trying out the template, we must first
 prepare UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 
-1. Build a suitable OpenJDK container image from [this
-   repository](https://github.com/jboss-container-images/openjdk),
-   branch `jlink-dev`. e.g.
+1.a. Pull the Tech-Preview image
+
+    podman pull registry.access.redhat.com/openjdk-tech-preview/openjdk-21-jlink-rhel9:latest
+    podman tag  registry.access.redhat.com/openjdk-tech-preview/openjdk-21-jlink-rhel9:latest \
+        openjdk-tech-preview/openjdk-21-jlink-rhel9:latest
+        
+OR
+
+1.b. Build a suitable OpenJDK container image from [this
+     repository](https://github.com/jboss-container-images/openjdk),
+     branch `jlink-dev`. e.g.
 
         cekit --descriptor ubi9-openjdk-21.yaml build podman
 
