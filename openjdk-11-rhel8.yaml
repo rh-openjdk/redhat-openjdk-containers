@@ -4,7 +4,7 @@ schema_version: 1
 
 from: "registry.access.redhat.com/ubi8/ubi-minimal"
 name: &name "openjdk-els/openjdk-11-rhel8"
-version: &version "1.22"
+version: &version "1.21"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 11"
 
 labels:
