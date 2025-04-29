@@ -67,18 +67,18 @@ Process it to create the needed objects. You can list the parameters using
 Some suitable test values for the parameters are
 
  * JDK_VERSION: 21
- * APP_URI: https://github.com/jboss-container-images/openjdk-test-applications
+ * APP_URI: https://github.com/rh-openjdk/openjdk-container-test-applications
  * REF: master
- * CONTEXT_DIR: quarkus-quickstarts/getting-started-3.9.2-uberjar
+ * CONTEXT_DIR: quarkus-quickstarts/getting-started-3.21.2-uberjar
  * APPNAME: quarkus-quickstart
  * TARGET_PORT: 8080
  * SERVICE_PORT: 8080
 
         oc process \
             -p JDK_VERSION=21 \
-            -p APP_URI=https://github.com/jboss-container-images/openjdk-test-applications \
+            -p APP_URI=https://github.com/rh-openjdk/openjdk-container-test-applications \
             -p REF=master \
-            -p CONTEXT_DIR=quarkus-quickstarts/getting-started-3.9.2-uberjar \
+            -p CONTEXT_DIR=quarkus-quickstarts/getting-started-3.21.2-uberjar \
             -p APPNAME=quarkus-quickstart \
             -p TARGET_PORT=8080 \
             -p SERVICE_PORT=8080 \
