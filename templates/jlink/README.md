@@ -14,9 +14,16 @@ DISCLAIMER: This template requires OpenShift to be able to resolve ImageStreams,
 Whilst the `jlink-dev` feature is in Tech Preview, we must prepare separate
 UBI9 OpenJDK ImageStreams with `jlink-dev` support.
 
-1. Obtain a suitable OpenJDK container image with Jlink integration.
-   Either download [the Tech Preview Image](https://catalog.redhat.com/software/containers/openjdk-tech-preview/openjdk-21-jlink-rhel9/678e61ffd77a3837d6962f3f?),
-   or build your own from [this repository](https://github.com/jboss-container-images/openjdk),
+1. Pull the Tech-Preview image
+
+       podman pull registry.access.redhat.com/openjdk-tech-preview/openjdk-21-jlink-rhel9:latest
+       podman tag  registry.access.redhat.com/openjdk-tech-preview/openjdk-21-jlink-rhel9:latest \
+           openjdk-tech-preview/openjdk-21-jlink-rhel9:latest
+        
+OR
+
+1. Build a suitable OpenJDK container image from [this
+   repository](https://github.com/jboss-container-images/openjdk),
    branch `jlink-dev`. e.g.
 
         cekit --descriptor ubi9-openjdk-21.yaml build podman
@@ -70,18 +77,18 @@ Process it to create the needed objects. You can list the parameters using
 Some suitable test values for the parameters are
 
  * JDK_VERSION: 21
- * APP_URI: https://github.com/jboss-container-images/openjdk-test-applications
+ * APP_URI: https://github.com/rh-openjdk/openjdk-container-test-applications
  * REF: master
- * CONTEXT_DIR: quarkus-quickstarts/getting-started-3.9.2-uberjar
+ * CONTEXT_DIR: quarkus-quickstarts/getting-started-3.21.2-uberjar
  * APPNAME: quarkus-quickstart
  * TARGET_PORT: 8080
  * SERVICE_PORT: 8080
 
         oc process \
             -p JDK_VERSION=21 \
-            -p APP_URI=https://github.com/jboss-container-images/openjdk-test-applications \
+            -p APP_URI=https://github.com/rh-openjdk/openjdk-container-test-applications \
             -p REF=master \
-            -p CONTEXT_DIR=quarkus-quickstarts/getting-started-3.9.2-uberjar \
+            -p CONTEXT_DIR=quarkus-quickstarts/getting-started-3.21.2-uberjar \
             -p APPNAME=quarkus-quickstart \
             -p TARGET_PORT=8080 \
             -p SERVICE_PORT=8080 \
