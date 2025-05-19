@@ -4,7 +4,7 @@ schema_version: 1
 
 from: "registry.access.redhat.com/ubi8/ubi-minimal"
 name: &name "ubi8/openjdk-17"
-version: &version "1.21"
+version: &version "1.23"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 17"
 
 labels:
