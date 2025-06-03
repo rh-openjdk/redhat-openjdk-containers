@@ -16,3 +16,11 @@ Feature: Openshift OpenJDK Runtime tests (OPENJDK-474, OPENJDK-2805)
      And file /usr/libexec/s2i/run should exist
      And file /usr/libexec/s2i/run should not contain JVM_ARGS
      And container log should not contain unique unique
+
+  @ubi9
+  # alternative to one of previous steps, for runtime images
+  Scenario: OPENJDK-2968 Ensure JAVA_ARGS is passed to the running Java application
+    Given container is started with env
+       | variable    | value                 |
+       | JAVA_ARGS   | Hello from Cekit test |
+    Then container log should match regex ^INFO exec -a "java" java.*Hello from Cekit test$
