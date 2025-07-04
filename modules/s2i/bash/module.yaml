@@ -23,3 +23,6 @@ artifacts:
     dest: /usr/local/s2i
   - path: artifacts/opt
     dest: /opt/jboss/container/java/s2i
+
+execute:
+- script: configure.sh

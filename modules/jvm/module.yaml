@@ -9,6 +9,9 @@ artifacts:
   - path: artifacts/jvm
     dest: /opt/jboss/container/java/jvm
 
+execute:
+- script: configure.sh
+
 modules:
   install:
   - name: jboss.container.user

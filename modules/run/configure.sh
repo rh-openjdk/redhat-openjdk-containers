@@ -17,3 +17,6 @@ else
     javasecurity="${JAVA_HOME}/conf/security/java.security"
 fi
 sed -i 's/\(networkaddress.cache.negative.ttl\)=[0-9]\+$/\1=0/' "$javasecurity"
+
+# OPENJDK-3695: force +x for scripts
+chmod 0755 /opt/jboss/container/java/run/run-java.sh
