@@ -30,6 +30,9 @@ modules:
   - name: jboss.container.maven.default
   - name: jboss.container.util.logging
 
+execute:
+- script: configure.sh
+
 packages:
   install:
   - tar
