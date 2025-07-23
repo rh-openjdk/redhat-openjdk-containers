@@ -3,7 +3,7 @@
 schema_version: 1
 
 from: "registry.access.redhat.com/ubi9/ubi-minimal"
-name: &name "ubi9/openjdk-21"
+name: &name "openjdk-tech-preview/openjdk-21-jlink-rhel9"
 version: &version "1.23"
 description: "Source To Image (S2I) image for Red Hat OpenShift providing OpenJDK 21"
 
@@ -17,7 +17,7 @@ labels:
 - name: "maintainer"
   value: "Red Hat OpenJDK <openjdk@redhat.com>"
 - name: "com.redhat.component"
-  value: "openjdk-21-ubi9-container"
+  value: "openjdk-21-jlink-tech-preview-ubi9-container"
 - name: "usage"
   value: &docs "https://rh-openjdk.github.io/redhat-openjdk-containers/"
 - name: "com.redhat.license_terms"
@@ -55,6 +55,7 @@ modules:
   - name: jboss.container.util.tzdata
   - name: jboss.container.java.s2i.bash
   - name: jboss.container.util.tzdata
+  - name: jboss.container.java.jlink
 
 help:
   add: true
