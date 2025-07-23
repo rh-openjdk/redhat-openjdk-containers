@@ -16,6 +16,10 @@ envs:
   value: /tmp/jre
 - name: S2I_JLINK_TEMP_PATH
   value: /tmp/jlink
+- name: S2I_ENABLE_JLINK
+  description: ^
+    Enables the Jdeps/JLink workflow to minimize JRE size
+  example: "false"
 
 modules:
   install: 
@@ -25,3 +29,4 @@ modules:
 packages:
   install:
   - binutils # for objcopy
+  - java-21-openjdk-jmods
