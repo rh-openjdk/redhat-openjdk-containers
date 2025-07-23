@@ -11,6 +11,7 @@ Feature: Tests for all openshift images
   # builder-only test
   @ubi9/openjdk-11
   @ubi9/openjdk-17
+  @ubi9/openjdk-21
   @openjdk-tech-preview/openjdk-21-jlink-rhel9
   Scenario: Check that builder labels are correctly set
     Given image is built
