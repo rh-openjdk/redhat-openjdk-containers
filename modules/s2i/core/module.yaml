@@ -124,3 +124,7 @@ run:
 modules:
   install:
     - name: jboss.container.user
+
+artifacts:
+  - path: artifacts/s2i-core
+    dest: /opt/jboss/container/s2i/core

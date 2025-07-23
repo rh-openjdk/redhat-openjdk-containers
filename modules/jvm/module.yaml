@@ -5,6 +5,10 @@ description: ^
   Provides support for configuring Java JVM, e.g. GC settings, etc.  Basic usage
   is opts=$($JBOSS_CONTAINER_JAVA_JVM_MODULE/java-default-options)
 
+artifacts:
+  - path: artifacts/jvm
+    dest: /opt/jboss/container/java/jvm
+
 execute:
 - script: configure.sh
 
