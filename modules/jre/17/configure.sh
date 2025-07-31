@@ -1,19 +1,10 @@
-#!/bin/sh
-# Configure module
-set -e
+#!/bin/bash
+set -euo pipefail
 
 SCRIPT_DIR=$(dirname $0)
-echo $SCRIPT_DIR
 ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
-echo $ARTIFACTS_DIR
 
-chown -R $USER:root $SCRIPT_DIR
-chmod -R ug+rwX $SCRIPT_DIR
-chmod ug+x ${ARTIFACTS_DIR}/opt/jboss/container/openjdk/jre/*
-
-pushd ${ARTIFACTS_DIR}
-cp -pr * /
-popd
+install -m 0644 -D {${ARTIFACTS_DIR},}/opt/jboss/container/openjdk/jre/jvm-options
 
 # Set this JDK as the alternative in use
 _arch="$(uname -i)"
