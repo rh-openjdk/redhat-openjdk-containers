@@ -2,6 +2,19 @@
 # Configure module
 set -e
 
+SCRIPT_DIR=$(dirname $0)
+ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
+
+# configure artifact permissions
+chown -R $USER:root $ARTIFACTS_DIR
+chmod -R ug+rwX $ARTIFACTS_DIR
+chmod ug+x ${ARTIFACTS_DIR}/opt/jboss/container/maven/default/maven.sh
+
+# install artifacts
+pushd ${ARTIFACTS_DIR}
+cp -pr * /
+popd
+
 MAVEN_VERSION_SQUASHED=${MAVEN_VERSION/./}
 
 # pull in specific maven version to serve as default

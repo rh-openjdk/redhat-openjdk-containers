@@ -1,5 +1,14 @@
-#!/bin/bash
-set -euo pipefail
+#!/bin/sh
+# Configure module
+set -e
 
-# OPENJDK-3695: force +x for scripts
-chmod 0755 /opt/jboss/container/java/jvm/*
+SCRIPT_DIR=$(dirname $0)
+ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
+
+chown -R $USER:root $SCRIPT_DIR
+chmod -R ug+rwX $SCRIPT_DIR
+chmod ug+x ${ARTIFACTS_DIR}/opt/jboss/container/java/jvm/*
+
+pushd ${ARTIFACTS_DIR}
+cp -pr * /
+popd
