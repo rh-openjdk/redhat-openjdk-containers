@@ -33,7 +33,3 @@ modules:
 
 execute:
 - script: configure.sh
-
-artifacts:
-  - path: artifacts/jvm-options
-    dest: /opt/jboss/container/openjdk/jre

@@ -1,5 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-# OPENJDK-3695: force +x for scripts
-chmod 0755 /opt/jboss/container/java/jvm/*
+SCRIPT_DIR=$(dirname $0)
+ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
+
+install -D -t /opt/jboss/container/java/jvm \
+    ${ARTIFACTS_DIR}/opt/jboss/container/java/jvm/*

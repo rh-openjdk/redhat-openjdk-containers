@@ -23,6 +23,5 @@ modules:
   install:
   - name: jboss.container.user
 
-artifacts:
-  - path: artifacts/proxy
-    dest: /opt/jboss/container/java/proxy
+execute:
+- script: configure.sh
