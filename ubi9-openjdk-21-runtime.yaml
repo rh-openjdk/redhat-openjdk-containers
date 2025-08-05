@@ -30,6 +30,8 @@ labels:
   value: *version
 - name: "org.opencontainers.image.source"
   value: "https://github.com/rh-openjdk/redhat-openjdk-containers"
+- name: "org.opencontainers.image.revision"
+  value: "ubi9"
 
 envs:
 - name: "JBOSS_IMAGE_NAME"
