@@ -1,14 +1,7 @@
-#!/bin/sh
-# Configure module
-set -e
+#!/bin/bash
+set -euo pipefail
 
 SCRIPT_DIR=$(dirname $0)
 ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
 
-chown -R default:root $SCRIPT_DIR
-chmod -R ug+rwX $SCRIPT_DIR
-chmod ug+x ${ARTIFACTS_DIR}/opt/jboss/container/util/pathfinder/*
-
-pushd ${ARTIFACTS_DIR}
-cp -pr * /
-popd
+install -m 0644 -D {${ARTIFACTS_DIR},}/opt/jboss/container/util/pathfinder/pathfinder.sh
