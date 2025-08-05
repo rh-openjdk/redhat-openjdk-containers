@@ -1,5 +1,6 @@
 
 source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
+source "${JBOSS_CONTAINER_S2I_CORE_MODULE}/s2i-core"
 
 # inject our overridden maven_*() functions
 function maven_s2i_source_maven_overrides() {
@@ -30,11 +31,7 @@ function maven_s2i_custom_binary_build() {
   fi
   log_info "Copying binaries from ${binary_dir} to ${S2I_TARGET_DEPLOYMENTS_DIR} ..."
 
-  ( # OPENJDK-2850: use glob (dotglob to match hidden files) to stop rsync altering
-    # timestamps of S2I_TARGET_DEPLOYMENTS_DIR. Don't alter parent shell's dotglob.
-    shopt -s dotglob
-    rsync --archive --out-format='%n' "${binary_dir}"/* "${S2I_TARGET_DEPLOYMENTS_DIR}"
-  )
+  recursive_copy_files "${binary_dir}" "${S2I_TARGET_DEPLOYMENTS_DIR}"
 }
 
 function maven_s2i_deploy_artifacts_override() {
