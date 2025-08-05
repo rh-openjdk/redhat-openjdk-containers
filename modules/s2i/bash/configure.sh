@@ -1,5 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-# OPENJDK-3695: force +x for scripts
-chmod 0755 /usr/local/s2i/{assemble,run,usage}
+SCRIPT_DIR=$(dirname $0)
+ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
+
+install -D ${ARTIFACTS_DIR}/usr/local/s2i/* /usr/local/s2i
+install -m 0644 -D -t /opt/jboss/container/java/s2i \
+    ${ARTIFACTS_DIR}/opt/jboss/container/java/s2i/*

@@ -2,6 +2,11 @@
 # Configure module
 set -e
 
+SCRIPT_DIR=$(dirname $0)
+ARTIFACTS_DIR=${SCRIPT_DIR}/artifacts
+
+install -m 0644 -D {${ARTIFACTS_DIR},}/opt/jboss/container/openjdk/jdk/jvm-options
+
 # Set this JDK as the alternative in use
 _arch="$(uname -i)"
 alternatives --set java java-21-openjdk.${_arch}

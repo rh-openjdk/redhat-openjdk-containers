@@ -4,6 +4,5 @@ version: '3.8'
 description: ^
   Enables the AppStream RPM Module for Maven 3.8 packages.
 
-artifacts:
-  - path: artifacts/maven.module
-    dest: /etc/dnf/modules.d
+execute:
+- script: configure.sh

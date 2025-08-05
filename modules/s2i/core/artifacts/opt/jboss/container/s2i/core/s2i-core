@@ -42,6 +42,20 @@ function s2i_core_env_init_hook() {
   : 
 }
 
+# Copy files from a source path to a destination path
+# Do not attempt to change metadata of the destination path, which we
+# may not own
+function recursive_copy_files() {
+  src="$1"
+  dst="$2"
+  ( # OPENJDK-2850: use glob (dotglob to match hidden files) to stop rsync altering
+    # timestamps of $dst, which we might not own. Subshell to not alter parent shell's
+    # dotglob setting.
+    shopt -s dotglob
+    rsync --archive --out-format='%n' "${src}"/* "${dst}"
+  )
+}
+
 # copy configuration files
 # $1 - the base directory to which $S2I_SOURCE_CONFIGURATION_DIR is appended
 function s2i_core_copy_configuration() {
@@ -54,7 +68,7 @@ function s2i_core_copy_configuration() {
         mkdir -pm 775 "${S2I_TARGET_CONFIGURATION_DIR}"
       fi
       log_info "Copying configuration from $(realpath --relative-to ${S2I_SOURCE_DIR} ${1}/${S2I_SOURCE_CONFIGURATION_DIR}) to ${S2I_TARGET_CONFIGURATION_DIR}..."
-      rsync --archive --out-format='%n' "${1}/${S2I_SOURCE_CONFIGURATION_DIR}"/ "${S2I_TARGET_CONFIGURATION_DIR}"
+      recursive_copy_files "${1}/${S2I_SOURCE_CONFIGURATION_DIR}" "${S2I_TARGET_CONFIGURATION_DIR}"
     fi
   fi 
 }
@@ -71,7 +85,7 @@ function s2i_core_copy_data() {
         mkdir -pm 775 "${S2I_TARGET_DATA_DIR}"
       fi
       log_info "Copying app data from $(realpath --relative-to ${S2I_SOURCE_DIR} ${1}/${S2I_SOURCE_DATA_DIR}) to ${S2I_TARGET_DATA_DIR}..."
-      rsync --archive --out-format='%n' "${1}/${S2I_SOURCE_DATA_DIR}"/ "${S2I_TARGET_DATA_DIR}"
+      recursive_copy_files "${1}/${S2I_SOURCE_DATA_DIR}" "${S2I_TARGET_DATA_DIR}"
       # s2i used to be more forgiving, but the build will fail if this call
       # fails.  emit a warning and allow the build to succeed
       chmod -R g+rwX "${S2I_TARGET_DATA_DIR}" || log_warning "Errors occurred while adding read/write permissions to S2I_TARGET_DATA_DIR ($S2I_TARGET_DATA_DIR)."
