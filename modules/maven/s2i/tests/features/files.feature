@@ -1,8 +1,7 @@
 Feature: test file properties for Maven S2I module
 
   # builder-only test
-  @ubi9/openjdk-17
-  @ubi9/openjdk-21
+  @ubi10/openjdk-21
   Scenario: Ensure save-artifacts script is executable (OPENJDK-3935)
     When container is started with args
     | arg     | value                                         |

@@ -1,6 +1,6 @@
 Feature: test file properties for JVM module
 
-  @ubi9
+  @ubi10
   Scenario: Ensure image scripts are executable (OPENJDK-3935)
     When container is started with args
     | arg     | value                                                        |
