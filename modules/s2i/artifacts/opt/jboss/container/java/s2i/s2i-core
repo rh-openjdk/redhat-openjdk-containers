@@ -19,8 +19,8 @@ function s2i_core_init() {
 }
 
 function s2i_core_env_init() {
-  # initialize core s2i environmet variables
-  s2i_core_env_init_hook
+  # initialize core s2i environment variables
+  S2I_TARGET_DATA_DIR="${S2I_TARGET_DATA_DIR:-${JAVA_DATA_DIR:-/deployments/data}}"
   S2I_DESTINATION_DIR="${S2I_DESTINATION_DIR:-/tmp}"
   S2I_ARTIFACTS_DIR="${S2I_DESTINATION_DIR}/artifacts"
   S2I_SOURCE_DIR="${S2I_DESTINATION_DIR}/src"
@@ -33,12 +33,6 @@ function s2i_core_env_init() {
   S2I_IMAGE_SOURCE_MOUNTS="${S2I_IMAGE_SOURCE_MOUNTS:-${CUSTOM_INSTALL_DIRECTORIES}}"
   S2I_ENABLE_INCREMENTAL_BUILDS="${S2I_ENABLE_INCREMENTAL_BUILDS:-true}"
   S2I_DELETE_SOURCE="${S2I_DELETE_SOURCE:-true}"
-}
-
-# extensions may override this method to initialize environment variables
-# to suit their own needs.
-function s2i_core_env_init_hook() {
-  : 
 }
 
 # Copy files from a source path to a destination path
