@@ -80,11 +80,6 @@ function maven_s2i_maven_build() {
 # copy build output to deployments folder
 # internal method
 function maven_s2i_deploy_artifacts() {
-  if [ -n "$(type -t maven_s2i_deploy_artifacts_override)" ]; then
-    eval maven_s2i_deploy_artifacts_override $*
-    return $?
-  fi
-
   local artifact_dirs=${1:-${MAVEN_S2I_ARTIFACT_DIRS}}
 
   if [[ ! "${S2I_SOURCE_DIR}" =~ ^\/ ]]; then

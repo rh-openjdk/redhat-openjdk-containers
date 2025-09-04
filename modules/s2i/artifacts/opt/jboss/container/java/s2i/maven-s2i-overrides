@@ -33,9 +33,3 @@ function maven_s2i_custom_binary_build() {
 
   recursive_copy_files "${binary_dir}" "${S2I_TARGET_DEPLOYMENTS_DIR}"
 }
-
-function maven_s2i_deploy_artifacts_override() {
-  unset -f maven_s2i_deploy_artifacts_override
-  eval maven_s2i_deploy_artifacts $*
-  return $?
-}
