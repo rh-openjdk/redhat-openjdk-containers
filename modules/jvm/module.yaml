@@ -8,6 +8,9 @@ description: ^
 execute:
 - script: configure.sh
 
+execute:
+- script: configure.sh
+
 modules:
   install:
   - name: jboss.container.user
