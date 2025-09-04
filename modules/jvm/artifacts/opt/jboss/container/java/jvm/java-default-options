@@ -10,10 +10,6 @@ jvm_specific_options() {
   :
 }
 
-jvm_specific_diagnostics() {
-  :
-}
-
 # Include overridden jvm_specific_*() functions
 if [ -f "${JBOSS_CONTAINER_OPENJDK_JDK_MODULE}/jvm-options" ]; then
   source "${JBOSS_CONTAINER_OPENJDK_JDK_MODULE}/jvm-options"
@@ -38,7 +34,7 @@ max_memory() {
 # Switch on diagnostics except when switched off
 diagnostics() {
   if [ "x$JAVA_DIAGNOSTICS" != "x" ]; then
-    echo "$(jvm_specific_diagnostics)"
+    echo "-Xlog:gc::utctime -XX:NativeMemoryTracking=summary"
   fi
 }
 

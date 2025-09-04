@@ -32,7 +32,7 @@ envs:
   description:  Specify the maximum heap memory. Corresponds to the JVM argument `-XX:MaxRAMPercentage`. The default is `80.0` which means 80% of the available memory. You can disable this mechanism by setting the value to `0`. The supplied value can be an integer or float, but only the whole number part is used.
   example: "90.0"
 - name:         JAVA_DIAGNOSTICS
-  description:  "Set this to get some diagnostics information to standard output when things are happening. **Note: ** This option, if set to true, will set `-XX :+UnlockDiagnosticVMOptions`. **Disabled by default.**"
+  description:  "Set this to get some diagnostics information from the JVM (e.g. GC, memory tracking) to standard output. **Disabled by default.**"
   example:      "true"
 - name:         JAVA_DEBUG
   description:  If set remote debugging will be switched on. **Disabled by default.**
