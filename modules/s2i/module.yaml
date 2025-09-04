@@ -1,28 +1,23 @@
 schema_version: 1
-name: jboss.container.s2i.core
-version: '9.0'
-description: "Provides support for core s2i capabilities."
+name: jboss.container.java.s2i
+version: '1.0'
+description: Customization of common Maven S2I for Java S2I image.
 
-execute:
-- script: configure.sh
+modules:
+  install:
+  - name: jboss.container.user
+  - name: jboss.container.maven.s2i
+  - name: jboss.container.java.run
+  - name: jboss.container.util.logging
 
 packages:
   install:
   - findutils
   - rsync
 
-labels:
-  # XXX this modules does not install files in this path
-- name: "io.openshift.s2i.scripts-url"
-  value: "image:///usr/libexec/s2i"
-- name: io.openshift.s2i.destination
-  value: "/tmp"
-- name: org.jboss.container.deployments-dir
-  value: "/deployments"
-
 envs:
-- name: JBOSS_CONTAINER_S2I_CORE_MODULE
-  value: /opt/jboss/container/s2i/core/
+- name: JBOSS_CONTAINER_JAVA_S2I_MODULE
+  value: /opt/jboss/container/java/s2i
 
 - name: S2I_DESTINATION_DIR
   description: ^
@@ -113,11 +108,17 @@ envs:
     Delete source files at the end of build.  Defaults to true.
   example: "false"
 
+labels:
+- name: "io.openshift.s2i.scripts-url"
+  value: "image:///usr/libexec/s2i"
+- name: io.openshift.s2i.destination
+  value: "/tmp"
+- name: org.jboss.container.deployments-dir
+  value: "/deployments"
+
+execute:
+- script: configure.sh
+
 run:
   cmd:
-    # XXX this script is in a different module
   - "/usr/libexec/s2i/run"
-
-modules:
-  install:
-    - name: jboss.container.user

@@ -57,7 +57,7 @@ modules:
     version: "21"
   - name: jboss.container.maven
     version: "3.9.21"
-  - name: jboss.container.java.s2i.bash
+  - name: jboss.container.java.s2i
 
 help:
   add: true

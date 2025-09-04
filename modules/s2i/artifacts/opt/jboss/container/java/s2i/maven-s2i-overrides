@@ -1,6 +1,6 @@
 
 source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
-source "${JBOSS_CONTAINER_S2I_CORE_MODULE}/s2i-core"
+source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/s2i-core"
 
 # inject our overridden maven_*() functions
 function maven_s2i_source_maven_overrides() {
