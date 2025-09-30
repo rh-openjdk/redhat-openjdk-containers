@@ -21,6 +21,9 @@ envs:
   value: *jdkver
 - name: JBOSS_CONTAINER_OPENJDK_JRE_MODULE
   value: /opt/jboss/container/openjdk/jre
+- name:         JAVA_COMPACT_OBJECT_HEADERS
+  description:  Whether to enable compact object headers (JEP519) for JDK24 and newer. Enabled by default.
+  example:      "false"
 
 packages:
   install:
@@ -30,3 +33,6 @@ modules:
   install:
   - name: jboss.container.user
   - name: jboss.container.openjdk
+
+execute:
+- script: configure.sh
