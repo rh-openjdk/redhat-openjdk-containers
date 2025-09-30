@@ -11,8 +11,8 @@ jvm_specific_options() {
 }
 
 # Include overridden jvm_specific_*() functions
-if [ -f "${JBOSS_CONTAINER_OPENJDK_JDK_MODULE}/jvm-options" ]; then
-  source "${JBOSS_CONTAINER_OPENJDK_JDK_MODULE}/jvm-options"
+if [ -f "${JBOSS_CONTAINER_OPENJDK_JRE_MODULE}/jvm-options" ]; then
+  source "${JBOSS_CONTAINER_OPENJDK_JRE_MODULE}/jvm-options"
 fi
 
 # Check for memory options and calculate a sane default if not given
@@ -60,7 +60,7 @@ gc_config() {
     fi
   fi
 
-  local allOptions="$(jvm_specific_options) "
+  local allOptions=""
   allOptions+="${gcOptions} "
   allOptions+="-XX:MinHeapFreeRatio=${minHeapFreeRatio} "
   allOptions+="-XX:MaxHeapFreeRatio=${maxHeapFreeRatio} "
@@ -81,5 +81,7 @@ error_handling() {
   echo "-XX:+ExitOnOutOfMemoryError"
 }
 
-## Echo options, trimming trailing and multiple spaces
-echo "$(max_memory) $(gc_config) $(diagnostics) $(error_handling)" | awk '$1=$1'
+echo "$(max_memory) $(gc_config) $(diagnostics) $(error_handling)\
+  $(jvm_specific_options)
+
+" | awk '$1=$1' # trim leading/trailing spaces and squash multi
