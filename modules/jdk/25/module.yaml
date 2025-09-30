@@ -28,5 +28,7 @@ packages:
 
 modules:
   install:
+  - name: jboss.container.openjdk.jre
+    version: *jdkver
   - name: jboss.container.user
   - name: jboss.container.openjdk
