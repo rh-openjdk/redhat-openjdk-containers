@@ -30,6 +30,3 @@ modules:
   install:
   - name: jboss.container.user
   - name: jboss.container.openjdk
-
-execute:
-- script: configure.sh
