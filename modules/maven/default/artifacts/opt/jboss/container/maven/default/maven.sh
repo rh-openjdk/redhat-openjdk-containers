@@ -14,23 +14,13 @@ function maven_init() {
 # initialize maven variables
 function maven_init_vars() {
   maven_init_var_MAVEN_LOCAL_REPO
-  maven_init_var_MAVEN_SETTINGS_XML
+  maven_init_var_MAVEN_SETTINGS_XML # must be defined by an accompanying cekit module
   maven_init_var_MAVEN_OPTS
   maven_init_var_MAVEN_ARGS
 }
 
 function maven_init_var_MAVEN_LOCAL_REPO() {
   MAVEN_LOCAL_REPO="${MAVEN_LOCAL_REPO:-${HOME}/.m2/repository}"
-}
-
-function maven_init_var_MAVEN_SETTINGS_XML() {
-  if [ -f "${MAVEN_SETTINGS_XML}" ]; then
-    :
-  elif [ -f "${HOME}/.m2/settings.xml" ]; then
-    MAVEN_SETTINGS_XML="${HOME}/.m2/settings.xml"
-  else
-    MAVEN_SETTINGS_XML="${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/jboss-settings.xml"
-  fi
 }
 
 function maven_init_var_MAVEN_OPTS() {
