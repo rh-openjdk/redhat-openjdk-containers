@@ -9,6 +9,18 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-1.8.0
     Then available container log should not contain java-11
     Then available container log should not contain java-17
+    Then available container log should not contain java-25
+
+  @ubi10/openjdk-25
+  @ubi10/openjdk-25-runtime
+  Scenario: Check that only OpenJDK 25 is installed
+    When container is started with args
+    | arg     | value   |
+    | command | rpm -qa |
+    Then available container log should not contain java-1.8.0
+    Then available container log should not contain java-11
+    Then available container log should not contain java-17
+    Then available container log should not contain java-21
 
   @ubi10
   Scenario: Ensure JAVA_HOME is defined and contains Java
@@ -35,6 +47,18 @@ Feature: Miscellaneous OpenJDK-related unit tests
     Then available container log should not contain java-1.8.0
     Then available container log should not contain java-11
     Then available container log should not contain java-17
+    Then available container log should not contain java-25
+
+  @ubi10/openjdk-25
+  @ubi10/openjdk-25-runtime
+  Scenario: Check that directories from other JDKs are not present (JDK25)
+    When container is started with args
+    | arg     | value   |
+    | command | ls -1 /usr/lib/jvm |
+    Then available container log should not contain java-1.8.0
+    Then available container log should not contain java-11
+    Then available container log should not contain java-17
+    Then available container log should not contain java-21
 
   @ubi10
   Scenario: Ensure LANG is defined and contains UTF-8
