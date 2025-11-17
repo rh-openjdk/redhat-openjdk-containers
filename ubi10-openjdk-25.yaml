@@ -56,8 +56,9 @@ modules:
   - name: jboss.container.openjdk.jdk
     version: "25"
   - name: jboss.container.maven
-    version: "3.9.25"
+    version: "3.9.21"
   - name: jboss.container.java.s2i.bash
+  - name: jboss.container.java.singleton-jdk
 
 help:
   add: true
