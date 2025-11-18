@@ -1,0 +1,9 @@
+#!/bin/bash
+# this is a script library and is intended to be sourced, not executed.
+
+# OPENJDK-4106
+jvm_specific_options() {
+  if [ "$JAVA_COMPACT_OBJECT_HEADERS" != "false" ]; then
+    echo "-XX:+UseCompactObjectHeaders"
+  fi
+}
