@@ -1,0 +1,29 @@
+osbs:
+  configuration:
+    container:
+      compose:
+        pulp_repos: false
+        packages:
+        - java-25-openjdk
+        - java-25-openjdk-devel
+        - java-25-openjdk-headless
+        signing_intent: unsigned
+  repository:
+    name: containers/openjdk
+    branch: openjdk-25-ubi10
+
+packages:
+  manager: microdnf
+  content_sets:
+    x86_64:
+    - rhel-10-for-x86_64-baseos-rpms
+    - rhel-10-for-x86_64-appstream-rpms
+    ppc64le:
+    - rhel-10-for-ppc64le-baseos-rpms
+    - rhel-10-for-ppc64le-appstream-rpms
+    aarch64:
+    - rhel-10-for-aarch64-baseos-rpms
+    - rhel-10-for-aarch64-appstream-rpms
+    s390x:
+    - rhel-10-for-s390x-baseos-rpms
+    - rhel-10-for-s390x-appstream-rpms
