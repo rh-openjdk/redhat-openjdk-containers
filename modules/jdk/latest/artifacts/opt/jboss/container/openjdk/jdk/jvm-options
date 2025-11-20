@@ -1,0 +1,10 @@
+
+#!/bin/sh
+# ==============================================================================
+# JDK specific customizations
+#
+# ==============================================================================
+
+function jvm_specific_diagnostics() {
+    echo "-Xlog:gc::utctime -XX:NativeMemoryTracking=summary"
+}
