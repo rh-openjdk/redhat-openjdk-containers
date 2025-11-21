@@ -1,0 +1,8 @@
+schema_version: 1
+name: jboss.container.epel
+version: '1.0'
+description: Enable EPEL for RHEL9
+  Debug/testing only.
+
+execute:
+- script: configure.sh
