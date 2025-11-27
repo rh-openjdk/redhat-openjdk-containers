@@ -1,6 +1,7 @@
 # temporarily marking 'ignore' so these tests are skipped on GHA
 @ignore
 @ubi10/openjdk-21
+@openjdk-tech-preview/openjdk-21-jlink-rhel9
 Feature: Openshift OpenJDK S2I tests
 # NOTE: these tests should be usable with the other images once we have refactored the JDK scripts.
 # These builds do not actually run maven. This is important, because the proxy

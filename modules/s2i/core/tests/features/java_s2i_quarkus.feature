@@ -1,5 +1,6 @@
 # builder only
 @ubi10/openjdk-21
+@openjdk-tech-preview/openjdk-21-jlink-rhel9
 Feature: Openshift OpenJDK S2I tests (Quarkus-based)
 
   Scenario: Ensure Quarkus CDS doesn't fail due to timestamp mismatch (OPENDJK-1673)

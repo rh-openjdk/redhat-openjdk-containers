@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -eo pipefail
 
 source "${JBOSS_CONTAINER_UTIL_LOGGING_MODULE}/logging.sh"
 source "${JBOSS_CONTAINER_MAVEN_S2I_MODULE}/maven-s2i"
@@ -13,4 +13,56 @@ source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/maven-s2i-overrides"
 
 # invoke the build
 maven_s2i_build
+
+# run the pathfinder scripts to define JAVA_APP_JAR and JAVA_LIB_DIR
+source "${JBOSS_CONTAINER_UTIL_PATHFINDER_MODULE}/pathfinder.sh"
+setup_java_app_and_lib
+
+# include our jlink scripts
+if [ "$S2I_ENABLE_JLINK" = "true" ]; then
+
+    source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/preflight.sh"
+    jlink_techpreview_warning
+    jlink_preflight_check
+
+    if [ ! -d "${S2I_JLINK_TEMP_PATH}" ]; then
+        log_info "S2I_JLINK_TEMP_PATH does not exist, creating ${S2I_JLINK_TEMP_PATH}"
+        mkdir -pm 775 "${S2I_JLINK_TEMP_PATH}"
+    fi
+
+    source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkdeps.sh"
+    echo "Invoking mkdeps"
+    generate_deps || {
+        log_error "mkdeps failed, return code: $?"
+        exit 1
+    }
+
+    source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkstrippeddeps.sh"
+    echo "Stripping dependencies"
+    mkstrippeddeps || {
+        log_error "stripping dependencies failed, return code: $?"
+        exit 1
+    }
+
+    source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/generatejdkdeps.sh"
+    echo "Generating JDK dependencies"
+    generatejdkdeps || {
+        log_error "generating JDK dependencies failed, return code: $?"
+        exit 1
+    }
+
+    source "${JBOSS_CONTAINER_JAVA_JLINK_MODULE}/mkjreimage.sh"
+    echo "Linking jre"
+    generate_jre_image || {
+        log_error "Linking JRE failed, return code: $?"
+        exit 1
+    }
+
+    if [ "$S2I_DELETE_SOURCE" == "true" ]; then
+      if [ -n "$(find $S2I_JLINK_TEMP_PATH -maxdepth 0 -type d ! -empty 2> /dev/null)" ]; then
+        log_info "Cleaning up temporary file directory $S2I_JLINK_TEMP_PATH"
+        rm -rf $S2I_JLINK_TEMP_PATH
+      fi
+    fi
+fi
 
