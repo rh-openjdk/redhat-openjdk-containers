@@ -1,6 +1,6 @@
-@ubi9/openjdk-11
 @ubi9/openjdk-17
 @ubi9/openjdk-21
+@ubi9/openjdk-25
 Feature: Openshift OpenJDK Runtime tests
 
   @ubi9
@@ -54,6 +54,7 @@ Feature: Openshift OpenJDK Runtime tests
 
   # temporarily disabled, see https://issues.redhat.com/browse/OPENJDK-3536
   @ignore
+  @ubi9
   Scenario: Check non-existent path JAVA_APP_DIR (OPENJDK-2034)
     Given container is started with env
     | variable     | value  |
