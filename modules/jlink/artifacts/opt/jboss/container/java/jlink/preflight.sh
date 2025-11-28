@@ -17,7 +17,7 @@ jlink_preflight_check()
       echo "Jlink integration is only supported for JDK versions 11 and newer."
       exit 1
     fi
-    if [ ! -d /usr/lib/jvm/java/jmods ]; then
+    if [ ! -d $JAVA_HOME/jmods ]; then
       echo "Jlink integration requires the jmods RPM to be installed in the builder image, e.g."
       echo "        microdnf install -y java-${JAVA_VERSION}-openjdk-jmods"
       exit 1
