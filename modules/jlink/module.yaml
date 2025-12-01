@@ -1,3 +1,5 @@
+# This is required for openjdk-tech-preview/openjdk-21-jlink-rhel9
+# and is not needed for rhel10-based images.
 schema_version: 1
 
 name: "jboss.container.java.jlink"
