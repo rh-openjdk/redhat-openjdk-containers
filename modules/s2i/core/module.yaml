@@ -24,25 +24,6 @@ envs:
 - name: JBOSS_CONTAINER_S2I_CORE_MODULE
   value: /opt/jboss/container/s2i/core/
 
-- name: S2I_DESTINATION_DIR
-  description: ^
-    Root directory for S2I mount, as specified by the
-    **io.openshift.s2i.destination** label.  This should not be overridden by
-    end users.
-  example: /tmp
-
-- name: S2I_ARTIFACTS_DIR
-  description: ^
-    Location mount for artifacts persisted with **save-artifacts** script, which
-    are used with incremental builds.  This should not be overridden by end users.
-  example: "${S2I_DESTINATION_DIR}/artifacts}"
-
-- name: S2I_SOURCE_DIR
-  description: ^
-    Location of mount for source code to be built.  This should not be
-    overridden by end users.
-  example: "${S2I_DESTINATION_DIR}/src}"
-
 - name: S2I_SOURCE_CONFIGURATION_DIR
   description: ^
     Relative path to directory containing application configuration files to be
@@ -67,7 +48,7 @@ envs:
   description: ^
     Absolute path to which files located in
     $S2I_SOURCE_DIR/$S2I_SOURCE_DATA_DIR are copied.
-  example: /opt/eap/standalone/data
+  example: /deployments/data
 
 - name: S2I_SOURCE_DEPLOYMENTS_DIR
   description: ^

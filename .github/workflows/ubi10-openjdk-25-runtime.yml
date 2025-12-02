@@ -1,0 +1,10 @@
+name: UBI10 OpenJDK 25 Runtime S2I Image CI
+on: [push, pull_request]
+env:
+  LANG: en_US.UTF-8
+  IMAGE: ubi10-openjdk-25-runtime
+jobs:
+  call-openjdkci:
+    uses: ./.github/workflows/image-workflow-template.yml
+    with:
+      image: ubi10-openjdk-25-runtime
