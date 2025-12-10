@@ -1,0 +1,10 @@
+name: UBI9 OpenJDK 25 S2I Image CI
+on: [push, pull_request]
+env:
+  LANG: en_US.UTF-8
+  IMAGE: ubi9-openjdk-25
+jobs:
+  call-openjdkci:
+    uses: ./.github/workflows/image-workflow-template.yml
+    with:
+      image: ubi9-openjdk-25

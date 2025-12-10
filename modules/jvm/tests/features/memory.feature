@@ -36,6 +36,7 @@ Feature: OPENJDK-559 JVM Memory tests
   @ubi9/openjdk-11
   @ubi9/openjdk-17
   @ubi9/openjdk-21
+  @ubi9/openjdk-25
   Scenario: Ensure Maven doesn't use MaxRAMPercentage=80
     Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from spring-boot-sample-simple
     Then s2i build log should match regex INFO Using MAVEN_OPTS.*-XX:MaxRAMPercentage=25.0$
