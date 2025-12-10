@@ -7,7 +7,7 @@ osbs:
         - java-25-openjdk
         - java-25-openjdk-devel
         - java-25-openjdk-headless
-        signing_intent: unsigned
+        signing_intent: release
   repository:
     name: containers/openjdk
     branch: openjdk-25-ubi9

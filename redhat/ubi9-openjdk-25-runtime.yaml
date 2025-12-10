@@ -5,7 +5,7 @@ osbs:
         pulp_repos: true
         packages:
         - java-25-openjdk-headless
-        signing_intent: unsigned
+        signing_intent: release
   repository:
     name: containers/openjdk
     branch: openjdk-25-runtime-ubi9
