@@ -56,7 +56,7 @@ modules:
     version: "latest"
   - name: jboss.container.maven
     version: "3.9.21"
-  - name: jboss.container.util.tzdata
+  - name: jboss.container.java.singleton-jdk
   - name: jboss.container.java.s2i.bash
   - name: jboss.container.util.tzdata
 
