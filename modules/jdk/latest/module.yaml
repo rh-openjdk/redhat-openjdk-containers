@@ -16,7 +16,7 @@ envs:
 - name: "JAVA_HOME"
   value: "/usr/lib/jvm/java-25"
 - name: "JAVA_VENDOR"
-  value: "openjdk"
+  value: "epel"
 - name: "JAVA_VERSION"
   value: *jdkver
 - name: JBOSS_CONTAINER_OPENJDK_JDK_MODULE
