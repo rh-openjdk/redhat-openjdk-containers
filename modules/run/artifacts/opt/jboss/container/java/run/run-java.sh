@@ -247,4 +247,6 @@ startup() {
 
 # =============================================================================
 # Fire up
-startup $*
+
+echo "Starting the Java application using ${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh $* ${JAVA_ARGS}…"
+startup $* ${JAVA_ARGS}
