@@ -24,8 +24,8 @@ rhel7:
       not: [ 2, 3, 4, 5, 6, 7, 8, 9, 13 ]
 ubi8:
   from: 3
-  to: 21
-  not: [ 4, 5, 6, 7, 8, 9 ]
+  to: 23
+  not: [ 4, 5, 6, 7, 8, 9, 22 ]
   builder: # "ubi8/openjdk-X"
     8:  {}
     11:
@@ -52,12 +52,14 @@ ubi8:
 # ubi9 is not yet being used in any templates
 ubi9:
   from: 13
-  to: 21
+  to: 24
   builder:
     11: {}
     17: {}
     21:
       from: 17
+    25:
+      from: 24
   runtime:
     11:
       name: "ubi9/openjdk-11-runtime"
@@ -66,3 +68,6 @@ ubi9:
     21:
       name: "ubi9/openjdk-21-runtime"
       from: 17
+    25:
+      name: "ubi9/openjdk-25-runtime"
+      from: 24
