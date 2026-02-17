@@ -5,14 +5,19 @@ function maven_init_var_MAVEN_LOCAL_REPO() {
 
 # if not already defined, look for settings.xml in <source>/configuration
 function maven_init_var_MAVEN_SETTINGS_XML() {
-  if [ -f "${MAVEN_SETTINGS_XML}" ]; then
-    :
-  elif [ -f "${S2I_SOURCE_DIR}/configuration/settings.xml" ]; then
-    MAVEN_SETTINGS_XML="${S2I_SOURCE_DIR}/configuration/settings.xml"
+  if [ -n "$(type -t maven_init_var_MAVEN_SETTINGS_XML_overrides)" ]; then
+    eval maven_init_var_MAVEN_SETTINGS_XML_overrides $*
+    return $?
   else
-    MAVEN_SETTINGS_XML="${_MAVEN_S2I_SETTINGS_XML}"
-    mkdir -p $(dirname "${MAVEN_SETTINGS_XML}")
-    cp "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/jboss-settings.xml" "${MAVEN_SETTINGS_XML}"
+      if [ -f "${MAVEN_SETTINGS_XML}" ]; then
+        :
+      elif [ -f "${S2I_SOURCE_DIR}/configuration/settings.xml" ]; then
+        MAVEN_SETTINGS_XML="${S2I_SOURCE_DIR}/configuration/settings.xml"
+      else
+        MAVEN_SETTINGS_XML="${_MAVEN_S2I_SETTINGS_XML}"
+        mkdir -p $(dirname "${MAVEN_SETTINGS_XML}")
+        cp "${JBOSS_CONTAINER_MAVEN_DEFAULT_MODULE}/jboss-settings.xml" "${MAVEN_SETTINGS_XML}"
+      fi
   fi
 }
 

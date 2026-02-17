@@ -186,6 +186,13 @@ Feature: Openshift OpenJDK S2I tests
        | MAVEN_SETTINGS_XML | /tmp/src/settings.xml |
       Then s2i build log should contain Rule 0: org.apache.maven.enforcer.rules.RequireActiveProfile passed
 
+  Scenario: Ensure maven_init_var_MAVEN_SETTINGS_XML can be overridden via maven_init_var_MAVEN_SETTINGS_XML_overrides function (Issue #629)
+      Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from issue-629-maven-settings-xml-override with env
+       | variable   | value    |
+       | MAVEN_ARGS | validate |
+      Then s2i build log should contain Using custom MAVEN_SETTINGS_XML override
+      And s2i build log should contain Rule 0: org.apache.maven.enforcer.rules.RequireActiveProfile passed
+
   Scenario: Ensure that run-env.sh placed in the JAVA_APP_DIR is sourced in the run script before launching java
       Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from quarkus-quickstarts/getting-started-3.0.1.Final-nos2i
        | variable            | value        |
