@@ -1,5 +1,6 @@
 # builder-only test
 @ubi10/openjdk-21
+@ubi10/openjdk-25
 Feature: OpenJDK S2I bash module tests
 
   Scenario: Ensure image scripts are executable (OPENJDK-3935)
