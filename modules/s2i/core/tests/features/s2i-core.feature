@@ -1,4 +1,5 @@
 @ubi10/openjdk-21
+@ubi10/openjdk-25
 @openjdk-tech-preview/openjdk-21-jlink-rhel9
 Feature: Openshift S2I tests
   # OPENJDK-84 - /tmp/src should not be present after build
