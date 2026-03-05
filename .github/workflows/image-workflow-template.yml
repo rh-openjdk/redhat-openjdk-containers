@@ -42,4 +42,7 @@ jobs:
       - name: Behave Tests
         run: |
           echo /home/runner/work/_temp/openshift-bin >> $GITHUB_PATH
-          cekit -v --descriptor ${{ inputs.image }}.yaml test behave
+          script -c "cekit -v --descriptor ${{ inputs.image }}.yaml test behave"
+
+      - name: summarize test results
+        run: sed -ne '/\(Failing scenarios:\|features\? passed,\)/,$p' < typescript
