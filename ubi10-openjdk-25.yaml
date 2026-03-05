@@ -58,6 +58,7 @@ modules:
   - name: jboss.container.maven
     version: "3.9.25"
   - name: jboss.container.java.s2i.bash
+  - name: jboss.container.util.licenses
 
 help:
   add: true

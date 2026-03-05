@@ -1,0 +1,7 @@
+schema_version: 1
+name: jboss.container.util.licenses
+version: '1.0'
+description: "Create and populate a /licenses directory"
+
+execute:
+- script: execute.sh
