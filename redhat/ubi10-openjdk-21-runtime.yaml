@@ -1,27 +1,12 @@
-osbs:
-  configuration:
-    container:
-      compose:
-        pulp_repos: true
-        packages:
-        - java-21-openjdk-headless
-        signing_intent: release
+konflux:
   repository:
-    name: containers/openjdk
-    branch: openjdk-21-runtime-ubi10
-
-packages:
-  manager: microdnf
-  content_sets:
-    x86_64:
-    - rhel-9-for-x86_64-baseos-rpms
-    - rhel-9-for-x86_64-appstream-rpms
-    ppc64le:
-    - rhel-9-for-ppc64le-baseos-rpms
-    - rhel-9-for-ppc64le-appstream-rpms
-    aarch64:
-    - rhel-9-for-aarch64-baseos-rpms
-    - rhel-9-for-aarch64-appstream-rpms
-    s390x:
-    - rhel-9-for-s390x-baseos-rpms
-    - rhel-9-for-s390x-appstream-rpms
+    uri: git@gitlab.cee.redhat.com:openjdk/openjdk-container-konflux.git
+    ref: openjdk-21-runtime-ubi10-container
+  rpms.in.yaml:
+    contentOrigin:
+      repofiles: ['./ubi.repo']
+    arches:
+      - x86_64
+      - aarch64
+      - ppc64le
+      - s390x
