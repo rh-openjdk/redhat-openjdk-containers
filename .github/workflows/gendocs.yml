@@ -4,6 +4,7 @@ on:
     branches:
     - 'ubi8'
     - 'ubi9'
+    - 'ubi10'
     - 'gendocs'
     tags:
     - 'ubi?-openjdk-containers*'
