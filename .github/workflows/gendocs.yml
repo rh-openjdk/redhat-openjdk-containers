@@ -4,9 +4,11 @@ on:
     branches:
     - 'ubi8'
     - 'ubi9'
+    - 'ubi10'
     - 'gendocs'
     tags:
     - 'ubi?-openjdk-containers*'
+    - 'ubi10-openjdk-containers*'
   workflow_dispatch:
 
 permissions:

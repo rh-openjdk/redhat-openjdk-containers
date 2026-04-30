@@ -44,7 +44,7 @@ handleRef()
 {
     ref="$1"
     git checkout "$ref"
-    for y in ubi?-*yaml; do
+    for y in ubi*-*yaml; do
         genImageDocs "$ref" "$y"
     done
 }
@@ -67,7 +67,7 @@ workdir="$(mktemp -td gendocs.XXXXXX)"
 cp ./gendocs.py "$workdir/gendocs.py"
 cp ./docs/README.adoc "$workdir/README.adoc"
 
-for ubi in ubi9 ubi8; do
+for ubi in ubi10 ubi9 ubi8; do
     UBI=${ubi^^}
     addToIndex "\n== $UBI\n"
     addToIndex "\n=== development\n"
