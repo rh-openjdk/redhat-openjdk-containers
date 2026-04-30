@@ -8,6 +8,7 @@ on:
     - 'gendocs'
     tags:
     - 'ubi?-openjdk-containers*'
+    - 'ubi10-openjdk-containers*'
   workflow_dispatch:
 
 permissions:

@@ -44,7 +44,7 @@ handleRef()
 {
     ref="$1"
     git checkout "$ref"
-    for y in ubi?-*yaml; do
+    for y in ubi*-*yaml; do
         genImageDocs "$ref" "$y"
     done
 }
