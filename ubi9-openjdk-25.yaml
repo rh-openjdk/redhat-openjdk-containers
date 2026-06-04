@@ -53,7 +53,7 @@ modules:
   install:
   - name: jboss.container.util.pkg-update
   - name: jboss.container.openjdk.jdk
-    version: "latest"
+    version: "25"
   - name: jboss.container.maven
     version: "3.9.21"
   - name: jboss.container.java.singleton-jdk

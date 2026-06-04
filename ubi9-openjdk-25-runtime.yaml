@@ -52,7 +52,7 @@ modules:
   - name: jboss.container.util.pkg-update
   - name: jboss.container.tar
   - name: jboss.container.openjdk.jre
-    version: "latest"
+    version: "25"
   - name: jboss.container.util.tzdata
   - name: jboss.container.java.jre.run
 
