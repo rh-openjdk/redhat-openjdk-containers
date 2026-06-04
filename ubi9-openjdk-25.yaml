@@ -64,3 +64,15 @@ help:
 
 packages:
   manager: microdnf
+konflux:
+  repository:
+    uri: git@gitlab.cee.redhat.com:jdowland/openjdk-container-konflux.git
+    ref: openjdk-25-ubi9-container
+  rpms.in.yaml:
+    contentOrigin:
+      repofiles: ['./ubi.repo']
+    arches:
+      - x86_64
+      - aarch64
+      - ppc64le
+      - s390x
