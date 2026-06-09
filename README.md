@@ -1,0 +1,71 @@
+These are the OpenJDK Source to Image (S2I) images for Red Hat
+OpenShift.
+
+# Acquiring the Images
+
+## From [Red Hat Container Catalog](https://access.redhat.com/containers/)
+
+- [ubi9/openjdk-11](https://catalog.redhat.com/software/containers/ubi9/openjdk-11/61ee7bafed74b2ffb22b07ab)
+
+- [ubi9/openjdk-17](https://catalog.redhat.com/software/containers/ubi9/openjdk-17/61ee7c26ed74b2ffb22b07f6)
+
+- [ubi9/openjdk-11-runtime](https://catalog.redhat.com/software/containers/ubi9/openjdk-11-runtime/61ee7d1c33f211c45407a91c)
+
+- [ubi9/openjdk-17-runtime](https://catalog.redhat.com/software/containers/ubi9/openjdk-17-runtime/61ee7d45384a3eb331996bee)
+
+The UBI9-based OpenJDK images are available under the terms of the [UBI
+EULA](https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI).
+
+[Red Hat provide Product documentation for
+customers](https://access.redhat.com/documentation/en-us/openjdk/17).
+Tables of environment variables used for image configuration are
+published to <https://rh-openjdk.github.io/redhat-openjdk-containers/>.
+These tables are automatically updated for every tagged release, and
+every commit to the development branches.
+
+Older RHEL7 and RHEL8-based image sources are in the `rhel7` and `ubi8`
+branches respectively.
+
+# How to build the images
+
+You need to [install
+Cekit](https://docs.cekit.io/en/latest/handbook/installation/index.html)
+to build these images.
+
+These sources are prepared and tested for Cekit 4.1.1.
+
+# Red Hat Universal Base Image 9 versions
+
+## Red Hat Universal Base Image 9 with OpenJDK 11
+
+    cekit --descriptor ubi9-openjdk-11.yaml build podman
+
+This will produce an image named `ubi9/openjdk-11`.
+
+## Red Hat Universal Base Image 9 with OpenJDK 17
+
+    cekit --descriptor ubi9-openjdk-17.yaml build podman
+
+This will produce an image named `ubi9/openjdk-17`.
+
+## Red Hat Universal Base Image 9 with OpenJDK 11 - Runtime
+
+    cekit --descriptor ubi9-openjdk-11-runtime.yaml build podman
+
+This will produce an image named `ubi9/openjdk-11-runtime`.
+
+## Red Hat Universal Base Image 9 with OpenJDK 17 - Runtime
+
+    cekit --descriptor ubi9-openjdk-17-runtime.yaml build podman
+
+This will produce an image named `ubi9/openjdk-17-runtime`.
+
+# Contributing
+
+We welcome contributions! For patches, a Developer Certificate of Origin
+(DCO) is required. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+# License
+
+© 2022 Red Hat, Inc. Distributed under the terms of the Apache License,
+Version 2.0. See [LICENSE](LICENSE) file.
