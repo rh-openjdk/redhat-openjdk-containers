@@ -1,11 +1,13 @@
+# Red Hat UBI OpenJDK container images
+
 These are the Red Hat Universal Base Image (UBI) OpenJDK container images,
 suitable for use with OpenShift Container Platform.
 
 → [API Docs](https://rh-openjdk.github.io/redhat-openjdk-containers/)
 
-# Acquiring the Images
+## Acquiring the Images
 
-## From [Red Hat Container Catalog](https://catalog.redhat.com/en):
+### From [Red Hat Container Catalog](https://catalog.redhat.com/en):
 
 _Make sure you are viewing the most recent tag for each container_.
 
@@ -28,7 +30,7 @@ Sources for older RHEL-based images are in the `ubi9`, `ubi8` and
 `rhel7`
 branches respectively.
 
-# How to build the images
+## How to build the images
 
 You need to [install
 Cekit](https://docs.cekit.io/en/latest/handbook/installation/index.html)
@@ -43,12 +45,12 @@ YAML for other versions):
 
 This will produce an image named `ubi10/openjdk-25`.
 
-# Contributing
+## Contributing
 
 We welcome contributions! For patches, a Developer Certificate of Origin
 (DCO) is required. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-# License
+## License
 
 © 2026 Red Hat, Inc. Distributed under the terms of the Apache License,
 Version 2.0. See [LICENSE](LICENSE) file.
