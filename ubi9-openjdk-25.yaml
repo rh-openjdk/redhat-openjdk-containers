@@ -66,8 +66,8 @@ packages:
   manager: microdnf
 konflux:
   repository:
-    uri: git@gitlab.cee.redhat.com:jdowland/openjdk-container-konflux.git
-    ref: openjdk-25-ubi9-container
+    uri: git@github.ibm.com:openjdk-team/openjdk-containers.git
+    ref: openjdk-25-ubi9
   rpms.in.yaml:
     contentOrigin:
       repofiles: ['./ubi.repo']
