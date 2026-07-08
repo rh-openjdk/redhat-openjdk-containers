@@ -25,8 +25,3 @@ packages:
     s390x:
     - rhel-9-for-s390x-baseos-rpms
     - rhel-9-for-s390x-appstream-rpms
-
-modules:
-  install:
-  - name: jboss.container.openjdk.jre
-    version: "25"
