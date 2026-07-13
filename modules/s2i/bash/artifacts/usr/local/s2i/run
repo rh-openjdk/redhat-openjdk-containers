@@ -11,7 +11,4 @@ source "${JBOSS_CONTAINER_JAVA_S2I_MODULE}/s2i-core-hooks"
 # Global S2I variable setup
 s2i_core_env_init
 
-export JAVA_OPTS
-
-echo "Starting the Java application using ${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh $args ${JAVA_ARGS}…"
-exec "${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh" $args ${JAVA_ARGS}
+exec "${JBOSS_CONTAINER_JAVA_RUN_MODULE}/run-java.sh" $args
