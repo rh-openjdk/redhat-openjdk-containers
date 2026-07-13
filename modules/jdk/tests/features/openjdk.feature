@@ -120,3 +120,12 @@ Feature: Miscellaneous OpenJDK-related unit tests
     | arg     | value         |
     | command | rpm -V tzdata |
     Then available container log should not contain missing
+
+  @ubi9/openjdk-17
+  @ubi9/openjdk-21
+  @ubi9/openjdk-25
+  Scenario: Ensure unzip is installed (OPENJDK-4533)
+    When container is started with args
+    | arg     | value        |
+    | command | rpm -V unzip |
+    Then available container log should not contain missing

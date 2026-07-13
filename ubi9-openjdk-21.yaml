@@ -65,3 +65,5 @@ help:
 
 packages:
   manager: microdnf
+  install:
+  - unzip
