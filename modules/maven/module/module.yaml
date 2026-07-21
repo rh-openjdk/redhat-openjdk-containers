@@ -1,8 +1,8 @@
 schema_version: 1
 name: jboss.container.maven.module
-version: '3.8'
+version: '3.9'
 description: ^
-  Enables the AppStream RPM Module for Maven 3.8 packages.
+  Enables the AppStream RPM Module for Maven 3.9 packages.
 
 execute:
 - script: configure.sh
