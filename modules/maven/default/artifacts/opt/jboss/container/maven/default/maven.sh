@@ -183,6 +183,7 @@ function add_maven_mirrors() {
     local mirror_of=$(_maven_find_env "MAVEN_MIRROR_OF" "external:*")
 
     _add_maven_mirror "${settings}" "${mirror_id}" "${MAVEN_MIRROR_URL}" "${mirror_of}"
+    _add_maven_mirror_server "${settings}" "${mirror_id}" "MAVEN"
   fi
 
   IFS=',' read -a maven_mirror_prefixes <<< ${MAVEN_MIRRORS}
@@ -195,6 +196,7 @@ function add_maven_mirrors() {
       log_warning "Variable \"${maven_mirror_prefix}_MAVEN_MIRROR_URL\" not set. Skipping maven mirror setup for the prefix \"${maven_mirror_prefix}\"."
     else
       _add_maven_mirror "${settings}" "${mirror_id}" "${mirror_url}" "${mirror_of}"
+      _add_maven_mirror_server "${settings}" "${mirror_id}" "${maven_mirror_prefix}_MAVEN"
     fi
 
     counter=$((counter+1))
@@ -217,6 +219,51 @@ function _add_maven_mirror() {
 
   sed -i "s|<!-- ### configured mirrors ### -->|$xml|" "${settings}"
 
+}
+
+# Add a server entry for an authenticated mirror.
+# Reads MIRROR_USERNAME, MIRROR_PASSWORD, MIRROR_PRIVATE_KEY, MIRROR_PASSPHRASE
+# under the given prefix (e.g. "MAVEN" or "MY_MIRROR_MAVEN").
+# No-op when none of the credential variables are set.
+# private
+function _add_maven_mirror_server() {
+  local settings=$1
+  local server_id=$2
+  local prefix=$3
+
+  local username=$(_maven_find_prefixed_env "$prefix" "MIRROR_USERNAME")
+  local password=$(_maven_find_prefixed_env "$prefix" "MIRROR_PASSWORD")
+  local private_key=$(_maven_find_prefixed_env "$prefix" "MIRROR_PRIVATE_KEY")
+  local passphrase=$(_maven_find_prefixed_env "$prefix" "MIRROR_PASSPHRASE")
+
+  # Only write a server entry when at least one complete credential pair is supplied.
+  # Each pair requires both members: username+password or private_key+passphrase.
+  # A half-pair (e.g. username without password) is silently ignored.
+  local has_userpass=false
+  local has_privatekey=false
+  [ "${username}" != "" -a "${password}" != "" ] && has_userpass=true
+  [ "${private_key}" != "" -a "${passphrase}" != "" ] && has_privatekey=true
+  if [ "${has_userpass}" = "false" ] && [ "${has_privatekey}" = "false" ]; then
+    return
+  fi
+
+  local xml="\n\
+    <server>\n\
+      <id>${server_id}</id>"
+  if [ "${has_userpass}" = "true" ]; then
+    xml="${xml}\n\
+      <username>${username}</username>\n\
+      <password><![CDATA[${password}]]></password>"
+  fi
+  if [ "${has_privatekey}" = "true" ]; then
+    xml="${xml}\n\
+      <privateKey>${private_key}</privateKey>\n\
+      <passphrase><![CDATA[${passphrase}]]></passphrase>"
+  fi
+  xml="${xml}\n\
+    </server>\n\
+    <!-- ### configured servers ### -->"
+  sed -i "s|<!-- ### configured servers ### -->|${xml}|" "${settings}"
 }
 
 function add_maven_repos() {

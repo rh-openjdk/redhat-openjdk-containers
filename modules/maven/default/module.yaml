@@ -61,6 +61,42 @@ envs:
 - name: <prefix>_MAVEN_MIRROR_URL
   description: "The URL of the mirror."
   example: "http://10.0.0.1:8080/repository/internal"
+- name: MAVEN_MIRROR_USERNAME
+  example: "mavenUser"
+  description: >
+    Username for the mirror configured via MAVEN_MIRROR_URL.
+    Must be set together with MAVEN_MIRROR_PASSWORD.
+    For multi-mirror support, see MAVEN_MIRRORS.
+- name: MAVEN_MIRROR_PASSWORD
+  example: "maven1!"
+  description: >
+    Password for the mirror configured via MAVEN_MIRROR_URL.
+    Must be set together with MAVEN_MIRROR_USERNAME.
+    For multi-mirror support, see MAVEN_MIRRORS.
+- name: MAVEN_MIRROR_PRIVATE_KEY
+  example: "${user.home}/.ssh/id_dsa"
+  description: >
+    Private key for the mirror configured via MAVEN_MIRROR_URL.
+    Must be set together with MAVEN_MIRROR_PASSPHRASE.
+    For multi-mirror support, see MAVEN_MIRRORS.
+- name: MAVEN_MIRROR_PASSPHRASE
+  example: "maven1!"
+  description: >
+    Passphrase for the private key of the mirror configured via MAVEN_MIRROR_URL.
+    Must be set together with MAVEN_MIRROR_PRIVATE_KEY.
+    For multi-mirror support, see MAVEN_MIRRORS.
+- name: "<prefix>_MAVEN_MIRROR_USERNAME"
+  example: "mavenUser"
+  description: "Username for the mirror identified by this prefix. Must be set together with <prefix>_MAVEN_MIRROR_PASSWORD."
+- name: "<prefix>_MAVEN_MIRROR_PASSWORD"
+  example: "maven1!"
+  description: "Password for the mirror identified by this prefix. Must be set together with <prefix>_MAVEN_MIRROR_USERNAME."
+- name: "<prefix>_MAVEN_MIRROR_PRIVATE_KEY"
+  example: "${user.home}/.ssh/id_dsa"
+  description: "Private key for the mirror identified by this prefix. Must be set together with <prefix>_MAVEN_MIRROR_PASSPHRASE."
+- name: "<prefix>_MAVEN_MIRROR_PASSPHRASE"
+  example: "maven1!"
+  description: "Passphrase for the private key of the mirror identified by this prefix. Must be set together with <prefix>_MAVEN_MIRROR_PRIVATE_KEY."
 - name: MAVEN_SETTINGS_XML
   description: Location of custom Maven settings.xml file to use.
   example: /home/default/.m2/settings.xml

@@ -141,6 +141,62 @@ Feature: Openshift OpenJDK S2I tests
     Then s2i build log should not contain skipping directory .
     And  run find /deployments in container and check its output for spring-boot-sample-simple-1.5.0.BUILD-SNAPSHOT.jar
 
+  # OPENJDK-109
+  # Mirror authentication: single mirror with username and password
+  Scenario: Check MAVEN_MIRROR_URL with credentials generates a server entry in settings.xml
+    Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from spring-boot-sample-simple/target
+       | variable               | value                                      |
+       | MAVEN_MIRROR_URL       | http://127.0.0.1:8080/repository/internal/ |
+       | MAVEN_MIRROR_USERNAME  | kermit                                     |
+       | MAVEN_MIRROR_PASSWORD  | thefrog                                    |
+    And XML namespaces
+       | prefix | url                                    |
+       | ns     | http://maven.apache.org/SETTINGS/1.0.0 |
+    Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:mirror[ns:id='mirror.default'][ns:url='http://127.0.0.1:8080/repository/internal/'][ns:mirrorOf='external:*']
+    Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:server[ns:id='mirror.default'][ns:username='kermit'][ns:password='thefrog']
+
+  # OPENJDK-109
+  # Mirror authentication: single mirror with private key and passphrase
+  Scenario: Check MAVEN_MIRROR_URL with private key credentials generates a server entry in settings.xml
+    Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from spring-boot-sample-simple/target
+       | variable                  | value                                      |
+       | MAVEN_MIRROR_URL          | http://127.0.0.1:8080/repository/internal/ |
+       | MAVEN_MIRROR_PRIVATE_KEY  | /home/default/.ssh/id_dsa                  |
+       | MAVEN_MIRROR_PASSPHRASE   | mypassphrase                               |
+    And XML namespaces
+       | prefix | url                                    |
+       | ns     | http://maven.apache.org/SETTINGS/1.0.0 |
+    Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:mirror[ns:id='mirror.default'][ns:url='http://127.0.0.1:8080/repository/internal/'][ns:mirrorOf='external:*']
+    Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:server[ns:id='mirror.default'][ns:privateKey='/home/default/.ssh/id_dsa'][ns:passphrase='mypassphrase']
+
+  # OPENJDK-109
+  # Mirror authentication: single mirror without credentials produces no server entry
+  Scenario: Check MAVEN_MIRROR_URL without credentials does not generate a server entry in settings.xml
+    Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from spring-boot-sample-simple/target
+       | variable         | value                                      |
+       | MAVEN_MIRROR_URL | http://127.0.0.1:8080/repository/internal/ |
+    And XML namespaces
+       | prefix | url                                    |
+       | ns     | http://maven.apache.org/SETTINGS/1.0.0 |
+    Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:mirror[ns:id='mirror.default'][ns:url='http://127.0.0.1:8080/repository/internal/'][ns:mirrorOf='external:*']
+    Then XML file /tmp/artifacts/configuration/settings.xml should have 0 elements on XPath //ns:server[ns:id='mirror.default']
+  
+  # OPENJDK-109
+  # Mirror authentication: multi-mirror with credentials via prefix
+  Scenario: Check MAVEN_MIRRORS with credentials generates mirror and server entries in settings.xml
+    Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from spring-boot-sample-simple/target
+       | variable                        | value                                      |
+       | MAVEN_MIRRORS                   | MYMIRROR                                   |
+       | MYMIRROR_MAVEN_MIRROR_ID        | my-mirror                                  |
+       | MYMIRROR_MAVEN_MIRROR_URL       | http://127.0.0.1:8080/repository/internal/ |
+       | MYMIRROR_MAVEN_MIRROR_USERNAME  | kermit                                     |
+       | MYMIRROR_MAVEN_MIRROR_PASSWORD  | thefrog                                    |
+    And XML namespaces
+       | prefix | url                                    |
+       | ns     | http://maven.apache.org/SETTINGS/1.0.0 |
+    Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:mirror[ns:id='my-mirror'][ns:url='http://127.0.0.1:8080/repository/internal/'][ns:mirrorOf='external:*']
+    Then XML file /tmp/artifacts/configuration/settings.xml should have 1 elements on XPath //ns:server[ns:id='my-mirror'][ns:username='kermit'][ns:password='thefrog']
+
   # OPENJDK-1954 - MAVEN_REPOS
   Scenario: run the s2i and check the maven mirror and proxy have been initialised in the default settings.xml, uses http_proxy
     Given s2i build https://github.com/rh-openjdk/openjdk-container-test-applications.git from spring-boot-sample-simple/target
