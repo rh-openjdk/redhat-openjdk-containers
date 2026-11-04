@@ -2,4 +2,4 @@
 set -euo pipefail
 
 mkdir -p /licenses
-ln -s /usr/lib/jvm/java/legal /licenses/legal
+cp -al /usr/lib/jvm/java/legal /licenses/openjdk
