@@ -25,3 +25,17 @@ packages:
     s390x:
     - rhel-9-for-s390x-baseos-rpms
     - rhel-9-for-s390x-appstream-rpms
+
+konflux:
+  repository:
+    uri: git@gitlab.cee.redhat.com:openjdk/openjdk-container-konflux.git
+    ref: openjdk-25-runtime-ubi9-container
+  rpms.in.yaml:
+    contentOrigin:
+      repofiles: ['./ubi.repo']
+    arches:
+      - x86_64
+      - aarch64
+      - ppc64le
+      - s390x
+    installWeakDeps: false
